@@ -86,7 +86,7 @@ export default function Hero() {
               <div className="flex items-start justify-between mb-5">
                 <div>
                   <p className="text-[0.65rem] text-text-muted tracking-[0.14em] uppercase">Net Balance</p>
-                  <p className="font-display text-[2.1rem] tracking-[-0.04em] mt-[3px]">$24,850<span className="text-[1rem] text-accent">.00</span></p>
+                  <p className="font-display text-[2.1rem] tracking-[-0.04em] mt-[3px] text-green-400">$24,850<span className="text-[1rem] text-green-400">.00</span></p>
                 </div>
                 <div className="bg-[rgba(201,185,154,0.1)] border border-[rgba(201,185,154,0.22)] py-1.5 px-3.5 rounded-full text-[0.72rem] text-accent font-bold">↑ 4.2%</div>
               </div>
@@ -121,15 +121,15 @@ export default function Hero() {
                 </div>
                 <div className="flex flex-col gap-2.5">
                   <div>
-                    <div className="flex justify-between text-[0.74rem] mb-1"><span>Housing</span><span className="text-accent">$1,400</span></div>
+                    <div className="flex justify-between text-[0.74rem] mb-1"><span>Housing</span><span className="text-green-400">$1,400</span></div>
                     <div className="prog-track"><div className="prog-fill" style={{ width: '65%' }}></div></div>
                   </div>
                   <div>
-                    <div className="flex justify-between text-[0.74rem] mb-1"><span>Food &amp; Dining</span><span className="text-accent">$620</span></div>
+                    <div className="flex justify-between text-[0.74rem] mb-1"><span>Food &amp; Dining</span><span className="text-green-400">$620</span></div>
                     <div className="prog-track"><div className="prog-fill" style={{ width: '38%' }}></div></div>
                   </div>
                   <div>
-                    <div className="flex justify-between text-[0.74rem] mb-1"><span>Transport</span><span className="text-accent">$240</span></div>
+                    <div className="flex justify-between text-[0.74rem] mb-1"><span>Transport</span><span className="text-green-400">$240</span></div>
                     <div className="prog-track"><div className="prog-fill" style={{ width: '22%' }}></div></div>
                   </div>
                 </div>

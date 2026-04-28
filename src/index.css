@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --bg: #FFFFFF;
@@ -40,10 +42,6 @@
 }
 
 @layer components {
-  /* ── Logo Theme Switcher */
-  .logo-theme { filter: invert(1); }
-  .dark .logo-theme { filter: invert(0); }
-
   /* ── Typography */
   .font-display { font-family: 'Instrument Serif', serif; }
 

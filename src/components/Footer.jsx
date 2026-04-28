@@ -50,8 +50,19 @@ export default function Footer() {
           {/* Left Column - Brand & Newsletter */}
           <div className="md:col-span-12 lg:col-span-4 flex flex-col">
             <div className="flex items-center gap-2 mb-6">
-              <img src="/newpennylogo.png" alt="PennyWise Logo" className="h-10 w-auto object-contain logo-theme" />
-              <span className="font-display font-bold text-xl text-text">PennyWise</span>
+                {isDark ? (
+                  <img 
+                    src={`${import.meta.env.BASE_URL}PennyWhite.png`} 
+                    alt="PennyWise Logo" 
+                    className="h-12 w-auto object-contain transition-all" 
+                  />
+                ) : (
+                  <img 
+                    src={`${import.meta.env.BASE_URL}PennyDark.png`} 
+                    alt="PennyWise Logo" 
+                    className="h-12 w-auto object-contain transition-all" 
+                  />
+                )}
             </div>
             <p className="text-[0.85rem] leading-[1.6] max-w-[300px] mb-6">
               The hub of your financial life. Track, save, and grow your wealth alongside intelligent AI recommendations.

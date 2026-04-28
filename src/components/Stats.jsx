@@ -22,7 +22,7 @@ export default function Stats() {
               <div className="text-[0.78rem] mt-[5px] font-semibold" style={{ color: isDark ? 'rgba(255,255,255,0.6)' : '#555555' }}>Active users</div>
             </div>
             <div className="reveal reveal-d1">
-              <div className="stat-n font-bold text-4xl md:text-5xl" style={{ color: isDark ? '#ffffff' : '#111111' }}>$2.4B</div>
+              <div className="stat-n font-bold text-4xl md:text-5xl text-green-600 dark:text-green-400">$2.4B</div>
               <div className="text-[0.78rem] mt-[5px] font-semibold" style={{ color: isDark ? 'rgba(255,255,255,0.6)' : '#555555' }}>Tracked expenses</div>
             </div>
             <div className="reveal reveal-d2">

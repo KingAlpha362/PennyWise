@@ -14,6 +14,17 @@ export function Header() {
     { label: 'Contact', href: '#contact' },
   ];
 
+  const [isDark, setIsDark] = React.useState(false);
+
+  React.useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    setIsDark(document.documentElement.classList.contains('dark'));
+    return () => observer.disconnect();
+  }, []);
+
   React.useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
@@ -50,7 +61,19 @@ export function Header() {
         )}
       >
         <a href="#home" onClick={() => setOpen(false)} className="flex items-center gap-2.5 no-underline text-inherit">
-          <img src="/newpennylogo.png" alt="PennyWise Logo" className="h-12 md:h-16 w-auto object-contain logo-theme" />
+          {isDark ? (
+            <img 
+              src={`${import.meta.env.BASE_URL}PennyWhite.png`} 
+              alt="PennyWise Logo" 
+              className="h-14 md:h-20 w-auto object-contain transition-all" 
+            />
+          ) : (
+            <img 
+              src={`${import.meta.env.BASE_URL}PennyDark.png`} 
+              alt="PennyWise Logo" 
+              className="h-14 md:h-20 w-auto object-contain transition-all" 
+            />
+          )}
         </a>
         
         <div className="hidden items-center gap-2 md:flex">

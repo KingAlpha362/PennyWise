@@ -90,7 +90,7 @@ export default function Benefits() {
               <div className="w-full h-2 rounded-full bg-bg border border-border dark:border-white/10 overflow-hidden">
                 <div className="h-full bg-accent" style={{ width: '78%' }}></div>
               </div>
-              <div className="flex justify-between mt-2 text-[0.7rem] font-bold text-accent"><span>78% spent</span><span>$214 left</span></div>
+              <div className="flex justify-between mt-2 text-[0.7rem] font-bold text-accent"><span>78% spent</span><span className="text-green-600 dark:text-green-400">$214 left</span></div>
             </div>
           </div>
 

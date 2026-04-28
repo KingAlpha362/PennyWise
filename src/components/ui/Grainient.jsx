@@ -192,11 +192,19 @@ const Grainient = ({
     ro.observe(container);
     setSize();
 
+    let isIntersecting = true;
+    const io = new IntersectionObserver(([entry]) => {
+      isIntersecting = entry.isIntersecting;
+    }, { threshold: 0.01 });
+    io.observe(container);
+
     let raf = 0;
     const t0 = performance.now();
     const loop = (t) => {
-      program.uniforms.iTime.value = (t - t0) * 0.001;
-      renderer.render({ scene: mesh });
+      if (isIntersecting) {
+        program.uniforms.iTime.value = (t - t0) * 0.001;
+        renderer.render({ scene: mesh });
+      }
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
@@ -204,6 +212,7 @@ const Grainient = ({
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
+      io.disconnect();
       try {
         container.removeChild(canvas);
       } catch {
