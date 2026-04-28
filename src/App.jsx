@@ -13,10 +13,14 @@ import DashboardPreview from './components/DashboardPreview';
 import Testimonials from './components/Testimonials';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
+import DashboardApp from './components/DashboardApp';
+import AuthForm from './components/AuthForm';
+import { useState } from 'react';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function App() {
+  const [appView, setAppView] = useState('landing'); // landing, dashboard, signin, signup
 
   useGSAP(() => {
     // GSAP Scroll reveal
@@ -57,10 +61,22 @@ export default function App() {
     };
   }, []);
 
+  if (appView === 'dashboard') {
+    return <DashboardApp onSignOut={() => setAppView('landing')} />;
+  }
+
+  if (appView === 'signin') {
+    return <AuthForm initialMode="signin" onAuthSuccess={() => setAppView('dashboard')} onBack={() => setAppView('landing')} />;
+  }
+
+  if (appView === 'signup') {
+    return <AuthForm initialMode="signup" onAuthSuccess={() => setAppView('dashboard')} onBack={() => setAppView('landing')} />;
+  }
+
   return (
     <div className="bg-bg text-text min-h-screen">
-      <Header />
-      <Hero />
+      <Header onSignIn={() => setAppView('signin')} />
+      <Hero onGetStarted={() => setAppView('signup')} />
       <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
       <Press />
       <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
@@ -76,7 +92,7 @@ export default function App() {
       <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
       <Testimonials />
       <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
-      <CTA />
+      <CTA onGetStarted={() => setAppView('signup')} />
       <Footer />
     </div>
   );

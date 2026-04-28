@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Grainient from './ui/Grainient';
 
-export default function Hero() {
+export default function Hero({ onGetStarted }) {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -58,10 +58,10 @@ export default function Hero() {
           </p>
 
           <div className="hero-t4 flex flex-wrap gap-3 mt-10">
-            <a href="#" className="px-7 py-3.5 bg-[#16A34A] text-white hover:bg-[#15803D] rounded-2xl font-semibold text-sm inline-flex items-center gap-2 no-underline shadow-md shadow-green-600/10 transition-all duration-200 hover:scale-[1.02]">
+            <button onClick={onGetStarted} className="px-7 py-3.5 bg-[#16A34A] text-white hover:bg-[#15803D] rounded-2xl font-semibold text-sm inline-flex items-center gap-2 no-underline shadow-md shadow-green-600/10 transition-all duration-200 hover:scale-[1.02] cursor-pointer">
               Get Started Free
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 6.5h10M7.5 2.5l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </a>
+            </button>
             <a href="#features" className="px-7 py-3.5 bg-white dark:bg-transparent border border-border dark:border-white/20 hover:bg-gray-50 dark:hover:bg-white/10 rounded-2xl font-semibold text-sm no-underline shadow-sm transition-all duration-200 hover:scale-[1.02]" style={{ color: isDark ? '#ffffff' : '#111111' }}>Learn More</a>
           </div>
 

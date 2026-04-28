@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 import { useScroll } from '@/components/ui/use-scroll';
 
-export function Header() {
+export function Header({ onSignIn }) {
   const [open, setOpen] = React.useState(false);
   const scrolled = useScroll(10);
 
@@ -85,8 +85,8 @@ export function Header() {
           <Button variant="ghost" onClick={toggleTheme} aria-label="Toggle Theme" className="ml-2 px-3">
             🌓
           </Button>
-          <Button variant="outline" className="ml-2">Sign In</Button>
-          <Button>Get Started</Button>
+          <Button variant="outline" onClick={onSignIn} className="ml-2">Sign In</Button>
+          <Button onClick={onSignIn}>Get Started</Button>
         </div>
         
         <div className="flex items-center gap-2 md:hidden">
@@ -101,7 +101,7 @@ export function Header() {
 
       <div
         className={cn(
-          'bg-bg/95 backdrop-blur-xl fixed top-20 right-0 bottom-0 left-0 z-50 flex flex-col overflow-hidden border-t border-border md:hidden',
+          'bg-white dark:bg-zinc-950 fixed top-20 right-0 bottom-0 left-0 z-50 flex flex-col overflow-hidden border-t border-border md:hidden',
           open ? 'block' : 'hidden'
         )}
       >
@@ -116,7 +116,7 @@ export function Header() {
             {links.map((link) => (
               <a
                 key={link.label}
-                className="text-2xl font-bold text-text no-underline"
+                className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 no-underline"
                 href={link.href}
                 onClick={() => setOpen(false)}
               >

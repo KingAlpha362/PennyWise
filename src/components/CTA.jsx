@@ -1,6 +1,6 @@
 import ShapeGrid from './ui/ShapeGrid';
 
-export default function CTA() {
+export default function CTA({ onGetStarted }) {
   return (
     <section className="relative px-6 md:px-14 py-24 overflow-hidden">
       {/* ShapeGrid Background */}
@@ -25,11 +25,11 @@ export default function CTA() {
             Join thousands building smarter financial habits. Free forever, no credit card required.
           </p>
           <div className="flex flex-wrap gap-3 justify-center relative z-10">
-            <a href="#" className="px-8 py-4 bg-[#16A34A] text-white hover:bg-[#15803D] rounded-2xl font-semibold text-sm inline-flex items-center gap-2 no-underline shadow-md shadow-green-600/10 hover:scale-[1.02] transition-all duration-200">
+            <button onClick={onGetStarted} className="px-8 py-4 bg-[#16A34A] text-white hover:bg-[#15803D] rounded-2xl font-semibold text-sm inline-flex items-center gap-2 no-underline shadow-md shadow-green-600/10 hover:scale-[1.02] transition-all duration-200 cursor-pointer">
               Get Started Free
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 6.5h10M7.5 2.5l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </a>
-            <a href="#" className="px-8 py-4 bg-white text-[#111111] border border-border hover:bg-gray-50 rounded-2xl font-semibold text-sm no-underline shadow-sm hover:scale-[1.02] transition-all duration-200">See the Demo</a>
+            </button>
+            <button onClick={onGetStarted} className="px-8 py-4 bg-white text-[#111111] border border-border hover:bg-gray-50 rounded-2xl font-semibold text-sm no-underline shadow-sm hover:scale-[1.02] transition-all duration-200 cursor-pointer">See the Demo</button>
           </div>
           <p className="text-[0.68rem] text-text-muted mt-[14px] relative">
             No credit card required &nbsp;·&nbsp; Cancel anytime &nbsp;·&nbsp; GDPR compliant
