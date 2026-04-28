@@ -350,8 +350,8 @@ function getIncome(){return state.transactions.filter(t=>t.amount>0);}
 function totalIncome(){return getIncome().reduce((a,t)=>a+t.amount,0);}
 function totalExpenses(){return Math.abs(getExpenses().reduce((a,t)=>a+t.amount,0));}
 function totalSavings(){return state.savings.reduce((a,s)=>a+s.balance,0);}
-function catLabel(c){{food:'Food',housing:'Housing',transport:'Transport',lifestyle:'Lifestyle',subscriptions:'Subscriptions',income:'Income'}[c]||c.charAt(0).toUpperCase()+c.slice(1);return{food:'Food',housing:'Housing',transport:'Transport',lifestyle:'Lifestyle',subscriptions:'Subscriptions',income:'Income'}[c]||c;}
-function catBadge(c){{food:'bg',housing:'bb',transport:'bo',lifestyle:'br',subscriptions:'ba',income:'bg'}[c];return {food:'bg',housing:'bb',transport:'bo',lifestyle:'br',subscriptions:'ba',income:'bg'}[c]||'bg';}
+function catLabel(c){return {food:'Food',housing:'Housing',transport:'Transport',lifestyle:'Lifestyle',subscriptions:'Subscriptions',income:'Income'}[c]||c.charAt(0).toUpperCase()+c.slice(1);}
+function catBadge(c){return {food:'bg',housing:'bb',transport:'bo',lifestyle:'br',subscriptions:'ba',income:'bg'}[c]||'bg';}
 function spentByCat(cat){return Math.abs(getExpenses().filter(t=>t.cat===cat).reduce((a,t)=>a+t.amount,0));}
 function col(){return dark?{green:'#4db87a',gold:'#c9922a',red:'#d85a30',amber:'#e8a020',blue:'#5aabee',grid:'rgba(255,255,255,0.05)',label:'#6a8a72',fill:'rgba(77,184,122,0.12)',fill2:'rgba(90,171,238,0.1)'}:{green:'#2a6e3a',gold:'#7a5000',red:'#7a2010',amber:'#7a5000',blue:'#1050a0',grid:'rgba(0,0,0,0.06)',label:'#5a6a5a',fill:'rgba(42,110,58,0.1)',fill2:'rgba(16,80,160,0.1)'};}
 
