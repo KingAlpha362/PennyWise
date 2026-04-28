@@ -4,6 +4,7 @@ import { fileURLToPath, URL } from 'url'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/PennyWise/',
   plugins: [react()],
   resolve: {
     alias: {
