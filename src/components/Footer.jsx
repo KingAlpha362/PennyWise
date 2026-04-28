@@ -1,7 +1,50 @@
+import { useEffect, useState } from 'react';
+import Grainient from './ui/Grainient';
+
 export default function Footer() {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    setIsDark(document.documentElement.classList.contains('dark'));
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <footer id="contact" className="border-t border-border pt-20 pb-10 bg-[rgba(255,255,255,0.01)] text-text-muted">
-      <div className="max-w-7xl mx-auto px-6 md:px-14">
+    <footer id="contact" className="relative border-t border-border pt-20 pb-10 bg-white dark:bg-[#050505] text-text-muted dark:text-[#F5F5F5] overflow-hidden">
+      {/* Soft fade from previous section */}
+      <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-transparent to-black/40 z-[5] pointer-events-none" />
+      
+      {/* Darker Grainient Background */}
+      {isDark && (
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <Grainient
+            color1="#B87A5C"
+            color2="#4A2412"
+            color3="#050505"
+            timeSpeed={0.04}
+            colorBalance={-0.4}
+            warpStrength={0.2}
+            warpFrequency={2.5}
+            warpSpeed={0.4}
+            warpAmplitude={20.0}
+            blendAngle={20.0}
+            blendSoftness={0.4}
+            rotationAmount={80.0}
+            noiseScale={1.0}
+            grainAmount={0.04}
+            grainScale={2.5}
+            contrast={1.2}
+            saturation={1.0}
+            zoom={1.2}
+          />
+        </div>
+      )}
+
+      <div className="max-w-7xl mx-auto px-6 md:px-14 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16 mb-20">
           
           {/* Left Column - Brand & Newsletter */}

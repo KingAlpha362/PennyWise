@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import ShapeGrid from './ui/ShapeGrid';
 
 export default function DashboardPreview() {
   useEffect(() => {
@@ -20,8 +21,19 @@ export default function DashboardPreview() {
   }, []);
 
   return (
-    <section className="px-6 md:px-14 py-20">
-      <div className="max-w-7xl mx-auto">
+    <section className="relative px-6 md:px-14 py-20 overflow-hidden">
+      {/* ShapeGrid Background */}
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+        <ShapeGrid 
+          speed={0.3} 
+          squareSize={40}
+          direction="diagonal"
+          shape="square"
+          hoverTrailAmount={5}
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12 reveal">
           <div className="label mb-4">Live Preview</div>
           <h2 className="font-display" style={{ fontSize: 'clamp(2rem,4vw,3.4rem)', lineHeight: '1.08', letterSpacing: '-0.03em' }}>
@@ -30,7 +42,7 @@ export default function DashboardPreview() {
           <p className="text-text-muted mt-[10px] text-[0.88rem]">Your finances at a glance. Always clear, always actionable.</p>
         </div>
 
-        <div id="dashWrap" className="glass-card rounded-3xl overflow-hidden reveal" style={{ boxShadow: '0 60px 160px rgba(0,0,0,0.72)' }}>
+        <div id="dashWrap" className="glass-card rounded-2xl overflow-hidden reveal border border-border" style={{ boxShadow: '0 30px 80px rgba(0,0,0,0.08)' }}>
           {/* Browser chrome */}
           <div className="bg-[rgba(255,255,255,0.03)] border-b border-border py-3 px-[22px] flex items-center gap-[7px]">
             <div className="w-[9px] h-[9px] rounded-full bg-[rgba(255,255,255,0.14)]"></div>

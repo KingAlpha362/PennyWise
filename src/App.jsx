@@ -61,13 +61,21 @@ export default function App() {
     <div className="bg-bg text-text min-h-screen">
       <Header />
       <Hero />
+      <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
       <Press />
+      <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
       <DashboardWidget />
+      <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
       <Stats />
+      <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
       <Features />
+      <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
       <Benefits />
+      <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
       <DashboardPreview />
+      <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
       <Testimonials />
+      <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
       <CTA />
       <Footer />
     </div>

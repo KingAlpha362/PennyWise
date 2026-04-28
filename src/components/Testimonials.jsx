@@ -1,4 +1,5 @@
 import React from 'react';
+import ShapeGrid from './ui/ShapeGrid';
 
 export default function Testimonials() {
   const testimonialsTop = [
@@ -40,7 +41,7 @@ export default function Testimonials() {
   ];
 
   const renderCard = (item, i) => (
-    <div key={i} className="glass-card rounded-3xl p-8 border border-[rgba(255,255,255,0.12)] bg-[rgba(255,255,255,0.02)] shadow-sm flex flex-col justify-between h-[260px] w-[350px] shrink-0 hover:scale-[1.02] transition-transform duration-300">
+    <div key={i} className="glass-card rounded-2xl p-8 border border-border bg-bg-card shadow-sm flex flex-col justify-between h-[260px] w-[350px] shrink-0 hover:scale-[1.02] transition-transform duration-300">
       <div className="mb-6">
         <div className="flex gap-1 mb-4 text-[#FBBC05]">
           {[...Array(5)].map((_, idx) => (
@@ -65,7 +66,18 @@ export default function Testimonials() {
 
   return (
     <section className="py-24 overflow-hidden relative">
-      <div className="max-w-7xl mx-auto px-6 md:px-14 mb-16">
+      {/* ShapeGrid Background */}
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+        <ShapeGrid 
+          speed={0.3} 
+          squareSize={40}
+          direction="diagonal"
+          shape="square"
+          hoverTrailAmount={5}
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 md:px-14 mb-16 relative z-10">
         <div className="text-center reveal">
           <div className="label mb-4">Wall of Love</div>
           <h2 className="font-display font-black text-[clamp(2.5rem,5vw,4rem)] text-text leading-[1.05] tracking-[-0.03em]">
@@ -75,14 +87,14 @@ export default function Testimonials() {
       </div>
       
       {/* Top Marquee */}
-      <div className="flex overflow-hidden group w-full mb-6 reveal" style={{ maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}>
+      <div className="flex overflow-hidden group w-full mb-6 reveal relative z-10" style={{ maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}>
         <div className="flex shrink-0 gap-6 pr-6 animate-marquee group-hover:[animation-play-state:paused] w-max">
           {[...testimonialsTop, ...testimonialsTop].map((item, i) => renderCard(item, i))}
         </div>
       </div>
 
       {/* Bottom Marquee */}
-      <div className="flex overflow-hidden group w-full reveal" style={{ maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}>
+      <div className="flex overflow-hidden group w-full reveal relative z-10" style={{ maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}>
         <div className="flex shrink-0 gap-6 pr-6 animate-marquee-reverse group-hover:[animation-play-state:paused] w-max">
           {[...testimonialsBottom, ...testimonialsBottom].map((item, i) => renderCard(item, i))}
         </div>

@@ -2,25 +2,27 @@
 
 @layer base {
   :root {
-    --bg: #fdfaf6;
-    --bg-card: rgba(255,255,255,0.7);
-    --border: rgba(0,0,0,0.06);
-    --border-card: rgba(0,0,0,0.05);
-    --text: #1a1a24;
-    --text-muted: rgba(26,26,36,0.6);
-    --accent: #e76f51;
-    --accent-dim: rgba(231,111,81,0.15);
+    --bg: #FFFFFF;
+    --bg-card: rgba(247, 247, 247, 0.75);
+    --border: rgba(17, 17, 17, 0.06);
+    --border-card: rgba(17, 17, 17, 0.05);
+    --text: #111111;
+    --text-muted: rgba(17, 17, 17, 0.6);
+    --accent: #16A34A;
+    --accent-dim: rgba(22, 163, 74, 0.08);
+    --border-grid: rgba(17, 17, 17, 0.04);
   }
 
   .dark {
-    --bg: #050a14;
-    --bg-card: rgba(140,160,200,0.03);
-    --border: rgba(255,255,255,0.08);
-    --border-card: rgba(255,255,255,0.06);
-    --text: #f4f6fa;
-    --text-muted: rgba(244,246,250,0.55);
-    --accent: #f4a261;
-    --accent-dim: rgba(244,162,97,0.15);
+    --bg: #1b1511;
+    --bg-card: rgba(27, 21, 17, 0.4);
+    --border: rgba(253, 248, 245, 0.12);
+    --border-card: rgba(253, 248, 245, 0.08);
+    --text: #fdf8f5;
+    --text-muted: rgba(253, 248, 245, 0.65);
+    --accent: #22c55e;
+    --accent-dim: rgba(34, 197, 94, 0.15);
+    --border-grid: rgba(253, 248, 245, 0.05);
   }
   
   html { scroll-behavior: smooth; }

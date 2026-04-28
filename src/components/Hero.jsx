@@ -1,8 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Grainient from './ui/Grainient';
 
 export default function Hero() {
+  const [isDark, setIsDark] = useState(false);
+
   useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    setIsDark(document.documentElement.classList.contains('dark'));
+
     const timer = setTimeout(() => {
       const heroLine = document.getElementById('heroLine');
       const dotEnd = document.getElementById('dotEnd');
@@ -15,54 +23,57 @@ export default function Hero() {
         }, 2400);
       }
     }, 1200);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
   }, []);
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center pt-24 pb-16 px-6 md:px-14 overflow-hidden">
+    <section id="home" className="relative min-h-screen flex items-center pt-24 pb-16 px-6 md:px-14 overflow-hidden bg-bg dark:bg-[#1b1511]">
       {/* Background WebGL Grainient */}
-      <div className="absolute inset-0 z-0 opacity-60">
+      <div className="absolute inset-0 z-0 opacity-100">
         <Grainient 
-          color1="#050a14" 
-          color2="#f4a261" 
-          color3="#1a1a24"
-          timeSpeed={0.15}
-          warpAmplitude={40.0}
+          color1={isDark ? "#1b1511" : "#ffffff"} 
+          color2={isDark ? "#c28d6c" : "#f5f5f5"} 
+          color3={isDark ? "#3c2f25" : "#eaeaea"}
+          timeSpeed={isDark ? 0.1 : 0.05}
+          warpAmplitude={isDark ? 30.0 : 15.0}
         />
       </div>
 
       <div className="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-14 items-center relative z-10">
         {/* Copy */}
         <div>
-          <div className="label hero-t1 mb-6">Personal Finance, Reimagined</div>
+          <div className="label hero-t1 mb-6 text-accent border-accent/20">Personal Finance, Reimagined</div>
 
-          <h1 className="font-display hero-t2" style={{ fontSize: 'clamp(3rem,6vw,5.6rem)', lineHeight: '1.04', letterSpacing: '-0.035em', fontWeight: '400' }}>
-            Take Control<br />
-            <em className="text-accent">of Your</em><br />
-            Money.
+          <h1 className="font-display hero-t2 font-extrabold tracking-[-0.05em]" style={{ color: isDark ? '#ffffff' : '#111111', fontSize: 'clamp(3.2rem,6.5vw,5.8rem)', lineHeight: '1.02' }}>
+            See Where Every<br />
+            <em className="text-accent not-italic">Cent Goes.</em><br />
+            Instantly.
           </h1>
 
-          <p className="hero-t3 mt-6 text-base md:text-lg leading-relaxed text-text-muted max-w-[400px]">
-            Track, save, and grow your finances with clarity. PennyWise uses subtle AI to give you the intelligence to make every penny count.
+          <p className="hero-t3 mt-6 text-base md:text-lg leading-relaxed max-w-[420px]" style={{ color: isDark ? 'rgba(255,255,255,0.8)' : '#444444' }}>
+            Build wealth without thinking about it. PennyWise uses subtle AI to organize your finances, giving you absolute clarity over every dollar.
           </p>
 
           <div className="hero-t4 flex flex-wrap gap-3 mt-10">
-            <a href="#" className="btn-primary px-7 py-3.5 rounded-full font-semibold text-sm inline-flex items-center gap-2 no-underline">
-              Get Started — Free
+            <a href="#" className="px-7 py-3.5 bg-[#16A34A] text-white hover:bg-[#15803D] rounded-2xl font-semibold text-sm inline-flex items-center gap-2 no-underline shadow-md shadow-green-600/10 transition-all duration-200 hover:scale-[1.02]">
+              Get Started Free
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 6.5h10M7.5 2.5l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </a>
-            <a href="#features" className="btn-ghost px-7 py-3.5 rounded-full font-semibold text-sm no-underline text-inherit">Learn More</a>
+            <a href="#features" className="px-7 py-3.5 bg-white dark:bg-transparent border border-border dark:border-white/20 hover:bg-gray-50 dark:hover:bg-white/10 rounded-2xl font-semibold text-sm no-underline shadow-sm transition-all duration-200 hover:scale-[1.02]" style={{ color: isDark ? '#ffffff' : '#111111' }}>Learn More</a>
           </div>
 
           {/* Social proof */}
           <div className="hero-t5 flex items-center gap-4 mt-10">
             <div className="flex" style={{ marginRight: '4px' }}>
-              <div className="w-[30px] h-[30px] rounded-full bg-[rgba(201,185,154,0.18)] border-2 border-bg flex items-center justify-center text-[0.6rem] font-bold z-30">AL</div>
-              <div className="w-[30px] h-[30px] rounded-full bg-[rgba(255,255,255,0.08)] border-2 border-bg flex items-center justify-center text-[0.6rem] font-bold -ml-2 z-20">JM</div>
-              <div className="w-[30px] h-[30px] rounded-full bg-[rgba(201,185,154,0.1)] border-2 border-bg flex items-center justify-center text-[0.6rem] font-bold -ml-2 z-10">RK</div>
-              <div className="w-[30px] h-[30px] rounded-full bg-[rgba(255,255,255,0.05)] border-2 border-bg flex items-center justify-center text-[0.65rem] -ml-2 z-0">+</div>
+              <div className="w-[30px] h-[30px] rounded-full bg-[rgba(17,17,17,0.08)] dark:bg-white/10 border-2 border-bg dark:border-[#1b1511] flex items-center justify-center text-[0.6rem] font-bold z-30" style={{ color: isDark ? '#ffffff' : '#111111' }}>AL</div>
+              <div className="w-[30px] h-[30px] rounded-full bg-[rgba(17,17,17,0.04)] dark:bg-white/5 border-2 border-bg dark:border-[#1b1511] flex items-center justify-center text-[0.6rem] font-bold -ml-2 z-20" style={{ color: isDark ? '#ffffff' : '#111111' }}>JM</div>
+              <div className="w-[30px] h-[30px] rounded-full bg-[rgba(17,17,17,0.06)] dark:bg-white/8 border-2 border-bg dark:border-[#1b1511] flex items-center justify-center text-[0.6rem] font-bold -ml-2 z-10" style={{ color: isDark ? '#ffffff' : '#111111' }}>RK</div>
+              <div className="w-[30px] h-[30px] rounded-full bg-[rgba(17,17,17,0.02)] dark:bg-white/5 border-2 border-bg dark:border-[#1b1511] flex items-center justify-center text-[0.65rem] -ml-2 z-0" style={{ color: isDark ? '#ffffff' : '#111111' }}>+</div>
             </div>
-            <span className="text-[0.78rem] text-text-muted">Trusted by <strong className="text-text">12,000+</strong> users worldwide</span>
+            <span className="text-[0.78rem]" style={{ color: isDark ? 'rgba(255,255,255,0.7)' : '#555555' }}>Trusted by <strong style={{ color: isDark ? '#ffffff' : '#111111' }}>12,000+</strong> users worldwide</span>
           </div>
         </div>
 

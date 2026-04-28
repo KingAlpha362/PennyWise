@@ -1,5 +1,6 @@
 import React from 'react';
 import { ResponsiveContainer, AreaChart, Area, Tooltip } from 'recharts';
+import ShapeGrid from './ui/ShapeGrid';
 
 const chartData = [
   { month: 'Jan', value: 3200 },
@@ -24,10 +25,21 @@ const CustomTooltip = ({ active, payload }) => {
 
 export default function DashboardWidget() {
   return (
-    <section className="px-6 md:px-14 pb-20 pt-10">
-      <div className="max-w-5xl mx-auto glass-card rounded-3xl overflow-hidden border border-[rgba(255,255,255,0.06)] shadow-sm">
+    <section className="relative px-6 md:px-14 pb-20 pt-10 overflow-hidden">
+      {/* ShapeGrid Background */}
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+        <ShapeGrid 
+          speed={0.3} 
+          squareSize={40}
+          direction="diagonal"
+          shape="square"
+          hoverTrailAmount={5}
+        />
+      </div>
+
+      <div className="relative z-10 max-w-5xl mx-auto glass-card rounded-2xl overflow-hidden border border-border shadow-sm hover:scale-[1.01] transition-all duration-300">
         {/* Dashboard content */}
-        <div className="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 bg-[rgba(255,255,255,0.02)] min-h-[380px]">
+        <div className="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 bg-bg-card min-h-[380px]">
           
           {/* Left sidebar */}
           <div className="lg:col-span-3 hidden lg:flex flex-col gap-3 border-r border-[rgba(255,255,255,0.06)] pr-4">
