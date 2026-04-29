@@ -11,6 +11,9 @@ import Features from './components/Features';
 import Benefits from './components/Benefits';
 import DashboardPreview from './components/DashboardPreview';
 import Testimonials from './components/Testimonials';
+import Pricing from './components/Pricing';
+import HowItWorks from './components/HowItWorks';
+import SecurityIntegrations from './components/SecurityIntegrations';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
 import DashboardApp from './components/DashboardApp';
@@ -84,6 +87,10 @@ export default function App() {
       <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
       <Stats />
       <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
+      <HowItWorks />
+      <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
+      <SecurityIntegrations />
+      <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
       <Features />
       <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
       <Benefits />
@@ -91,6 +98,7 @@ export default function App() {
       <DashboardPreview />
       <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
       <Testimonials />
+      <Pricing />
       <div className="h-px w-full bg-[#111111]/5 dark:bg-white/10" />
       <CTA onGetStarted={() => setAppView('signup')} />
       <Footer />

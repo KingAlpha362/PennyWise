@@ -42,7 +42,7 @@ export default function DashboardPreview() {
           <p className="text-text-muted mt-[10px] text-[0.88rem]">Your finances at a glance. Always clear, always actionable.</p>
         </div>
 
-        <div id="dashWrap" className="glass-card rounded-2xl overflow-hidden reveal border border-border" style={{ boxShadow: '0 30px 80px rgba(0,0,0,0.08)' }}>
+        <div id="dashWrap" className="glass-card rounded-2xl overflow-hidden reveal border border-border" style={{ boxShadow: '0 30px 80px rgba(0,0,0,0.08)' }} role="img" aria-label="Interactive dashboard preview showing total balance, monthly spend, and a cash flow chart">
           {/* Browser chrome */}
           <div className="bg-[rgba(255,255,255,0.03)] border-b border-border py-3 px-[22px] flex items-center gap-[7px]">
             <div className="w-[9px] h-[9px] rounded-full bg-[rgba(255,255,255,0.14)]"></div>

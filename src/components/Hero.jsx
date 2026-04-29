@@ -79,7 +79,7 @@ export default function Hero({ onGetStarted }) {
 
         {/* Dashboard visual */}
         <div className="hero-vis relative flex justify-center">
-          <div className="float-card relative w-full max-w-[440px]">
+          <div className="float-card relative w-full max-w-[440px]" role="img" aria-label="Interactive dashboard visualization showing net balance, chart, and spending breakdown">
             {/* Main card */}
             <div className="glass-card rounded-3xl p-6" style={{ boxShadow: '0 48px 120px rgba(0,0,0,0.65),0 0 0 1px rgba(201,185,154,0.09)' }}>
               {/* Header row */}

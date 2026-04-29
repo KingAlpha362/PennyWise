@@ -230,27 +230,27 @@ export default function DashboardApp({ onSignOut }) {
   const pieColors = ['#16A34A', '#5aabee', '#c9922a', '#d85a30', '#e8a020'];
 
   return (
-    <div className="flex h-screen w-full bg-white dark:bg-[#111814] text-zinc-900 dark:text-[#fdf8f5] transition-colors font-sans overflow-hidden">
+    <div className="flex h-screen w-full bg-bg text-text transition-colors font-sans overflow-hidden">
       
       {/* Sidebar */}
-      <aside className="w-64 bg-zinc-50 dark:bg-[#0d120f] border-r border-zinc-200 dark:border-[#1e2b20] flex flex-col relative z-20">
-        <div className="p-6 border-b border-zinc-200 dark:border-[#1e2b20] flex items-center justify-between">
-          <span className="text-xl font-bold text-[#16A34A]">Penny<span className="text-[#c9922a]">Wise</span></span>
+      <aside className="w-64 bg-card border-r border-border flex flex-col relative z-20">
+        <div className="p-6 border-b border-border flex items-center justify-between">
+          <span className="text-xl font-extrabold text-[#16A34A]">Penny<span className="text-[#c9922a]">Wise</span></span>
         </div>
         
         <nav className="flex-1 p-4 space-y-6 overflow-y-auto">
           <div>
-            <p className="text-xs font-bold text-zinc-400 dark:text-[#6a8a72] tracking-wider uppercase mb-2">Main</p>
+            <p className="text-xs font-bold text-text-muted tracking-wider uppercase mb-2">Main</p>
             <div className="space-y-1">
               <button 
                 onClick={() => setCurrentView('overview')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all ${currentView === 'overview' ? 'bg-zinc-200/60 dark:bg-[#131f15] text-[#16A34A]' : 'text-zinc-600 dark:text-[#8aa890] hover:bg-zinc-200/30 dark:hover:bg-[#131f15] hover:text-[#16A34A]'}`}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all ${currentView === 'overview' ? 'bg-border text-[#16A34A]' : 'text-text-muted hover:bg-border/50 hover:text-[#16A34A]'}`}
               >
                 <Grid size={18} /> Overview
               </button>
               <button 
                 onClick={() => setCurrentView('transactions')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all ${currentView === 'transactions' ? 'bg-zinc-200/60 dark:bg-[#131f15] text-[#16A34A]' : 'text-zinc-600 dark:text-[#8aa890] hover:bg-zinc-200/30 dark:hover:bg-[#131f15] hover:text-[#16A34A]'}`}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all ${currentView === 'transactions' ? 'bg-border text-[#16A34A]' : 'text-text-muted hover:bg-border/50 hover:text-[#16A34A]'}`}
               >
                 <List size={18} /> Transactions
               </button>
@@ -258,35 +258,35 @@ export default function DashboardApp({ onSignOut }) {
           </div>
 
           <div>
-            <p className="text-xs font-bold text-zinc-400 dark:text-[#6a8a72] tracking-wider uppercase mb-2">Money</p>
+            <p className="text-xs font-bold text-text-muted tracking-wider uppercase mb-2">Money</p>
             <div className="space-y-1">
               <button 
                 onClick={() => setCurrentView('income')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all ${currentView === 'income' ? 'bg-zinc-200/60 dark:bg-[#131f15] text-[#16A34A]' : 'text-zinc-600 dark:text-[#8aa890] hover:bg-zinc-200/30 dark:hover:bg-[#131f15] hover:text-[#16A34A]'}`}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all ${currentView === 'income' ? 'bg-border text-[#16A34A]' : 'text-text-muted hover:bg-border/50 hover:text-[#16A34A]'}`}
               >
                 <TrendingUp size={18} /> Income
               </button>
               <button 
                 onClick={() => setCurrentView('expenses')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all ${currentView === 'expenses' ? 'bg-zinc-200/60 dark:bg-[#131f15] text-[#16A34A]' : 'text-zinc-600 dark:text-[#8aa890] hover:bg-zinc-200/30 dark:hover:bg-[#131f15] hover:text-[#16A34A]'}`}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all ${currentView === 'expenses' ? 'bg-border text-[#16A34A]' : 'text-text-muted hover:bg-border/50 hover:text-[#16A34A]'}`}
               >
                 <TrendingDown size={18} /> Expenses
               </button>
               <button 
                 onClick={() => setCurrentView('budgets')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all ${currentView === 'budgets' ? 'bg-zinc-200/60 dark:bg-[#131f15] text-[#16A34A]' : 'text-zinc-600 dark:text-[#8aa890] hover:bg-zinc-200/30 dark:hover:bg-[#131f15] hover:text-[#16A34A]'}`}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all ${currentView === 'budgets' ? 'bg-border text-[#16A34A]' : 'text-text-muted hover:bg-border/50 hover:text-[#16A34A]'}`}
               >
                 <PieIcon size={18} /> Budgets
               </button>
               <button 
                 onClick={() => setCurrentView('savings')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all ${currentView === 'savings' ? 'bg-zinc-200/60 dark:bg-[#131f15] text-[#16A34A]' : 'text-zinc-600 dark:text-[#8aa890] hover:bg-zinc-200/30 dark:hover:bg-[#131f15] hover:text-[#16A34A]'}`}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all ${currentView === 'savings' ? 'bg-border text-[#16A34A]' : 'text-text-muted hover:bg-border/50 hover:text-[#16A34A]'}`}
               >
                 <Wallet size={18} /> Savings
               </button>
               <button 
                 onClick={() => setCurrentView('goals')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all ${currentView === 'goals' ? 'bg-zinc-200/60 dark:bg-[#131f15] text-[#16A34A]' : 'text-zinc-600 dark:text-[#8aa890] hover:bg-zinc-200/30 dark:hover:bg-[#131f15] hover:text-[#16A34A]'}`}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all ${currentView === 'goals' ? 'bg-border text-[#16A34A]' : 'text-text-muted hover:bg-border/50 hover:text-[#16A34A]'}`}
               >
                 <Target size={18} /> Goals
               </button>
@@ -294,23 +294,23 @@ export default function DashboardApp({ onSignOut }) {
           </div>
 
           <div>
-            <p className="text-xs font-bold text-zinc-400 dark:text-[#6a8a72] tracking-wider uppercase mb-2">Intelligence</p>
+            <p className="text-xs font-bold text-text-muted tracking-wider uppercase mb-2">Intelligence</p>
             <div className="space-y-1">
               <button 
                 onClick={() => setCurrentView('ai')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all ${currentView === 'ai' ? 'bg-zinc-200/60 dark:bg-[#131f15] text-[#16A34A]' : 'text-zinc-600 dark:text-[#8aa890] hover:bg-zinc-200/30 dark:hover:bg-[#131f15] hover:text-[#16A34A]'}`}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all ${currentView === 'ai' ? 'bg-border text-[#16A34A]' : 'text-text-muted hover:bg-border/50 hover:text-[#16A34A]'}`}
               >
                 <Bot size={18} /> AI Analysis
               </button>
               <button 
                 onClick={() => setCurrentView('chat')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all ${currentView === 'chat' ? 'bg-zinc-200/60 dark:bg-[#131f15] text-[#16A34A]' : 'text-zinc-600 dark:text-[#8aa890] hover:bg-zinc-200/30 dark:hover:bg-[#131f15] hover:text-[#16A34A]'}`}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all ${currentView === 'chat' ? 'bg-border text-[#16A34A]' : 'text-text-muted hover:bg-border/50 hover:text-[#16A34A]'}`}
               >
                 <MessageSquare size={18} /> Chatbot
               </button>
               <button 
                 onClick={() => setCurrentView('settings')}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all ${currentView === 'settings' ? 'bg-zinc-200/60 dark:bg-[#131f15] text-[#16A34A]' : 'text-zinc-600 dark:text-[#8aa890] hover:bg-zinc-200/30 dark:hover:bg-[#131f15] hover:text-[#16A34A]'}`}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all ${currentView === 'settings' ? 'bg-border text-[#16A34A]' : 'text-text-muted hover:bg-border/50 hover:text-[#16A34A]'}`}
               >
                 <Settings size={18} /> Settings
               </button>
@@ -318,24 +318,24 @@ export default function DashboardApp({ onSignOut }) {
           </div>
         </nav>
 
-        <div className="p-4 border-t border-zinc-200 dark:border-[#1e2b20] space-y-3">
+        <div className="p-4 border-t border-border space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-zinc-200 dark:bg-[#131f15] border border-zinc-300 dark:border-[#2a3a2c] flex items-center justify-center font-bold text-[#c9922a]">JD</div>
+            <div className="w-9 h-9 rounded-full bg-border border border-border-card flex items-center justify-center font-bold text-[#c9922a]">JD</div>
             <div>
-              <h4 className="text-sm font-semibold">James D.</h4>
-              <p className="text-xs text-zinc-500 dark:text-[#6a8a72]">Pro Plan</p>
+              <h4 className="text-sm font-bold">James D.</h4>
+              <p className="text-xs text-text-muted">Pro Plan</p>
             </div>
           </div>
           <div className="flex gap-2 mt-2">
             <button 
               onClick={() => setIsDark(!isDark)}
-              className="flex-1 p-2 bg-zinc-200 dark:bg-[#131f15] hover:bg-zinc-300 dark:hover:bg-[#1a2818] text-zinc-600 dark:text-[#8aa890] hover:text-zinc-900 dark:hover:text-white rounded-lg transition-all text-xs flex justify-center items-center gap-2"
+              className="flex-1 p-2 bg-bg hover:bg-border text-text-muted hover:text-text border border-border rounded-lg transition-all font-bold text-xs flex justify-center items-center gap-2 cursor-pointer shadow-sm"
             >
               {isDark ? <Sun size={14} /> : <Moon size={14} />} Theme
             </button>
             <button 
               onClick={onSignOut}
-              className="p-2 bg-red-100 dark:bg-red-900/20 hover:bg-red-200 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 rounded-lg transition-all text-xs flex justify-center items-center"
+              className="p-2 bg-red-900/10 hover:bg-red-900/20 text-red-500 rounded-lg transition-all text-xs flex justify-center items-center cursor-pointer shadow-sm"
             >
               <LogOut size={14} />
             </button>
@@ -347,10 +347,10 @@ export default function DashboardApp({ onSignOut }) {
       <main className="flex-1 flex flex-col overflow-hidden relative z-10">
         
         {/* Header */}
-        <header className="bg-white dark:bg-[#0d120f] border-b border-zinc-200 dark:border-[#1e2b20] px-8 py-4 flex justify-between items-center relative z-10">
+        <header className="bg-bg border-b border-border px-8 py-4 flex justify-between items-center relative z-10">
           <div>
-            <h1 className="text-lg font-bold capitalize">{currentView}</h1>
-            <p className="text-xs text-zinc-500 dark:text-[#6a8a72]">Optimizing your allocations intelligently.</p>
+            <h1 className="text-lg font-extrabold capitalize text-text">{currentView}</h1>
+            <p className="text-xs text-text-muted font-bold">Optimizing your allocations intelligently.</p>
           </div>
           {['overview', 'transactions', 'income', 'expenses', 'budgets', 'savings', 'goals'].includes(currentView) && (
             <button 
@@ -363,7 +363,7 @@ export default function DashboardApp({ onSignOut }) {
                 else if (currentView === 'goals') setFormType('goal');
                 setIsModalOpen(true);
               }}
-              className="flex items-center gap-2 px-4 py-2 bg-[#16A34A] hover:bg-[#15803D] text-white dark:text-[#111814] text-sm font-semibold rounded-xl shadow-md hover:scale-[1.02] transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-[#16A34A] hover:bg-[#15803D] text-white font-bold rounded-xl shadow-md hover:scale-[1.02] transition-all cursor-pointer"
             >
               <Plus size={16} /> Add {currentView === 'overview' || currentView === 'transactions' ? 'Entry' : currentView.slice(0, -1)}
             </button>
@@ -377,27 +377,27 @@ export default function DashboardApp({ onSignOut }) {
           {currentView === 'overview' && (
             <>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm">
-                  <p className="text-xs text-zinc-400 dark:text-[#6a8a72] font-bold uppercase tracking-wider">Total Income</p>
-                  <h3 className="text-3xl font-extrabold mt-2 text-green-600 dark:text-green-400">R {totalIncome.toLocaleString()}</h3>
+                <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm">
+                  <p className="text-xs text-text-muted font-bold uppercase tracking-wider">Total Income</p>
+                  <h3 className="text-3xl font-extrabold mt-2 text-green-500">R {totalIncome.toLocaleString()}</h3>
                 </div>
-                <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm">
-                  <p className="text-xs text-zinc-400 dark:text-[#6a8a72] font-bold uppercase tracking-wider">Total Expenses</p>
-                  <h3 className="text-3xl font-extrabold mt-2 text-red-600 dark:text-red-400">R {totalExpenses.toLocaleString()}</h3>
+                <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm">
+                  <p className="text-xs text-text-muted font-bold uppercase tracking-wider">Total Expenses</p>
+                  <h3 className="text-3xl font-extrabold mt-2 text-red-500">R {totalExpenses.toLocaleString()}</h3>
                 </div>
-                <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm">
-                  <p className="text-xs text-zinc-400 dark:text-[#6a8a72] font-bold uppercase tracking-wider">Net Surplus</p>
+                <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm">
+                  <p className="text-xs text-text-muted font-bold uppercase tracking-wider">Net Surplus</p>
                   <h3 className="text-3xl font-extrabold mt-2 text-[#c9922a]">R {(totalIncome - totalExpenses).toLocaleString()}</h3>
                 </div>
-                <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm">
-                  <p className="text-xs text-zinc-400 dark:text-[#6a8a72] font-bold uppercase tracking-wider">Total Savings</p>
-                  <h3 className="text-3xl font-extrabold mt-2 text-green-600 dark:text-green-400">R {totalSavings.toLocaleString()}</h3>
+                <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm">
+                  <p className="text-xs text-text-muted font-bold uppercase tracking-wider">Total Savings</p>
+                  <h3 className="text-3xl font-extrabold mt-2 text-green-500">R {totalSavings.toLocaleString()}</h3>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm">
-                  <h4 className="text-sm font-bold text-zinc-400 dark:text-[#8aa890] mb-4">Cash Flow Trends (6mo)</h4>
+                <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm">
+                  <h4 className="text-sm font-bold text-text-muted mb-4">Cash Flow Trends (6mo)</h4>
                   <div className="h-64 w-full">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={cashFlowData}>
@@ -412,8 +412,8 @@ export default function DashboardApp({ onSignOut }) {
                   </div>
                 </div>
 
-                <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm">
-                  <h4 className="text-sm font-bold text-zinc-400 dark:text-[#8aa890] mb-4">Expenses by Category</h4>
+                <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm">
+                  <h4 className="text-sm font-bold text-text-muted mb-4">Expenses by Category</h4>
                   <div className="h-64 w-full flex items-center justify-center">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
@@ -433,47 +433,47 @@ export default function DashboardApp({ onSignOut }) {
 
           {/* TRANSACTIONS */}
           {currentView === 'transactions' && (
-            <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm space-y-6">
+            <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm space-y-6">
               <div className="flex flex-wrap gap-2">
                 {['all', 'income', 'food', 'housing', 'transport', 'lifestyle', 'subscriptions'].map(cat => (
                   <button
                     key={cat}
                     onClick={() => setTxnFilter(cat)}
-                    className={`px-3 py-1.5 text-xs rounded-xl border font-bold transition-all capitalize ${txnFilter === cat ? 'bg-[#16A34A] text-white dark:text-[#111814] border-[#16A34A]' : 'bg-white dark:bg-[#1a2818] text-zinc-600 dark:text-[#8aa890] border-zinc-300 dark:border-[#1e2b20] hover:text-zinc-900 dark:hover:text-white'}`}
+                    className={`px-3 py-1.5 text-xs rounded-xl border font-bold transition-all capitalize cursor-pointer ${txnFilter === cat ? 'bg-[#16A34A] text-white border-[#16A34A]' : 'bg-bg text-text-muted border-border hover:text-text'}`}
                   >
                     {cat}
                   </button>
                 ))}
               </div>
 
-              <div className="overflow-x-auto border border-zinc-200 dark:border-[#1e2b20] rounded-xl bg-white dark:bg-[#0d120f]">
+              <div className="overflow-x-auto border border-border rounded-xl bg-bg">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-zinc-100 dark:bg-[#0d120f] text-zinc-500 dark:text-[#6a8a72] text-xs uppercase tracking-wider">
-                      <th className="p-4 border-b border-zinc-200 dark:border-[#1e2b20]">Date</th>
-                      <th className="p-4 border-b border-zinc-200 dark:border-[#1e2b20]">Merchant</th>
-                      <th className="p-4 border-b border-zinc-200 dark:border-[#1e2b20]">Category</th>
-                      <th className="p-4 border-b border-zinc-200 dark:border-[#1e2b20]">Method</th>
-                      <th className="p-4 border-b border-zinc-200 dark:border-[#1e2b20] text-right">Amount</th>
-                      <th className="p-4 border-b border-zinc-200 dark:border-[#1e2b20]"></th>
+                    <tr className="bg-bg text-text-muted text-xs uppercase tracking-wider">
+                      <th className="p-4 border-b border-border">Date</th>
+                      <th className="p-4 border-b border-border">Merchant</th>
+                      <th className="p-4 border-b border-border">Category</th>
+                      <th className="p-4 border-b border-border">Method</th>
+                      <th className="p-4 border-b border-border text-right">Amount</th>
+                      <th className="p-4 border-b border-border"></th>
                     </tr>
                   </thead>
                   <tbody className="text-sm">
                     {filteredTxns.map(t => (
-                      <tr key={t.id} className="hover:bg-zinc-50 dark:hover:bg-[#1a2818] transition-colors text-zinc-700 dark:text-[#fdf8f5]">
-                        <td className="p-4 border-b border-zinc-200 dark:border-[#1e2b20] text-zinc-400 dark:text-[#6a8a72]">{t.date}</td>
-                        <td className="p-4 border-b border-zinc-200 dark:border-[#1e2b20] font-semibold">{t.merchant}</td>
-                        <td className="p-4 border-b border-zinc-200 dark:border-[#1e2b20]">
-                          <span className={`px-2 py-0.5 text-xs rounded-md font-bold ${t.amount > 0 ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400'}`}>
+                      <tr key={t.id} className="hover:bg-border/30 transition-colors text-text">
+                        <td className="p-4 border-b border-border text-text-muted">{t.date}</td>
+                        <td className="p-4 border-b border-border font-bold">{t.merchant}</td>
+                        <td className="p-4 border-b border-border">
+                          <span className={`px-2 py-0.5 text-xs rounded-md font-bold ${t.amount > 0 ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'}`}>
                             {t.cat}
                           </span>
                         </td>
-                        <td className="p-4 border-b border-zinc-200 dark:border-[#1e2b20] text-zinc-400 dark:text-[#6a8a72]">{t.method}</td>
-                        <td className={`p-4 border-b border-zinc-200 dark:border-[#1e2b20] text-right font-extrabold ${t.amount > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                        <td className="p-4 border-b border-border text-text-muted">{t.method}</td>
+                        <td className={`p-4 border-b border-border text-right font-extrabold ${t.amount > 0 ? 'text-green-500' : 'text-red-500'}`}>
                           {t.amount > 0 ? '+' : ''}R {t.amount.toLocaleString()}
                         </td>
-                        <td className="p-4 border-b border-zinc-200 dark:border-[#1e2b20]">
-                          <button onClick={() => deleteTxn(t.id)} className="text-zinc-400 dark:text-[#6a8a72] hover:text-red-500 transition-all">
+                        <td className="p-4 border-b border-border">
+                          <button onClick={() => deleteTxn(t.id)} className="text-text-muted hover:text-red-500 transition-all cursor-pointer">
                             <Trash2 size={16} />
                           </button>
                         </td>
@@ -489,21 +489,21 @@ export default function DashboardApp({ onSignOut }) {
           {currentView === 'income' && (
             <>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm">
-                  <p className="text-xs text-zinc-400 dark:text-[#6a8a72] font-bold uppercase tracking-wider">Monthly Income</p>
-                  <h3 className="text-3xl font-extrabold mt-2 text-green-600 dark:text-green-400">R {totalIncome.toLocaleString()}</h3>
+                <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm">
+                  <p className="text-xs text-text-muted font-bold uppercase tracking-wider">Monthly Income</p>
+                  <h3 className="text-3xl font-extrabold mt-2 text-green-500">R {totalIncome.toLocaleString()}</h3>
                 </div>
-                <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm">
-                  <p className="text-xs text-zinc-400 dark:text-[#6a8a72] font-bold uppercase tracking-wider">Projected Annual</p>
-                  <h3 className="text-3xl font-extrabold mt-2 text-green-600 dark:text-green-400">R {(totalIncome * 12).toLocaleString()}</h3>
+                <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm">
+                  <p className="text-xs text-text-muted font-bold uppercase tracking-wider">Projected Annual</p>
+                  <h3 className="text-3xl font-extrabold mt-2 text-green-500">R {(totalIncome * 12).toLocaleString()}</h3>
                 </div>
-                <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm">
-                  <p className="text-xs text-zinc-400 dark:text-[#6a8a72] font-bold uppercase tracking-wider">Surplus Margin</p>
+                <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm">
+                  <p className="text-xs text-text-muted font-bold uppercase tracking-wider">Surplus Margin</p>
                   <h3 className="text-3xl font-extrabold mt-2 text-[#c9922a]">R {(totalIncome - totalExpenses).toLocaleString()}</h3>
                 </div>
               </div>
-              <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm">
-                <h4 className="text-sm font-bold text-zinc-400 dark:text-[#8aa890] mb-4">Income Allocation Overview</h4>
+              <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm">
+                <h4 className="text-sm font-bold text-text-muted mb-4">Income Allocation Overview</h4>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={incomeTrendData}>
@@ -523,16 +523,16 @@ export default function DashboardApp({ onSignOut }) {
           {currentView === 'expenses' && (
             <>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm">
-                  <p className="text-xs text-zinc-400 dark:text-[#6a8a72] font-bold uppercase tracking-wider">Total Spent</p>
-                  <h3 className="text-3xl font-extrabold mt-2 text-red-600 dark:text-red-400">R {totalExpenses.toLocaleString()}</h3>
+                <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm">
+                  <p className="text-xs text-text-muted font-bold uppercase tracking-wider">Total Spent</p>
+                  <h3 className="text-3xl font-extrabold mt-2 text-red-500">R {totalExpenses.toLocaleString()}</h3>
                 </div>
-                <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm">
-                  <p className="text-xs text-zinc-400 dark:text-[#6a8a72] font-bold uppercase tracking-wider">Total Actions</p>
+                <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm">
+                  <p className="text-xs text-text-muted font-bold uppercase tracking-wider">Total Actions</p>
                   <h3 className="text-3xl font-extrabold mt-2 text-[#c9922a]">{transactions.filter(t => t.amount < 0).length}</h3>
                 </div>
-                <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm">
-                  <p className="text-xs text-zinc-400 dark:text-[#6a8a72] font-bold uppercase tracking-wider">Max Segment Limit</p>
+                <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm">
+                  <p className="text-xs text-text-muted font-bold uppercase tracking-wider">Max Segment Limit</p>
                   <h3 className="text-3xl font-extrabold mt-2">R {Math.max(...budgets.map(b => b.limit), 0).toLocaleString()}</h3>
                 </div>
               </div>
@@ -541,29 +541,29 @@ export default function DashboardApp({ onSignOut }) {
 
           {/* BUDGETS */}
           {currentView === 'budgets' && (
-            <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm space-y-6">
-              <h4 className="text-sm font-bold text-zinc-400 dark:text-[#8aa890]">Active Budget Status</h4>
+            <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm space-y-6">
+              <h4 className="text-sm font-bold text-text-muted">Active Budget Status</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {budgets.map(b => {
                   const spent = Math.abs(transactions.filter(t => t.cat.toLowerCase() === b.cat.toLowerCase()).reduce((a, t) => a + t.amount, 0));
                   const pct = Math.min(Math.round(spent / b.limit * 100), 100);
                   const over = spent > b.limit;
                   return (
-                    <div key={b.id} className="p-4 bg-white dark:bg-[#1a2818] border border-zinc-200 dark:border-[#1e2b20] rounded-xl shadow-sm">
+                    <div key={b.id} className="p-4 bg-bg border border-border rounded-xl shadow-sm">
                       <div className="flex justify-between items-center mb-2">
                         <span className="font-bold text-sm">{b.cat}</span>
-                        <button onClick={() => deleteBudget(b.id)} className="text-zinc-400 dark:text-[#6a8a72] hover:text-red-500">
+                        <button onClick={() => deleteBudget(b.id)} className="text-text-muted hover:text-red-500 cursor-pointer">
                           <Trash2 size={14} />
                         </button>
                       </div>
-                      <div className="flex justify-between text-xs text-zinc-500 dark:text-[#8aa890] mb-1">
+                      <div className="flex justify-between text-xs text-text-muted mb-1">
                         <span>Spent: R {spent.toLocaleString()}</span>
                         <span>Limit: R {b.limit.toLocaleString()}</span>
                       </div>
-                      <div className="w-full h-2 rounded-full bg-zinc-200 dark:bg-[#0d120f] overflow-hidden">
+                      <div className="w-full h-2 rounded-full bg-border overflow-hidden">
                         <div className={`h-full rounded-full ${over ? 'bg-red-500' : pct > 80 ? 'bg-[#c9922a]' : 'bg-[#16A34A]'}`} style={{ width: `${pct}%` }}></div>
                       </div>
-                      <p className={`text-xs font-extrabold mt-2 text-right ${over ? 'text-red-600 dark:text-red-400' : 'text-zinc-500 dark:text-[#8aa890]'}`}>{pct}% consumed</p>
+                      <p className={`text-xs font-extrabold mt-2 text-right ${over ? 'text-red-500' : 'text-text-muted'}`}>{pct}% consumed</p>
                     </div>
                   );
                 })}
@@ -575,15 +575,15 @@ export default function DashboardApp({ onSignOut }) {
           {currentView === 'savings' && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {savings.map(s => (
-                <div key={s.id} className="p-4 bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] rounded-2xl shadow-sm">
+                <div key={s.id} className="p-4 bg-bg border border-border rounded-2xl shadow-sm">
                   <div className="flex justify-between items-start">
                     <span className="text-sm font-bold">{s.name}</span>
-                    <button onClick={() => deleteSaving(s.id)} className="text-zinc-400 dark:text-[#6a8a72] hover:text-red-500">
+                    <button onClick={() => deleteSaving(s.id)} className="text-text-muted hover:text-red-500 cursor-pointer">
                       <Trash2 size={14} />
                     </button>
                   </div>
-                  <h3 className="text-2xl font-extrabold mt-2 text-green-600 dark:text-green-400">R {s.balance.toLocaleString()}</h3>
-                  <p className="text-xs text-zinc-500 dark:text-[#6a8a72] mt-1 font-medium">{s.rate} Base Yield</p>
+                  <h3 className="text-2xl font-extrabold mt-2 text-green-500">R {s.balance.toLocaleString()}</h3>
+                  <p className="text-xs text-text-muted mt-1 font-medium">{s.rate} Base Yield</p>
                 </div>
               ))}
             </div>
@@ -595,25 +595,25 @@ export default function DashboardApp({ onSignOut }) {
               {goals.map(g => {
                 const pct = Math.min(Math.round(g.saved / g.target * 100), 100);
                 return (
-                  <div key={g.id} className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl flex flex-col justify-between shadow-sm">
+                  <div key={g.id} className="bg-bg border border-border p-6 rounded-2xl flex flex-col justify-between shadow-sm">
                     <div>
                       <div className="flex justify-between items-start mb-2">
-                        <span className="text-md font-bold">{g.name}</span>
-                        <button onClick={() => deleteGoal(g.id)} className="text-zinc-400 dark:text-[#6a8a72] hover:text-red-500">
+                        <span className="text-md font-extrabold">{g.name}</span>
+                        <button onClick={() => deleteGoal(g.id)} className="text-text-muted hover:text-red-500 cursor-pointer">
                           <Trash2 size={16} />
                         </button>
                       </div>
-                      <div className="flex justify-between text-xs text-zinc-500 dark:text-[#8aa890] mb-1">
+                      <div className="flex justify-between text-xs text-text-muted mb-1">
                         <span>Saved: R {g.saved.toLocaleString()}</span>
                         <span>Target: R {g.target.toLocaleString()}</span>
                       </div>
-                      <div className="w-full h-3 rounded-full bg-zinc-200 dark:bg-[#0d120f] overflow-hidden">
+                      <div className="w-full h-3 rounded-full bg-border overflow-hidden">
                         <div className="h-full rounded-full bg-[#16A34A]" style={{ width: `${pct}%` }}></div>
                       </div>
                     </div>
-                    <div className="mt-4 flex justify-between items-center border-t border-zinc-200 dark:border-[#1e2b20] pt-3">
-                      <span className="text-xs text-[#c9922a]">+R {g.monthly}/mo contribution</span>
-                      <span className="text-sm font-extrabold text-green-600 dark:text-green-400">{pct}% done</span>
+                    <div className="mt-4 flex justify-between items-center border-t border-border pt-3">
+                      <span className="text-xs text-[#c9922a] font-bold">+R {g.monthly}/mo contribution</span>
+                      <span className="text-sm font-extrabold text-green-500">{pct}% done</span>
                     </div>
                   </div>
                 );
@@ -623,22 +623,22 @@ export default function DashboardApp({ onSignOut }) {
 
           {/* AI ANALYSIS */}
           {currentView === 'ai' && (
-            <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl shadow-sm space-y-6">
+            <div className="bg-bg border border-border p-6 rounded-2xl shadow-sm space-y-6">
               <h4 className="text-sm font-bold flex items-center gap-2"><Sparkles className="text-[#c9922a]" size={18} /> AI Intelligence Recommendations</h4>
-              <div className="p-4 bg-white dark:bg-[#1a2818] border-l-4 border-red-500 rounded-r-xl space-y-1 border-y border-r border-zinc-200 dark:border-[#1e2b20] shadow-sm">
-                <p className="text-sm font-bold">High Spending Alert</p>
-                <p className="text-xs text-zinc-500 dark:text-[#8aa890]">Lifestyle parameters are increasing at rates that delay emergency funds deployment vectors.</p>
+              <div className="p-4 bg-bg border-l-4 border-l-red-500 rounded-r-xl space-y-1 border-y border-r border-border shadow-sm">
+                <p className="text-sm font-extrabold">High Spending Alert</p>
+                <p className="text-xs text-text-muted">Lifestyle parameters are increasing at rates that delay emergency funds deployment vectors.</p>
               </div>
             </div>
           )}
 
           {/* CHATBOT */}
           {currentView === 'chat' && (
-            <div className="h-[calc(100vh-240px)] bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-6 rounded-2xl flex flex-col shadow-sm">
-              <div className="flex-1 overflow-y-auto space-y-4 mb-4 p-4 bg-white dark:bg-[#0d120f] rounded-xl border border-zinc-200 dark:border-[#1e2b20] shadow-inner">
+            <div className="h-[calc(100vh-240px)] bg-bg border border-border p-6 rounded-2xl flex flex-col shadow-sm">
+              <div className="flex-1 overflow-y-auto space-y-4 mb-4 p-4 bg-card rounded-xl border border-border shadow-inner">
                 {chatMessages.map((m, i) => (
                   <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[70%] p-3 rounded-2xl text-sm font-medium leading-relaxed ${m.role === 'user' ? 'bg-[#16A34A] text-white dark:text-[#111814] rounded-tr-none' : 'bg-zinc-100 dark:bg-[#1a2818] border border-zinc-200 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] rounded-tl-none'}`}>
+                    <div className={`max-w-[70%] p-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm ${m.role === 'user' ? 'bg-[#16A34A] text-white rounded-tr-none' : 'bg-bg border border-border text-text rounded-tl-none'}`}>
                       {m.text}
                     </div>
                   </div>
@@ -651,11 +651,11 @@ export default function DashboardApp({ onSignOut }) {
                   onChange={(e) => setChatInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && sendChat()}
                   placeholder="Type a query for machine allocation engines..."
-                  className="flex-1 px-4 py-3 bg-white dark:bg-[#1a2818] border border-zinc-300 dark:border-[#1e2b20] focus:border-[#16A34A] outline-none text-sm rounded-xl transition-all dark:placeholder-[#6a8a72]"
+                  className="flex-1 px-4 py-3 bg-bg border border-border focus:border-[#16A34A] outline-none text-sm rounded-xl transition-all placeholder-text-muted/50 font-medium"
                 />
                 <button 
                   onClick={sendChat}
-                  className="px-6 bg-[#16A34A] hover:bg-[#15803D] text-white dark:text-[#111814] font-bold rounded-xl shadow-md transition-all active:scale-95 flex items-center justify-center"
+                  className="px-6 bg-[#16A34A] hover:bg-[#15803D] text-white font-bold rounded-xl shadow-md transition-all active:scale-95 flex items-center justify-center cursor-pointer"
                 >
                   Send
                 </button>
@@ -665,24 +665,24 @@ export default function DashboardApp({ onSignOut }) {
 
           {/* SETTINGS */}
           {currentView === 'settings' && (
-            <div className="bg-zinc-50 dark:bg-[#131f15] border border-zinc-200 dark:border-[#1e2b20] p-8 rounded-2xl shadow-sm max-w-2xl space-y-8">
+            <div className="bg-bg border border-border p-8 rounded-2xl shadow-sm max-w-2xl space-y-8">
               <div>
                 <h4 className="text-md font-bold mb-1 flex items-center gap-2">
                   <Settings className="text-[#c9922a]" size={20} /> Account Preferences
                 </h4>
-                <p className="text-xs text-zinc-500 dark:text-[#6a8a72]">Manage global allocations and user parameters safely.</p>
+                <p className="text-xs text-text-muted font-bold">Manage global allocations and user parameters safely.</p>
               </div>
 
-              <div className="space-y-6 border-t border-zinc-200 dark:border-[#1e2b20] pt-6">
+              <div className="space-y-6 border-t border-border pt-6">
                 <div className="flex justify-between items-center">
                   <div>
-                    <span className="text-sm font-semibold text-zinc-800 dark:text-[#fdf8f5] block">Default Currency</span>
-                    <span className="text-xs text-zinc-500 dark:text-[#8aa890]">Used for predictive cross-ledger mappings.</span>
+                    <span className="text-sm font-bold text-text block">Default Currency</span>
+                    <span className="text-xs text-text-muted font-medium">Used for predictive cross-ledger mappings.</span>
                   </div>
                   <select 
                     value={currency} 
                     onChange={(e) => setCurrency(e.target.value)}
-                    className="p-2 bg-white dark:bg-[#1a2818] border border-zinc-300 dark:border-[#1e2b20] text-sm font-bold rounded-xl outline-none text-zinc-800 dark:text-[#fdf8f5] focus:border-[#16A34A]"
+                    className="p-2 bg-bg border border-border text-sm font-bold rounded-xl outline-none text-text focus:border-[#16A34A] cursor-pointer"
                   >
                     <option value="ZAR">ZAR (R)</option>
                     <option value="USD">USD ($)</option>
@@ -693,12 +693,12 @@ export default function DashboardApp({ onSignOut }) {
 
                 <div className="flex justify-between items-center">
                   <div>
-                    <span className="text-sm font-semibold text-zinc-800 dark:text-[#fdf8f5] block">Smart Notifications</span>
-                    <span className="text-xs text-zinc-500 dark:text-[#8aa890]">Receive machine threshold limits alerts.</span>
+                    <span className="text-sm font-bold text-text block">Smart Notifications</span>
+                    <span className="text-xs text-text-muted font-medium">Receive machine threshold limits alerts.</span>
                   </div>
                   <button 
                     onClick={() => setNotifs(!notifs)}
-                    className={`w-12 h-6 rounded-full transition-all relative ${notifs ? 'bg-[#16A34A]' : 'bg-zinc-300 dark:bg-[#1a2818]'}`}
+                    className={`w-12 h-6 rounded-full transition-all relative cursor-pointer ${notifs ? 'bg-[#16A34A]' : 'bg-border'}`}
                   >
                     <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition-all shadow-sm ${notifs ? 'left-6.5' : 'left-0.5'}`} />
                   </button>
@@ -706,12 +706,12 @@ export default function DashboardApp({ onSignOut }) {
 
                 <div className="flex justify-between items-center">
                   <div>
-                    <span className="text-sm font-semibold text-zinc-800 dark:text-[#fdf8f5] block">Two-Factor Cryptography</span>
-                    <span className="text-xs text-zinc-500 dark:text-[#8aa890]">Enforce secure ledger authorization tokens.</span>
+                    <span className="text-sm font-bold text-text block">Two-Factor Cryptography</span>
+                    <span className="text-xs text-text-muted font-medium">Enforce secure ledger authorization tokens.</span>
                   </div>
                   <button 
                     onClick={() => setTwoFactor(!twoFactor)}
-                    className={`w-12 h-6 rounded-full transition-all relative ${twoFactor ? 'bg-[#16A34A]' : 'bg-zinc-300 dark:bg-[#1a2818]'}`}
+                    className={`w-12 h-6 rounded-full transition-all relative cursor-pointer ${twoFactor ? 'bg-[#16A34A]' : 'bg-border'}`}
                   >
                     <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition-all shadow-sm ${twoFactor ? 'left-6.5' : 'left-0.5'}`} />
                   </button>
@@ -726,16 +726,16 @@ export default function DashboardApp({ onSignOut }) {
       {/* Universal Add Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-[#0d120f] border border-zinc-200 dark:border-[#2a3a2c] p-6 rounded-2xl w-96 max-h-[80vh] overflow-y-auto shadow-2xl">
-            <h3 className="text-md font-bold mb-4 text-zinc-800 dark:text-[#fdf8f5]">Secure Ledger Entry</h3>
+          <div className="bg-card border border-border p-6 rounded-2xl w-96 max-h-[80vh] overflow-y-auto shadow-2xl">
+            <h3 className="text-md font-extrabold mb-4 text-text">Secure Ledger Entry</h3>
             
             <div className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Entry Type</label>
+                <label className="text-xs font-bold text-text-muted block mb-1">Entry Type</label>
                 <select 
                   value={formType} 
                   onChange={(e) => setFormType(e.target.value)}
-                  className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                  className="w-full p-3 bg-bg border border-border text-text font-bold text-sm rounded-xl outline-none focus:border-[#16A34A] cursor-pointer"
                 >
                   <option value="expense">Expense</option>
                   <option value="income">Income</option>
@@ -749,44 +749,44 @@ export default function DashboardApp({ onSignOut }) {
               {(formType === 'expense' || formType === 'income') && (
                 <>
                   <div>
-                    <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Name/Merchant</label>
+                    <label className="text-xs font-bold text-text-muted block mb-1">Name/Merchant</label>
                     <input 
                       type="text" 
                       value={formMerchant} 
                       onChange={(e) => setFormMerchant(e.target.value)}
                       placeholder="Description"
-                      className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                      className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A] placeholder-text-muted/50"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Amount (R)</label>
+                      <label className="text-xs font-bold text-text-muted block mb-1">Amount (R)</label>
                       <input 
                         type="number" 
                         value={formAmount} 
                         onChange={(e) => setFormAmount(e.target.value)}
                         placeholder="0"
-                        className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                        className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A] placeholder-text-muted/50"
                       />
                     </div>
                     <div>
-                      <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Date</label>
+                      <label className="text-xs font-bold text-text-muted block mb-1">Date</label>
                       <input 
                         type="date" 
                         value={formDate} 
                         onChange={(e) => setFormDate(e.target.value)}
-                        className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                        className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A]"
                       />
                     </div>
                   </div>
                   {formType === 'expense' && (
                     <div className="grid grid-cols-2 gap-2">
                       <div>
-                        <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Category</label>
+                        <label className="text-xs font-bold text-text-muted block mb-1">Category</label>
                         <select 
                           value={formCat} 
                           onChange={(e) => setFormCat(e.target.value)}
-                          className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                          className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A] cursor-pointer"
                         >
                           <option value="food">Food</option>
                           <option value="housing">Housing</option>
@@ -796,13 +796,13 @@ export default function DashboardApp({ onSignOut }) {
                         </select>
                       </div>
                       <div>
-                        <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Method</label>
+                        <label className="text-xs font-bold text-text-muted block mb-1">Method</label>
                         <input 
                           type="text" 
                           value={formMethod} 
                           onChange={(e) => setFormMethod(e.target.value)}
                           placeholder="Debit/EFT"
-                          className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                          className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A] placeholder-text-muted/50"
                         />
                       </div>
                     </div>
@@ -813,11 +813,11 @@ export default function DashboardApp({ onSignOut }) {
               {formType === 'budget' && (
                 <>
                   <div>
-                    <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Category</label>
+                    <label className="text-xs font-bold text-text-muted block mb-1">Category</label>
                     <select 
                       value={formCat} 
                       onChange={(e) => setFormCat(e.target.value)}
-                      className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                      className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A] cursor-pointer"
                     >
                       <option value="food">Food</option>
                       <option value="housing">Housing</option>
@@ -827,13 +827,13 @@ export default function DashboardApp({ onSignOut }) {
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Monthly Limit (R)</label>
+                    <label className="text-xs font-bold text-text-muted block mb-1">Monthly Limit (R)</label>
                     <input 
                       type="number" 
                       value={formBudgetLimit} 
                       onChange={(e) => setFormBudgetLimit(e.target.value)}
                       placeholder="0"
-                      className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                      className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A] placeholder-text-muted/50"
                     />
                   </div>
                 </>
@@ -842,45 +842,45 @@ export default function DashboardApp({ onSignOut }) {
               {formType === 'saving' && (
                 <>
                   <div>
-                    <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Account Name</label>
+                    <label className="text-xs font-bold text-text-muted block mb-1">Account Name</label>
                     <input 
                       type="text" 
                       value={formSavingName} 
                       onChange={(e) => setFormSavingName(e.target.value)}
                       placeholder="e.g. Flexi Save"
-                      className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                      className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A] placeholder-text-muted/50"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Balance (R)</label>
+                      <label className="text-xs font-bold text-text-muted block mb-1">Balance (R)</label>
                       <input 
                         type="number" 
                         value={formSavingBal} 
                         onChange={(e) => setFormSavingBal(e.target.value)}
                         placeholder="0"
-                        className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                        className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A] placeholder-text-muted/50"
                       />
                     </div>
                     <div>
-                      <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Interest Rate</label>
+                      <label className="text-xs font-bold text-text-muted block mb-1">Interest Rate</label>
                       <input 
                         type="text" 
                         value={formSavingRate} 
                         onChange={(e) => setFormSavingRate(e.target.value)}
                         placeholder="7.5%"
-                        className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                        className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A] placeholder-text-muted/50"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Notes</label>
+                    <label className="text-xs font-bold text-text-muted block mb-1">Notes</label>
                     <input 
                       type="text" 
                       value={formSavingNote} 
                       onChange={(e) => setFormSavingNote(e.target.value)}
                       placeholder="Access timeline"
-                      className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                      className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A] placeholder-text-muted/50"
                     />
                   </div>
                 </>
@@ -889,56 +889,56 @@ export default function DashboardApp({ onSignOut }) {
               {formType === 'goal' && (
                 <>
                   <div>
-                    <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Goal Target</label>
+                    <label className="text-xs font-bold text-text-muted block mb-1">Goal Target</label>
                     <input 
                       type="text" 
                       value={formGoalName} 
                       onChange={(e) => setFormGoalName(e.target.value)}
                       placeholder="Description"
-                      className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                      className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A] placeholder-text-muted/50"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Target (R)</label>
+                      <label className="text-xs font-bold text-text-muted block mb-1">Target (R)</label>
                       <input 
                         type="number" 
                         value={formGoalTarget} 
                         onChange={(e) => setFormGoalTarget(e.target.value)}
                         placeholder="0"
-                        className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                        className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A] placeholder-text-muted/50"
                       />
                     </div>
                     <div>
-                      <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Saved (R)</label>
+                      <label className="text-xs font-bold text-text-muted block mb-1">Saved (R)</label>
                       <input 
                         type="number" 
                         value={formGoalSaved} 
                         onChange={(e) => setFormGoalSaved(e.target.value)}
                         placeholder="0"
-                        className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                        className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A] placeholder-text-muted/50"
                       />
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Deadline</label>
+                      <label className="text-xs font-bold text-text-muted block mb-1">Deadline</label>
                       <input 
                         type="text" 
                         value={formGoalDeadline} 
                         onChange={(e) => setFormGoalDeadline(e.target.value)}
                         placeholder="Dec 2026"
-                        className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                        className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A] placeholder-text-muted/50"
                       />
                     </div>
                     <div>
-                      <label className="text-xs font-bold text-zinc-500 dark:text-[#8aa890] block mb-1">Contribution</label>
+                      <label className="text-xs font-bold text-text-muted block mb-1">Contribution</label>
                       <input 
                         type="number" 
                         value={formGoalMonthly} 
                         onChange={(e) => setFormGoalMonthly(e.target.value)}
                         placeholder="0"
-                        className="w-full p-3 bg-zinc-50 dark:bg-[#131f15] border border-zinc-300 dark:border-[#1e2b20] text-zinc-800 dark:text-[#fdf8f5] text-sm rounded-xl outline-none focus:border-[#16A34A]"
+                        className="w-full p-3 bg-bg border border-border text-text font-medium text-sm rounded-xl outline-none focus:border-[#16A34A] placeholder-text-muted/50"
                       />
                     </div>
                   </div>
@@ -949,13 +949,13 @@ export default function DashboardApp({ onSignOut }) {
             <div className="flex gap-2 mt-6">
               <button 
                 onClick={() => setIsModalOpen(false)}
-                className="flex-1 py-3 bg-zinc-100 dark:bg-[#1a2818] hover:bg-zinc-200 dark:hover:bg-[#1a2818]/80 text-zinc-600 dark:text-[#8aa890] hover:text-zinc-900 dark:hover:text-white rounded-xl transition-all font-bold border border-zinc-200 dark:border-[#1e2b20]"
+                className="flex-1 py-3 bg-bg hover:bg-border text-text-muted hover:text-text rounded-xl transition-all font-bold border border-border cursor-pointer shadow-sm"
               >
                 Cancel
               </button>
               <button 
                 onClick={handleAddEntry}
-                className="flex-1 py-3 bg-[#16A34A] hover:bg-[#15803D] text-white dark:text-[#111814] font-bold rounded-xl transition-all active:scale-95"
+                className="flex-1 py-3 bg-[#16A34A] hover:bg-[#15803D] text-white font-bold rounded-xl transition-all active:scale-95 cursor-pointer shadow-md"
               >
                 Save Entry
               </button>
