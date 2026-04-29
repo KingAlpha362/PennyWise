@@ -47,7 +47,7 @@ export default function Hero({ onGetStarted }) {
         <div>
           <div className="label hero-t1 mb-6 text-accent border-accent/20">Personal Finance, Reimagined</div>
 
-          <h1 className="font-display hero-t2 font-extrabold tracking-[-0.05em]" style={{ color: isDark ? '#ffffff' : '#111111', fontSize: 'clamp(3.2rem,6.5vw,5.8rem)', lineHeight: '1.02' }}>
+          <h1 className="hero-title hero-t2">
             See Where Every<br />
             <em className="text-accent not-italic">Cent Goes.</em><br />
             Instantly.
@@ -58,11 +58,11 @@ export default function Hero({ onGetStarted }) {
           </p>
 
           <div className="hero-t4 flex flex-wrap gap-3 mt-10">
-            <button onClick={onGetStarted} className="px-7 py-3.5 bg-[#16A34A] text-white hover:bg-[#15803D] rounded-2xl font-semibold text-sm inline-flex items-center gap-2 no-underline shadow-md shadow-green-600/10 transition-all duration-200 hover:scale-[1.02] cursor-pointer">
+            <button onClick={onGetStarted} className="btn-primary inline-flex items-center gap-2">
               Get Started Free
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 6.5h10M7.5 2.5l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
-            <a href="#features" className="px-7 py-3.5 bg-white dark:bg-transparent border border-border dark:border-white/20 hover:bg-gray-50 dark:hover:bg-white/10 rounded-2xl font-semibold text-sm no-underline shadow-sm transition-all duration-200 hover:scale-[1.02]" style={{ color: isDark ? '#ffffff' : '#111111' }}>Learn More</a>
+            <a href="#features" className="btn-secondary flex items-center justify-center no-underline">Learn More</a>
           </div>
 
           {/* Social proof */}
@@ -81,7 +81,7 @@ export default function Hero({ onGetStarted }) {
         <div className="hero-vis relative flex justify-center">
           <div className="float-card relative w-full max-w-[440px]" role="img" aria-label="Interactive dashboard visualization showing net balance, chart, and spending breakdown">
             {/* Main card */}
-            <div className="glass-card rounded-3xl p-6" style={{ boxShadow: '0 48px 120px rgba(0,0,0,0.65),0 0 0 1px rgba(201,185,154,0.09)' }}>
+            <div className="glass-card rounded-3xl p-6 hero-mockup">
               {/* Header row */}
               <div className="flex items-start justify-between mb-5">
                 <div>

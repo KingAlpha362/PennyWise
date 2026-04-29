@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link2, Sparkles, TrendingUp } from 'lucide-react';
+import OrbitingAccounts from './ui/orbiting-accounts';
 
 export default function HowItWorks() {
   const steps = [
@@ -67,6 +68,20 @@ export default function HowItWorks() {
             </motion.div>
           ))}
         </div>
+
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="mt-20 pt-10 border-t border-border"
+        >
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-extrabold text-text">All your assets. One ecosystem.</h3>
+            <p className="text-text-muted mt-2">PennyWise continuously syncs with your institutions.</p>
+          </div>
+          <OrbitingAccounts />
+        </motion.div>
       </div>
     </section>
   );

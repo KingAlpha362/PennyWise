@@ -11,6 +11,7 @@ export function Header({ onSignIn }) {
   const links = [
     { label: 'Features', href: '#features' },
     { label: 'Benefits', href: '#benefits' },
+    { label: 'Pricing', href: '#pricing' },
     { label: 'Contact', href: '#contact' },
   ];
 
@@ -43,8 +44,9 @@ export function Header({ onSignIn }) {
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 w-full border-b border-transparent md:transition-all md:ease-out',
+        'navbar fixed top-0 left-0 right-0 z-50 w-full border-b border-transparent md:transition-all md:ease-out',
         {
+          'scrolled': scrolled,
           'bg-bg/80 supports-[backdrop-filter]:bg-bg/60 border-border backdrop-blur-xl md:top-4 md:mx-auto md:rounded-2xl md:border md:max-w-5xl md:shadow-[0_24px_64px_rgba(0,0,0,0.4)] px-6 md:px-8':
             scrolled && !open,
           'bg-bg/95 backdrop-blur-xl px-6 md:px-14': open,
@@ -85,8 +87,8 @@ export function Header({ onSignIn }) {
           <Button variant="ghost" onClick={toggleTheme} aria-label="Toggle Theme" className="ml-2 px-3">
             🌓
           </Button>
-          <Button variant="outline" onClick={onSignIn} className="ml-2">Sign In</Button>
-          <Button onClick={onSignIn}>Get Started</Button>
+          <button className="btn-secondary ml-2" onClick={onSignIn}>Sign In</button>
+          <button className="btn-primary" onClick={onSignIn}>Get Started</button>
         </div>
         
         <div className="flex items-center gap-2 md:hidden">
@@ -125,10 +127,10 @@ export function Header({ onSignIn }) {
             ))}
           </div>
           <div className="flex flex-col gap-4 mb-12">
-            <Button variant="outline" className="w-full py-6 text-lg rounded-xl">
+            <button className="btn-secondary w-full py-6 text-lg rounded-xl" onClick={onSignIn}>
               Sign In
-            </Button>
-            <Button className="w-full py-6 text-lg rounded-xl">Get Started</Button>
+            </button>
+            <button className="btn-primary w-full py-6 text-lg rounded-xl" onClick={onSignIn}>Get Started</button>
           </div>
         </div>
       </div>

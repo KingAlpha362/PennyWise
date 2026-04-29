@@ -191,20 +191,15 @@ export default function Pricing() {
           >
             <Card
               className={cn(
-                "relative text-text border-border h-full flex flex-col transition-all duration-300",
+                "relative text-text border-border h-full flex flex-col transition-all duration-300 pricing-card",
                 plan.popular
-                  ? "bg-card shadow-2xl shadow-[#16A34A]/10 scale-[1.02] z-20 border-[#16A34A]/30"
+                  ? "pricing-card--pro bg-card shadow-2xl shadow-[#16A34A]/10 scale-[1.02] z-20 border-[#16A34A]/30"
                   : "bg-bg z-10"
               )}
             >
               <CardHeader className="text-left flex-none">
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="text-2xl font-extrabold">{plan.name}</h3>
-                  {plan.popular && (
-                    <span className="bg-[#16A34A]/10 text-[#16A34A] text-xs font-bold px-2 py-1 rounded-full">
-                      Most Popular
-                    </span>
-                  )}
                 </div>
                 <div className="flex items-baseline py-4">
                   <span className="text-5xl font-extrabold text-text">
@@ -225,10 +220,10 @@ export default function Pricing() {
               <CardContent className="pt-0 flex-1 flex flex-col">
                 <button
                   className={cn(
-                    "w-full mb-8 p-4 text-md font-bold rounded-xl transition-all active:scale-95 cursor-pointer shadow-sm",
+                    "w-full mb-8 text-center active:scale-95 cursor-pointer shadow-sm",
                     plan.popular
-                      ? "bg-[#16A34A] hover:bg-[#15803D] text-white"
-                      : "bg-border hover:bg-border/80 text-text"
+                      ? "btn-primary"
+                      : "btn-secondary"
                   )}
                 >
                   {plan.buttonText}

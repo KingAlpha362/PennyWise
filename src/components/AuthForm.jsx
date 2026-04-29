@@ -110,7 +110,7 @@ export default function AuthForm({ initialMode = 'signin', onAuthSuccess, onBack
                   <button 
                     type="button" 
                     onClick={() => onAuthSuccess()}
-                    className="flex items-center justify-center gap-2 py-2.5 bg-bg hover:bg-border border border-border hover:border-text-muted/30 text-text font-bold text-sm rounded-lg transition-all shadow-sm cursor-pointer"
+                    className="btn-secondary flex items-center justify-center gap-2"
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -123,7 +123,7 @@ export default function AuthForm({ initialMode = 'signin', onAuthSuccess, onBack
                   <button 
                     type="button" 
                     onClick={() => onAuthSuccess()}
-                    className="flex items-center justify-center gap-2 py-2.5 bg-bg hover:bg-border border border-border hover:border-text-muted/30 text-text font-bold text-sm rounded-lg transition-all shadow-sm cursor-pointer"
+                    className="btn-secondary flex items-center justify-center gap-2"
                   >
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                       <path d="M16.48 11.23c-.04-2.82 2.31-4.18 2.42-4.25-1.31-1.92-3.34-2.18-4.06-2.22-1.74-.18-3.38 1.03-4.28 1.03-.89 0-2.28-1-3.72-.98-1.92.03-3.68 1.12-4.68 2.86-2.02 3.51-.52 8.7 1.45 11.55.96 1.4 2.11 2.97 3.63 2.91 1.45-.06 2-.95 3.75-.95 1.74 0 2.25.95 3.78.92 1.57-.03 2.57-1.42 3.52-2.82 1.1-1.61 1.55-3.17 1.57-3.25-.03-.01-3.03-1.16-3.08-4.8zm-2.45-6.66c.8-1 1.34-2.38 1.19-3.77-1.19.05-2.64.8-3.48 1.8-.74.88-1.37 2.29-1.19 3.66 1.33.1 2.68-.69 3.48-1.69z"/>
@@ -208,7 +208,7 @@ export default function AuthForm({ initialMode = 'signin', onAuthSuccess, onBack
 
                 <button 
                   type="submit" 
-                  className="w-full py-2.5 bg-[#16A34A] hover:bg-[#15803D] text-white font-bold text-sm rounded-lg shadow-sm transition-all active:scale-[0.98] cursor-pointer"
+                  className="btn-primary w-full"
                 >
                   {mode === 'signin' ? 'Sign In' : 'Create Account'}
                 </button>
