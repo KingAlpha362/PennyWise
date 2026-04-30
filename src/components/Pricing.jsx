@@ -193,7 +193,7 @@ export default function Pricing() {
               className={cn(
                 "relative text-text border-border h-full flex flex-col transition-all duration-300 pricing-card",
                 plan.popular
-                  ? "pricing-card--pro bg-card shadow-2xl shadow-[#16A34A]/10 scale-[1.02] z-20 border-[#16A34A]/30"
+                  ? "pricing-card--pro bg-card shadow-2xl shadow-[#16A34A]/10 md:scale-[1.02] z-20 border-[#16A34A]/30"
                   : "bg-bg z-10"
               )}
             >

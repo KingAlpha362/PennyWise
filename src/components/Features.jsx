@@ -119,7 +119,7 @@ export default function Features() {
   ];
 
   return (
-    <section id="features" className="py-24 lg:py-32 overflow-hidden relative">
+    <section id="features" className="py-16 md:py-24 overflow-hidden relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-14">
         {/* Section header */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between mb-16 gap-6">
@@ -142,7 +142,7 @@ export default function Features() {
           {cards.map((card) => (
             <div
               key={card.id}
-              className={`reveal ${card.colSpan} glass-card benefit rounded-3xl p-6 lg:p-8 border border-[rgba(255,255,255,0.06)] bg-card shadow-sm`}
+              className={`reveal ${card.colSpan} glass-card benefit rounded-3xl p-5 sm:p-8 border border-black dark:border-white/10 bg-card shadow-sm`}
             >
               <div className="flex items-start justify-between mb-2">
                 <div>

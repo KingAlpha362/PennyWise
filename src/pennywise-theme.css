@@ -23,16 +23,16 @@ h1, h2, h3, h4, h5, h6,
 h1 {  
   font-family: var(--font-heading);  
   font-weight: 800;  
-  font-size: clamp(2.5rem, 6vw, 5rem);  
-  line-height: 1.05;          
-  letter-spacing: -0.02em;  
+  font-size: clamp(2.2rem, 5vw, 3.8rem);  
+  line-height: 1.1;          
+  letter-spacing: -0.025em;  
 }
 
 h2 {  
   font-family: var(--font-heading);  
   font-weight: 700;  
-  font-size: clamp(1.75rem, 4vw, 3rem);  
-  line-height: 1.1;  
+  font-size: clamp(1.5rem, 4vw, 3rem);  
+  line-height: 1.15;  
   letter-spacing: -0.015em;  
 }
 
@@ -99,8 +99,8 @@ p, li, td, input, button {
 }
 
 [data-theme="dark"], .dark {
-  --color-bg-primary:      #0d1117;    
-  --color-bg-secondary:    #161b22;    
+  --color-bg-primary:      #0d1017;    
+  --color-bg-secondary:    #121821;    
   --color-bg-tertiary:     #1c2333;    
   --color-bg-accent:       #0d2137;    
 
@@ -131,40 +131,7 @@ p, li, td, input, button {
   --shadow-hero-image:     0 8px 40px rgba(0, 0, 0, 0.6);
 }
 
-@media (prefers-color-scheme: dark) {  
-  :root:not([data-theme="light"]):not(.light) {
-    --color-bg-primary:      #0d1117;    
-    --color-bg-secondary:    #161b22;    
-    --color-bg-tertiary:     #1c2333;    
-    --color-bg-accent:       #0d2137;    
 
-    --color-brand:           #1d9e75;    
-    --color-brand-hover:     #178563;  
-    --color-brand-light:     #0d4a35;    
-    --color-brand-xlight:    #062a1e;
-
-    --color-text-primary:    #e6edf3;  
-    --color-text-secondary:  #8b949e;  
-    --color-text-tertiary:   #6e7681;  
-    --color-text-on-brand:   #ffffff;  
-    --color-text-brand:      #60d4aa;    
-
-    --color-border-light:    #21262d;  
-    --color-border-medium:   #30363d;  
-    --color-border-brand:    #1d9e75;
-
-    --color-stat-value:      #60d4aa;  
-    --color-stat-bg:         #161b22;
-
-    --color-success:         #3fb950;  
-    --color-warning:         #d29922;  
-    --color-danger:          #f85149;
-
-    --shadow-card:           0 1px 3px rgba(0, 0, 0, 0.4);  
-    --shadow-card-hover:     0 4px 16px rgba(0, 0, 0, 0.6);  
-    --shadow-hero-image:     0 8px 40px rgba(0, 0, 0, 0.6);
-  }  
-}
 
 body {  
   background-color: var(--color-bg-primary);  
@@ -282,6 +249,7 @@ body {
 .navbar.scrolled {  
   background: var(--color-bg-primary);  
   border-bottom: 1px solid var(--color-border-light);  
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 [data-theme="dark"] .navbar.scrolled,
@@ -302,11 +270,30 @@ body {
 }
 
 section {  
-  padding: 6rem 0;            
+  padding: 5rem 0;            
 }
 
 @media (max-width: 768px) {  
   section {  
-    padding: 4rem 0;          
+    padding: 3.5rem 0;          
   }  
+  
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
 }
+
+/* Mobile-first utility for stacking */
+.mobile-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .mobile-stack {
+    flex-direction: row;
+  }
+}
+

@@ -14,60 +14,37 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer id="contact" className="relative border-t border-border pt-20 pb-10 bg-white dark:bg-[#050505] text-text-muted dark:text-[#F5F5F5] overflow-hidden">
+    <footer id="contact" className="relative border-t border-border pt-16 sm:pt-20 pb-10 bg-bg text-text overflow-hidden">
       {/* Soft fade from previous section */}
-      <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-transparent to-black/40 z-[5] pointer-events-none" />
-      
-      {/* Darker Grainient Background */}
-      {isDark && (
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <Grainient
-            color1="#B87A5C"
-            color2="#4A2412"
-            color3="#050505"
-            timeSpeed={0.04}
-            colorBalance={-0.4}
-            warpStrength={0.2}
-            warpFrequency={2.5}
-            warpSpeed={0.4}
-            warpAmplitude={20.0}
-            blendAngle={20.0}
-            blendSoftness={0.4}
-            rotationAmount={80.0}
-            noiseScale={1.0}
-            grainAmount={0.04}
-            grainScale={2.5}
-            contrast={1.2}
-            saturation={1.0}
-            zoom={1.2}
-          />
-        </div>
-      )}
+      {/* Soft fade from previous section */}
+      <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-transparent to-bg z-[5] pointer-events-none" />
+
+
 
       <div className="max-w-7xl mx-auto px-6 md:px-14 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16 mb-20">
-          
+
           {/* Left Column - Brand & Newsletter */}
           <div className="md:col-span-12 lg:col-span-4 flex flex-col">
             <div className="flex items-center gap-2 mb-6">
-                {isDark ? (
-                  <img 
-                    src={`${import.meta.env.BASE_URL}PennyWhite.png`} 
-                    alt="PennyWise Logo" 
-                    className="h-12 w-auto object-contain transition-all" 
-                  />
-                ) : (
-                  <img 
-                    src={`${import.meta.env.BASE_URL}PennyDark.png`} 
-                    alt="PennyWise Logo" 
-                    className="h-12 w-auto object-contain transition-all" 
-                  />
-                )}
+              {isDark ? (
+                <img
+                  src={`${import.meta.env.BASE_URL}PennyWhite.png`}
+                  alt="PennyWise Logo"
+                  className="h-12 w-auto object-contain transition-all"
+                />
+              ) : (
+                <img
+                  src={`${import.meta.env.BASE_URL}PennyDark.png`}
+                  alt="PennyWise Logo"
+                  className="h-12 w-auto object-contain transition-all"
+                />
+              )}
             </div>
             <p className="text-[0.85rem] leading-[1.6] max-w-[300px] mb-6">
               The hub of your financial life. Track, save, and grow your wealth alongside intelligent AI recommendations.
             </p>
-            
+
             <div className="flex gap-4 mb-10">
               {/* X / Twitter */}
               <a href="#" className="hover:text-text transition-colors">
@@ -75,7 +52,7 @@ export default function Footer() {
               </a>
               {/* YouTube */}
               <a href="#" className="hover:text-text transition-colors">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.083 0 12 0 12s0 3.917.501 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.917 24 12 24 12s0-3.917-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.083 0 12 0 12s0 3.917.501 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.917 24 12 24 12s0-3.917-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
               </a>
               {/* Instagram */}
               <a href="#" className="hover:text-text transition-colors">
@@ -95,26 +72,26 @@ export default function Footer() {
             <p className="text-[0.75rem] leading-[1.6] max-w-[280px] mb-4">
               Join the newsletter and get a unique 50% off code for your first 3 months on Basic or Pro.
             </p>
-            
+
             <form className="flex w-full max-w-[300px]">
-              <input 
-                type="email" 
-                placeholder="Enter your email" 
+              <input
+                type="email"
+                placeholder="Enter your email"
                 className="bg-[rgba(255,255,255,0.03)] border border-border border-r-0 rounded-l-md px-4 py-2 text-sm text-text focus:outline-none focus:border-[rgba(255,255,255,0.2)] w-full placeholder:text-text-muted transition-colors"
                 required
               />
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="bg-text text-bg px-4 py-2 rounded-r-md flex items-center justify-center hover:bg-gray-200 transition-colors"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
               </button>
             </form>
           </div>
 
           {/* Right Columns - Links */}
           <div className="md:col-span-12 lg:col-span-8 grid grid-cols-2 md:grid-cols-5 gap-8">
-            
+
             <div>
               <div className="text-[0.7rem] font-bold tracking-[0.14em] uppercase mb-5 text-text-muted">Product</div>
               <div className="flex flex-col gap-3">

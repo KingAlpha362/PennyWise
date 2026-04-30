@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Grainient from './ui/Grainient';
 
 export default function Benefits() {
   const [isDark, setIsDark] = useState(false);
@@ -14,56 +13,32 @@ export default function Benefits() {
   }, []);
 
   return (
-    <section id="benefits" className="relative px-6 md:px-14 py-24 overflow-hidden bg-white dark:bg-[#0B0B0B] text-text dark:text-[#F5F5F5]">
+    <section id="benefits" className="relative px-6 md:px-14 py-16 md:py-24 overflow-hidden bg-bg text-text">
       {/* Top Fade (transition from light section) */}
-      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white dark:from-[#0A0A0A] to-transparent z-[5] pointer-events-none" />
-      
-      {/* Grainient Background */}
-      {isDark && (
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <Grainient
-            color1="#D89A73"
-            color2="#6A3720"
-            color3="#121212"
-            timeSpeed={0.06}
-            colorBalance={-0.15}
-            warpStrength={0.3}
-            warpFrequency={3.0}
-            warpSpeed={0.5}
-            warpAmplitude={25.0}
-            blendAngle={25.0}
-            blendSoftness={0.35}
-            rotationAmount={100.0}
-            noiseScale={1.1}
-            grainAmount={0.06}
-            grainScale={2.5}
-            contrast={1.25}
-            saturation={1.05}
-            zoom={1.15}
-          />
-        </div>
-      )}
+      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-bg to-transparent z-[5] pointer-events-none" />
+
+
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="mb-12 reveal text-center">
           <div className="label mb-4">What PennyWise Accomplishes</div>
-          <h2 className="font-display text-text dark:text-[#F5F5F5]" style={{ fontSize: 'clamp(2rem,4vw,3.4rem)', lineHeight: '1.08', letterSpacing: '-0.03em' }}>
+          <h2 className="font-display text-text" style={{ fontSize: 'clamp(2rem,4vw,3.4rem)', lineHeight: '1.08', letterSpacing: '-0.03em' }}>
             Real outcomes.<br /><em className="text-accent">Real freedom.</em>
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
           {/* Benefit 1: Wide Card */}
-          <div className="md:col-span-8 glass-card benefit rounded-2xl p-8 reveal relative overflow-hidden flex flex-col md:flex-row gap-8 items-center justify-between hover:scale-[1.01] transition-all duration-300 dark:bg-white/5 dark:border-white/10 dark:shadow-lg">
+          <div className="md:col-span-8 glass-card benefit rounded-2xl p-6 sm:p-8 reveal relative overflow-hidden flex flex-col md:flex-row gap-8 items-center justify-between hover:scale-[1.01] transition-all duration-300 dark:bg-white/5 border border-black dark:border-white/10 dark:shadow-lg">
             <div className="flex-1 flex flex-col gap-5">
               <div className="text-[2.4rem] leading-none">👁️</div>
               <div>
-                <h3 className="text-[1.15rem] font-bold tracking-[-0.03em] mb-[7px] text-text dark:text-[#F5F5F5]">See where every single penny goes</h3>
-                <p className="text-text-muted dark:text-white/70 text-[0.85rem] leading-[1.65]">Categorize automatically. View deep visual breakdowns of your daily cash flow effortlessly.</p>
+                <h3 className="text-[1.15rem] font-bold tracking-[-0.03em] mb-[7px] text-text">See where every single penny goes</h3>
+                <p className="text-text-muted text-[0.85rem] leading-[1.65]">Categorize automatically. View deep visual breakdowns of your daily cash flow effortlessly.</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-5 shrink-0 bg-bg-card dark:bg-black/30 p-5 rounded-xl border border-border dark:border-white/10">
+            <div className="flex items-center gap-5 shrink-0 bg-bg-card dark:bg-black/30 p-5 rounded-xl border border-black dark:border-white/10">
               <svg className="w-[64px] h-[64px]">
                 <circle cx="32" cy="32" r="25" stroke="rgba(22,163,74,0.1)" strokeWidth="8" fill="none" />
                 <circle cx="32" cy="32" r="25" stroke="var(--accent)" strokeWidth="8" fill="none" strokeDasharray="36 121" strokeDashoffset="-50" transform="rotate(-90 32 32)" />
@@ -78,15 +53,15 @@ export default function Benefits() {
           </div>
 
           {/* Benefit 2: Tall Card */}
-          <div className="md:col-span-4 glass-card benefit rounded-2xl p-8 reveal relative overflow-hidden flex flex-col justify-between gap-6 hover:scale-[1.01] transition-all duration-300 dark:bg-white/5 dark:border-white/10 dark:shadow-lg">
+          <div className="md:col-span-4 glass-card benefit rounded-2xl p-6 sm:p-8 reveal relative overflow-hidden flex flex-col justify-between gap-6 hover:scale-[1.01] transition-all duration-300 dark:bg-white/5 border border-black dark:border-white/10 dark:shadow-lg">
             <div className="flex flex-col gap-4">
               <div className="text-[2.4rem] leading-none">⚡</div>
               <div>
-                <h3 className="text-[1.15rem] font-bold tracking-[-0.03em] mb-[7px] text-text dark:text-[#F5F5F5]">Stay within budget effortlessly</h3>
-                <p className="text-text-muted dark:text-white/70 text-[0.85rem] leading-[1.65]">Smart alerts and real-time tracking ensure you never overspend — without the guilt trips.</p>
+                <h3 className="text-[1.15rem] font-bold tracking-[-0.03em] mb-[7px] text-text">Stay within budget effortlessly</h3>
+                <p className="text-text-muted text-[0.85rem] leading-[1.65]">Smart alerts and real-time tracking ensure you never overspend — without the guilt trips.</p>
               </div>
             </div>
-            <div className="mt-auto pt-5 border-t border-border dark:border-white/10">
+            <div className="mt-auto">
               <div className="w-full h-2 rounded-full bg-bg border border-border dark:border-white/10 overflow-hidden">
                 <div className="h-full bg-accent" style={{ width: '78%' }}></div>
               </div>
@@ -95,16 +70,16 @@ export default function Benefits() {
           </div>
 
           {/* Benefit 3: Full Width Bottom Card */}
-          <div className="md:col-span-12 glass-card benefit rounded-2xl p-8 reveal relative overflow-hidden flex flex-col md:flex-row items-center gap-8 justify-between hover:scale-[1.01] transition-all duration-300 dark:bg-white/5 dark:border-white/10 dark:shadow-lg">
+          <div className="md:col-span-12 glass-card benefit rounded-2xl p-6 sm:p-8 reveal relative overflow-hidden flex flex-col md:flex-row items-center gap-8 justify-between hover:scale-[1.01] transition-all duration-300 dark:bg-white/5 border border-black dark:border-white/10 dark:shadow-lg">
             <div className="flex-1 flex flex-col gap-4">
               <div className="flex items-center gap-4 mb-1">
                 <div className="text-[2.4rem] leading-none">🌱</div>
-                <h3 className="text-[1.3rem] font-bold tracking-[-0.03em] text-text dark:text-[#F5F5F5]">Build better financial habits</h3>
+                <h3 className="text-[1.3rem] font-bold tracking-[-0.03em] text-text">Build better financial habits</h3>
               </div>
-              <p className="text-text-muted dark:text-white/70 text-[0.9rem] leading-[1.7] max-w-[480px]">Weekly check-ins, habit streaks, and personalized coaching help you improve consistently over time. The more you engage, the smarter it gets.</p>
+              <p className="text-text-muted text-[0.9rem] leading-[1.7] max-w-[480px]">Weekly check-ins, habit streaks, and personalized coaching help you improve consistently over time. The more you engage, the smarter it gets.</p>
             </div>
-            <div className="flex-1 flex flex-col md:items-end w-full md:w-auto border-t md:border-t-0 md:border-l border-border dark:border-white/10 pt-6 md:pt-0 md:pl-8">
-              <div className="text-[0.7rem] text-text-muted dark:text-white/70 mb-[10px] uppercase tracking-[0.15em] font-bold">Weekly streak</div>
+            <div className="flex-1 flex flex-col md:items-end w-full md:w-auto pt-6 md:pt-0 md:pl-8">
+              <div className="text-[0.7rem] text-text-muted mb-[10px] uppercase tracking-[0.15em] font-bold">Weekly streak</div>
               <div className="flex gap-2.5 mb-2">
                 <div className="w-8 h-8 rounded-lg bg-accent opacity-90 shadow-[0_0_12px_rgba(22,163,74,0.3)]"></div>
                 <div className="w-8 h-8 rounded-lg bg-accent opacity-75"></div>

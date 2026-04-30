@@ -4,8 +4,8 @@
   :root {
     --bg: #FFFFFF;
     --bg-card: rgba(247, 247, 247, 0.75);
-    --border: rgba(17, 17, 17, 0.06);
-    --border-card: rgba(17, 17, 17, 0.05);
+    --border: rgba(0, 0, 0, 0.15);
+    --border-card: rgba(0, 0, 0, 0.2);
     --text: #111111;
     --text-muted: rgba(17, 17, 17, 0.6);
     --accent: #16A34A;
@@ -14,8 +14,8 @@
   }
 
   .dark {
-    --bg: #111814;
-    --bg-card: rgba(17, 24, 20, 0.4);
+    --bg: #0d1017;
+    --bg-card: rgba(16, 20, 26, 0.4);
     --border: rgba(253, 248, 245, 0.12);
     --border-card: rgba(253, 248, 245, 0.08);
     --text: #fdf8f5;
