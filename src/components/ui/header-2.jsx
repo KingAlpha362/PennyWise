@@ -11,8 +11,8 @@ export function Header({ onSignIn }) {
   const links = [
     { label: 'Features', href: '#features' },
     { label: 'Benefits', href: '#benefits' },
-    { label: 'Pricing',  href: '#pricing'  },
-    { label: 'Contact',  href: '#contact'  },
+    { label: 'Pricing', href: '#pricing' },
+    { label: 'Contact', href: '#contact' },
   ];
 
   const [isDark, setIsDark] = React.useState(false);
@@ -45,7 +45,7 @@ export function Header({ onSignIn }) {
   }, [open]);
 
   const toggleTheme = () => document.documentElement.classList.toggle('dark');
-  const close       = ()  => setOpen(false);
+  const close = () => setOpen(false);
 
   return (
     // The header is the single stacking context; everything lives inside it.
@@ -53,7 +53,7 @@ export function Header({ onSignIn }) {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 w-full border-b border-black/10 transition-all ease-out duration-300',
         scrolled && !open &&
-          'bg-bg/80 supports-[backdrop-filter]:bg-bg/60 border-black/20 backdrop-blur-xl md:top-4 md:mx-auto md:rounded-2xl md:border md:max-w-5xl md:shadow-[0_24px_64px_rgba(0,0,0,0.4)]',
+        'bg-bg/80 supports-[backdrop-filter]:bg-bg/60 border-black/20 backdrop-blur-xl md:top-4 md:mx-auto md:rounded-2xl md:border md:max-w-5xl md:shadow-[0_24px_64px_rgba(0,0,0,0.4)]',
         open && 'bg-bg/95 backdrop-blur-xl',
         !scrolled && !open && 'bg-transparent',
       )}
@@ -100,7 +100,7 @@ export function Header({ onSignIn }) {
             🌓
           </Button>
           <button className="btn-secondary ml-2" onClick={onSignIn}>Sign In</button>
-          <button className="btn-primary"         onClick={onSignIn}>Get Started</button>
+          <button className="btn-primary" onClick={onSignIn}>Get Started</button>
         </div>
 
         {/* Mobile controls */}
@@ -130,7 +130,7 @@ export function Header({ onSignIn }) {
         className={cn(
           'md:hidden overflow-hidden transition-[grid-template-rows,opacity] duration-300 ease-out',
           'grid',
-          open  ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
+          open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
         )}
       >
         {/* Inner wrapper: min-h-0 lets grid collapse this to 0 */}

@@ -29,7 +29,7 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Syne', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
   }
@@ -41,7 +41,7 @@
 
 @layer components {
   /* ── Typography */
-  .font-display { font-family: 'Instrument Serif', serif; }
+  .font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
 
   /* ── Navbar */
   .navbar { transition: background 0.5s ease, backdrop-filter 0.5s ease, border-color 0.5s ease; }
