@@ -1,10 +1,7 @@
 import { motion } from "framer-motion";
-import React from "react";
-
 export const TimelineContent = ({
   children,
   animationNum,
-  timelineRef,
   customVariants,
   className,
   as: Component = motion.div,

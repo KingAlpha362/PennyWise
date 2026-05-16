@@ -1,6 +1,4 @@
 import { Shield, Lock, Server } from 'lucide-react';
-import React from 'react';
-
 export default function SecurityIntegrations() {
   return (
     <section className="bg-bg py-16 border-y border-border">

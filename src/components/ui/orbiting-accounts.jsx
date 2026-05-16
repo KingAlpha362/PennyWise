@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState, useRef, useCallback, memo } from 'react';
+import { useEffect, useState, useRef, useCallback, memo  } from 'react';
 import { Landmark, CreditCard, TrendingUp, PiggyBank, Wallet, Bitcoin, ArrowRightLeft } from 'lucide-react';
 
 const iconComponents = {
@@ -27,7 +27,7 @@ const skillsConfig = [
 ];
 
 // ─── Tooltip: renders above the icon so it never clips off the bottom ──────────
-const Tooltip = memo(({ label, color, size }) => (
+const Tooltip = memo(({ label, color }) => (
   <div
     className="absolute left-1/2 -translate-x-1/2 pointer-events-none"
     style={{
@@ -58,7 +58,7 @@ Tooltip.displayName = 'Tooltip';
 // ─── Single orbiting icon ──────────────────────────────────────────────────────
 const OrbitingSkill = memo(({ config, angle, scale }) => {
   const [active, setActive] = useState(false);
-  const { orbitRadius, size, iconType, label } = config;
+  const { orbitRadius, iconType, label, size } = config;
   const iconColor = iconComponents[iconType]?.color;
 
   const currentRadius = orbitRadius * scale;
@@ -102,7 +102,7 @@ const OrbitingSkill = memo(({ config, angle, scale }) => {
         }}
       >
         <SkillIcon type={iconType} />
-        {active && <Tooltip label={label} color={iconColor} size={size} />}
+        {active && <Tooltip label={label} color={iconColor} />}
       </div>
     </div>
   );

@@ -1,9 +1,9 @@
-﻿import React, { useState } from 'react';
-import { ArrowLeft, Mail, KeyRound, Eye, EyeOff } from 'lucide-react';
-
+import { useState  } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Eye, EyeOff, Mail, KeyRound } from "lucide-react";
 
 export default function AuthForm({ initialMode = 'signin', onAuthSuccess, onBack }) {
   const [mode, setMode] = useState(initialMode);
@@ -22,17 +22,14 @@ export default function AuthForm({ initialMode = 'signin', onAuthSuccess, onBack
       return;
     }
 
-    // Simulated success execution
     onAuthSuccess();
   };
 
   return (
     <div className="min-h-screen bg-bg flex font-sans text-text transition-colors relative overflow-hidden">
-      {/* Decorative Glows */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#16A34A]/5 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#c9922a]/5 blur-[120px] pointer-events-none" />
 
-      {/* Main Interactive Form */}
       <div className="w-full flex items-center justify-center p-8 md:p-16 relative z-10">
         <button
           onClick={onBack}
@@ -61,7 +58,6 @@ export default function AuthForm({ initialMode = 'signin', onAuthSuccess, onBack
             )}
 
             <div className="space-y-4">
-              {/* Social Sign-in */}
               <div className="space-y-2">
                 <Label className="text-xs text-text-muted font-bold">Sign in with</Label>
                 <div className="grid grid-cols-2 gap-2">
@@ -91,7 +87,6 @@ export default function AuthForm({ initialMode = 'signin', onAuthSuccess, onBack
                 </div>
               </div>
 
-              {/* Divider */}
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t border-border" />
@@ -101,7 +96,6 @@ export default function AuthForm({ initialMode = 'signin', onAuthSuccess, onBack
                 </div>
               </div>
 
-              {/* Email Form */}
               <form onSubmit={handleSubmit} className="space-y-4">
                 {mode === 'signup' && (
                   <div className="space-y-2">
@@ -164,10 +158,7 @@ export default function AuthForm({ initialMode = 'signin', onAuthSuccess, onBack
                   </div>
                 </div>
 
-                <button
-                  type="submit"
-                  className="btn-primary w-full"
-                >
+                <button type="submit" className="btn-primary w-full">
                   {mode === 'signin' ? 'Sign In' : 'Create Account'}
                 </button>
               </form>

@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo  } from 'react';
 import { 
   BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell
 } from 'recharts';
 import { 
-  Grid, List, TrendingUp, TrendingDown, PieChart as PieIcon, Wallet, Target, Bot, MessageSquare, 
-  Plus, Trash2, Sun, Moon, LogOut, Sparkles, ShieldCheck, Building2, Landmark, Handshake, Settings,
+  Grid, List, TrendingUp, TrendingDown, PieChart as PieIcon, Wallet, Target, Plus, Trash2, Sun, Moon, LogOut, Sparkles, Building2, Landmark, Settings,
   Search, ChevronRight, BarChart3 as BarChartIcon 
 } from 'lucide-react';
 
@@ -103,9 +102,6 @@ export default function DashboardApp({ onSignOut }) {
     Math.abs(transactions.filter(t => t.amount < 0).reduce((acc, t) => acc + t.amount, 0))
   , [transactions]);
 
-  const totalSavings = useMemo(() => 
-    savings.reduce((acc, s) => acc + s.balance, 0)
-  , [savings]);
 
   const categorySpend = useMemo(() => {
     const map = {};
@@ -134,15 +130,6 @@ export default function DashboardApp({ onSignOut }) {
     { name: 'Feb', Income: 16500 },
     { name: 'Mar', Income: 18200 },
     { name: 'Apr', Income: totalIncome }
-  ];
-
-  const savingsTrendData = [
-    { name: 'Nov', Savings: totalSavings - 18000 },
-    { name: 'Dec', Savings: totalSavings - 14400 },
-    { name: 'Jan', Savings: totalSavings - 10800 },
-    { name: 'Feb', Savings: totalSavings - 7200 },
-    { name: 'Mar', Savings: totalSavings - 3600 },
-    { name: 'Apr', Savings: totalSavings }
   ];
 
   // Actions

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect  } from 'react';
 
 const resolveColor = (colorStr) => {
   if (typeof colorStr === 'string' && colorStr.startsWith('var(')) {

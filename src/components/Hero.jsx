@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 
 export default function Hero({ onGetStarted }) {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(() => typeof document !== 'undefined' ? document.documentElement.classList.contains('dark') : false);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
       setIsDark(document.documentElement.classList.contains('dark'));
     });
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    setIsDark(document.documentElement.classList.contains('dark'));
 
     const timer = setTimeout(() => {
       const heroLine = document.getElementById('heroLine');

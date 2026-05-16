@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import { useRef, useState  } from 'react';
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Sparkles } from "@/components/ui/sparkles";
 import { TimelineContent } from "@/components/ui/timeline-animation";

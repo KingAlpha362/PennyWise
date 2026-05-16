@@ -1,4 +1,3 @@
-import React from 'react';
 import { ResponsiveContainer, AreaChart, Area, Tooltip } from 'recharts';
 import ShapeGrid from './ui/ShapeGrid';
 
@@ -61,7 +60,7 @@ export default function DashboardWidget() {
               { label: 'Net Worth', value: '$48,240', change: '+12.3%', positive: true },
               { label: 'Monthly Spend', value: '$3,180', change: '-8.2%', positive: true },
               { label: 'Savings Rate', value: '34%', change: '+5.1%', positive: true },
-            ].map((kpi, i) => (
+            ].map((kpi) => (
               <div
                 key={kpi.label}
                 className="reveal bg-[rgba(255,255,255,0.04)] rounded-2xl p-5 border border-[rgba(255,255,255,0.06)] shadow-sm"

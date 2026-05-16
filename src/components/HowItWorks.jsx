@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Link2, Sparkles, TrendingUp } from 'lucide-react';
 import OrbitingAccounts from './ui/orbiting-accounts';

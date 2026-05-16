@@ -1,17 +1,4 @@
-import { useEffect, useState } from 'react';
-
 export default function Benefits() {
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setIsDark(document.documentElement.classList.contains('dark'));
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    setIsDark(document.documentElement.classList.contains('dark'));
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <section id="benefits" className="relative px-6 md:px-14 py-16 md:py-24 overflow-hidden bg-bg text-text">
       {/* Top Fade (transition from light section) */}
