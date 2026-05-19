@@ -16,7 +16,7 @@ export default function Benefits() {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
           {/* Benefit 1: Wide Card */}
-          <div className="md:col-span-8 glass-card benefit rounded-2xl p-6 sm:p-8 reveal relative overflow-hidden flex flex-col md:flex-row gap-8 items-center justify-between hover:scale-[1.01] transition-all duration-300 dark:bg-white/5 border border-black dark:border-white/10 dark:shadow-lg">
+          <div className="md:col-span-8 glass-card benefit p-6 sm:p-8 reveal flex flex-col md:flex-row gap-8 items-center justify-between">
             <div className="flex-1 flex flex-col gap-5">
               <div className="text-[2.4rem] leading-none">👁️</div>
               <div>
@@ -40,7 +40,7 @@ export default function Benefits() {
           </div>
 
           {/* Benefit 2: Tall Card */}
-          <div className="md:col-span-4 glass-card benefit rounded-2xl p-6 sm:p-8 reveal relative overflow-hidden flex flex-col justify-between gap-6 hover:scale-[1.01] transition-all duration-300 dark:bg-white/5 border border-black dark:border-white/10 dark:shadow-lg">
+          <div className="md:col-span-4 glass-card benefit p-6 sm:p-8 reveal flex flex-col justify-between gap-6">
             <div className="flex flex-col gap-4">
               <div className="text-[2.4rem] leading-none">⚡</div>
               <div>
@@ -57,7 +57,7 @@ export default function Benefits() {
           </div>
 
           {/* Benefit 3: Full Width Bottom Card */}
-          <div className="md:col-span-12 glass-card benefit rounded-2xl p-6 sm:p-8 reveal relative overflow-hidden flex flex-col md:flex-row items-center gap-8 justify-between hover:scale-[1.01] transition-all duration-300 dark:bg-white/5 border border-black dark:border-white/10 dark:shadow-lg">
+          <div className="md:col-span-12 glass-card benefit p-6 sm:p-8 reveal flex flex-col md:flex-row items-center gap-8 justify-between">
             <div className="flex-1 flex flex-col gap-4">
               <div className="flex items-center gap-4 mb-1">
                 <div className="text-[2.4rem] leading-none">🌱</div>

@@ -140,7 +140,7 @@ export default function Features() {
           {cards.map((card) => (
             <div
               key={card.id}
-              className={`reveal ${card.colSpan} glass-card benefit rounded-3xl p-5 sm:p-8 border border-black dark:border-white/10 bg-card shadow-sm`}
+              className={`reveal ${card.colSpan} glass-card benefit p-5 sm:p-8`}
             >
               <div className="flex items-start justify-between mb-2">
                 <div>

@@ -126,14 +126,14 @@ export default function Hero({ onGetStarted }) {
             </div>
 
             {/* Floating card: savings */}
-            <div className="glass-card rounded-2xl p-4 absolute -bottom-[18px] -right-[5px] sm:-right-[22px] w-[140px] sm:w-[158px] shadow-[0_20px_50px_rgba(0,0,0,0.55)] z-20" style={{ animation: 'floatY 5s ease-in-out 1.2s infinite' }}>
+            <div className="glass-card rounded-2xl p-4 absolute -bottom-[18px] -right-[5px] sm:-right-[22px] w-[140px] sm:w-[158px] z-20" style={{ animation: 'floatY 5s ease-in-out 1.2s infinite' }}>
               <div className="text-[0.62rem] text-text-muted mb-[3px]">Savings Goal</div>
               <div className="text-[1.05rem] font-bold tracking-[-0.03em]">72% done</div>
               <div className="prog-track mt-[7px]"><div className="h-full w-[72%] bg-gradient-to-r from-accent to-text rounded-sm"></div></div>
             </div>
 
             {/* Floating card: alert */}
-            <div className="glass-card rounded-2xl p-4 absolute -top-[14px] -left-[5px] sm:-left-[20px] w-[150px] sm:w-[168px] shadow-[0_20px_50px_rgba(0,0,0,0.55)] z-20" style={{ animation: 'floatY 7s ease-in-out 0.5s infinite' }}>
+            <div className="glass-card rounded-2xl p-4 absolute -top-[14px] -left-[5px] sm:-left-[20px] w-[150px] sm:w-[168px] z-20" style={{ animation: 'floatY 7s ease-in-out 0.5s infinite' }}>
               <div className="flex items-center gap-2 mb-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80] block" style={{ animation: 'pulse 2s ease infinite' }}></span>
                 <span className="text-[0.62rem] text-text-muted">Smart Alert</span>

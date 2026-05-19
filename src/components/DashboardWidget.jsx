@@ -36,7 +36,7 @@ export default function DashboardWidget() {
         />
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto glass-card rounded-2xl overflow-hidden border border-border shadow-sm hover:scale-[1.01] transition-all duration-300">
+      <div className="relative z-10 max-w-5xl mx-auto glass-card rounded-2xl overflow-hidden hover:scale-[1.01]">
         {/* Dashboard content */}
         <div className="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 bg-bg-card min-h-[380px]">
           
