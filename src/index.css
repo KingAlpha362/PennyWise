@@ -1,11 +1,14 @@
 @import "tailwindcss";
 
+/* Make Tailwind's dark: utilities respond to .dark class (not just OS media query) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     /* Light-first design — Stripe/Linear aesthetic */
-    --bg: #FFFFFF;
-    --bg-card: #F8FAFC;
-    --bg-subtle: #F1F5F9;
+    --bg: #F5F4F1;
+    --bg-card: #FFFFFF;
+    --bg-subtle: #ECEAE6;
     --border: rgba(15, 23, 42, 0.09);
     --border-card: rgba(15, 23, 42, 0.07);
     --text: #0F172A;
@@ -63,7 +66,7 @@
   /* ── Navbar */
   .navbar { transition: background 0.4s var(--ease-out), backdrop-filter 0.4s var(--ease-out), border-color 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out); }
   .navbar.scrolled {
-    background: rgba(255, 255, 255, 0.90);
+    background: rgba(245, 244, 241, 0.92);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
@@ -341,6 +344,20 @@
   .cline { stroke-dasharray: 2000; stroke-dashoffset: 2000; }
   .cline.drawn { animation: drawPath 2.4s cubic-bezier(.4,0,.2,1) forwards; }
   .cline-slow.drawn { animation: drawPath 3s cubic-bezier(.4,0,.2,1) 0.3s forwards; }
+
+  /* Semantic color utilities — explicit var() references so CSS cascade overrides work */
+  .text-text       { color: var(--text); }
+  .text-text-muted { color: var(--text-muted); }
+  .text-accent     { color: var(--accent); }
+  .text-bg         { color: var(--bg); }
+  .bg-bg           { background-color: var(--bg); }
+  .bg-bg-card      { background-color: var(--bg-card); }
+  .bg-bg-subtle    { background-color: var(--bg-subtle); }
+  .bg-text         { background-color: var(--text); }
+  .bg-accent       { background-color: var(--accent); }
+  .bg-accent-dim   { background-color: var(--accent-dim); }
+  .border-border   { border-color: var(--border); }
+  .border-accent   { border-color: var(--accent); }
 }
 
 @keyframes fadeUp  { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }

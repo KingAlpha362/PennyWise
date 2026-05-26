@@ -57,12 +57,12 @@ export default function DashboardPreview() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-3.5">
               <div className="bg-[rgba(255,255,255,0.03)] border border-border rounded-[14px] p-[18px]">
                 <div className="text-[0.62rem] text-text-muted uppercase tracking-[0.12em] mb-1.5">Total Balance</div>
-                <div className="font-display text-[1.7rem] tracking-[-0.04em]">$24,850</div>
+                <div className="font-display text-[1.7rem] tracking-[-0.04em] text-text">$24,850</div>
                 <div className="text-[0.7rem] text-accent mt-[3px]">↑ +4.2% this month</div>
               </div>
               <div className="bg-[rgba(255,255,255,0.03)] border border-border rounded-[14px] p-[18px]">
                 <div className="text-[0.62rem] text-text-muted uppercase tracking-[0.12em] mb-1.5">Monthly Spend</div>
-                <div className="font-display text-[1.7rem] tracking-[-0.04em]">$2,614</div>
+                <div className="font-display text-[1.7rem] tracking-[-0.04em] text-text">$2,614</div>
                 <div className="text-[0.7rem] text-text-muted mt-[3px]">-8% vs last month</div>
               </div>
               <div className="bg-[rgba(34,197,94,0.07)] border border-[rgba(34,197,94,0.22)] rounded-[14px] p-[18px]">
@@ -75,7 +75,7 @@ export default function DashboardPreview() {
             {/* Cash flow chart */}
             <div className="bg-[rgba(255,255,255,0.02)] border border-border rounded-[14px] p-[22px] sm:col-span-3">
               <div className="flex justify-between items-center mb-4">
-                <div className="text-[0.8rem] font-semibold">Cash Flow — December 2024</div>
+                <div className="text-[0.8rem] font-semibold text-text">Cash Flow — December 2024</div>
                 <div className="flex gap-5 text-[0.68rem] text-text-muted">
                   <span><span className="text-accent">●</span> Income</span>
                   <span><span className="text-text-muted">●</span> Expenses</span>

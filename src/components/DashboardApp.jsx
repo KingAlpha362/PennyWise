@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
+import NumberFlow from '@number-flow/react';
 import '../dashboard.css';
 import AIAssistant from './dashboard/AIAssistant.jsx';
 import Settings from './dashboard/Settings.jsx';
@@ -555,15 +556,51 @@ function GoalRing({ pct, size = 80, color, stroke = 6 }) {
 }
 
 /* ============================================================
+   HEALTH GAUGE
+   ============================================================ */
+function HealthGauge({ score, size = 96, thickness = 10 }) {
+  const r = (size - thickness) / 2;
+  const c = 2 * Math.PI * r;
+  const track = c * 0.75;
+  const fill = track * (score / 100);
+  const color = score >= 80 ? 'var(--pos)' : score >= 60 ? 'var(--warn)' : 'var(--neg)';
+  return (
+    <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}
+           style={{ transform: 'rotate(135deg)' }}>
+        <circle cx={size/2} cy={size/2} r={r} fill="none"
+          stroke="var(--border)" strokeWidth={thickness}
+          strokeDasharray={`${track} ${c - track}`} strokeLinecap="round"/>
+        <circle cx={size/2} cy={size/2} r={r} fill="none"
+          stroke={color} strokeWidth={thickness}
+          strokeDasharray={`${fill} ${c - fill}`} strokeLinecap="round"
+          style={{ transition: 'stroke-dasharray 1s cubic-bezier(0.4,0,0.2,1)', filter: `drop-shadow(0 0 4px ${color}40)` }}/>
+      </svg>
+      <div style={{
+        position: 'absolute', inset: 0,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <span style={{ fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-mono)', color, lineHeight: 1, letterSpacing: '-0.02em' }}>{score}</span>
+        <span style={{ fontSize: 9, color: 'var(--text-faint)', marginTop: 1 }}>/ 100</span>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
    SHARED BITS
    ============================================================ */
-function KPI({ label, value, delta, deltaPct, sub, series, invert = false, isPercent = false }) {
+function KPI({ label, value, rawValue, numFormat, delta, deltaPct, sub, series, invert = false, isPercent = false }) {
   const positive = invert ? delta < 0 : delta > 0;
   const color = positive ? 'var(--pos)' : 'var(--neg)';
   return (
     <div className="pw-kpi">
       <div className="pw-kpi-label">{label}</div>
-      <div className="pw-kpi-value">{value}</div>
+      <div className="pw-kpi-value">
+        {rawValue !== undefined
+          ? <NumberFlow value={rawValue} locales="en-US" format={numFormat ?? { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }} />
+          : value}
+      </div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 2 }}>
         <div className="pw-kpi-delta" style={{ color }}>
           <Icon name={positive ? 'arrow-up' : 'arrow-down'} size={11} stroke={2.5}/>
@@ -735,7 +772,7 @@ function InsightMini({ ins }) {
 /* ============================================================
    SCREENS
    ============================================================ */
-function Overview({ range, setRange, txns, setScreen, onAddTxn }) {
+function Overview({ range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExport }) {
   const latest = NET_WORTH[NET_WORTH.length - 1].v;
   const prior = NET_WORTH[NET_WORTH.length - 31].v;
   const monthDelta = latest - prior;
@@ -746,6 +783,20 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn }) {
   const recentTxns = (txns || TRANSACTIONS).slice(0, 7);
   const todayTotal = (txns || TRANSACTIONS).filter(t => t.date === '2025-11-25' && t.amount < 0).reduce((s, t) => s + t.amount, 0);
   const aiSummary = buildAISummary(AI_DATA);
+
+  // Financial health score (4 factors × 25 pts each)
+  const budgetOver = BUDGETS.filter(b => b.spent > b.budget).length;
+  const savingsFactor = Math.round(Math.min(1, savingsRate / 25) * 25);
+  const budgetFactor = Math.round((1 - budgetOver / BUDGETS.length) * 25);
+  const cc1 = ACCOUNTS.find(a => a.id === 'cc1');
+  const cc2 = ACCOUNTS.find(a => a.id === 'cc2');
+  const avgCreditUtil = (Math.abs(cc1.balance) / cc1.limit + Math.abs(cc2.balance) / cc2.limit) / 2;
+  const creditFactor = Math.round(Math.max(0, 1 - avgCreditUtil * 2.5) * 25);
+  const savingsAcct = ACCOUNTS.find(a => a.id === 'sav');
+  const emergencyFactor = Math.round(Math.min(1, savingsAcct.balance / (thisMonth.expenses * 6)) * 25);
+  const healthScore = savingsFactor + budgetFactor + creditFactor + emergencyFactor;
+  const healthGrade = healthScore >= 90 ? 'A' : healthScore >= 80 ? 'B+' : healthScore >= 70 ? 'B' : healthScore >= 60 ? 'C+' : 'C';
+  const healthColor = healthScore >= 80 ? 'var(--pos)' : healthScore >= 60 ? 'var(--warn)' : 'var(--neg)';
 
   return (
     <div className="pw-screen pw-fadein">
@@ -760,7 +811,7 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn }) {
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <RangeSegment range={range} setRange={setRange}/>
-          <button className="pw-btn"><Icon name="download" size={14}/>Export</button>
+          <button className="pw-btn" onClick={() => onExport?.()}><Icon name="download" size={14}/>Export</button>
           <button className="pw-btn pw-btn-primary" onClick={onAddTxn}><Icon name="plus" size={14}/>Add transaction</button>
         </div>
       </div>
@@ -787,10 +838,40 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn }) {
 
       <div className="pw-card" style={{ marginBottom: 16 }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
-          <KPI label="Net worth" value={fmt(latest, { decimals: 0 })} delta={monthDelta} deltaPct={monthPct} sub="vs 30 days ago" series={NET_WORTH.slice(-30).map(d => d.v)}/>
-          <KPI label="Income (Nov)" value={fmt(thisMonth.income, { decimals: 0 })} delta={thisMonth.income - CASHFLOW[CASHFLOW.length - 2].income} sub="vs Oct"/>
-          <KPI label="Spending (Nov)" value={fmt(thisMonth.expenses, { decimals: 0 })} delta={thisMonth.expenses - CASHFLOW[CASHFLOW.length - 2].expenses} invert sub="vs Oct"/>
+          <KPI label="Net worth" rawValue={latest} numFormat={{ style: 'currency', currency: 'USD', maximumFractionDigits: 0 }} value={fmt(latest, { decimals: 0 })} delta={monthDelta} deltaPct={monthPct} sub="vs 30 days ago" series={NET_WORTH.slice(-30).map(d => d.v)}/>
+          <KPI label="Income (Nov)" rawValue={thisMonth.income} value={fmt(thisMonth.income, { decimals: 0 })} delta={thisMonth.income - CASHFLOW[CASHFLOW.length - 2].income} sub="vs Oct"/>
+          <KPI label="Spending (Nov)" rawValue={thisMonth.expenses} value={fmt(thisMonth.expenses, { decimals: 0 })} delta={thisMonth.expenses - CASHFLOW[CASHFLOW.length - 2].expenses} invert sub="vs Oct"/>
           <KPI label="Savings rate" value={`${savingsRate.toFixed(1)}%`} delta={6.2} sub={`${fmt(netSavings, { decimals: 0 })} saved`} isPercent/>
+        </div>
+      </div>
+
+      {/* Financial Health Card */}
+      <div className="pw-health-card">
+        <HealthGauge score={healthScore}/>
+        <div className="pw-health-info">
+          <div className="pw-health-title">Financial Health</div>
+          <div className="pw-health-grade" style={{ color: healthColor }}>{healthGrade}</div>
+          <div className="pw-health-factors">
+            {[
+              { label: 'Savings rate', value: `${savingsFactor}/25`, color: savingsFactor >= 20 ? 'var(--pos)' : savingsFactor >= 13 ? 'var(--warn)' : 'var(--neg)' },
+              { label: 'Budgets', value: `${budgetFactor}/25`, color: budgetFactor >= 20 ? 'var(--pos)' : budgetFactor >= 13 ? 'var(--warn)' : 'var(--neg)' },
+              { label: 'Credit util', value: `${creditFactor}/25`, color: creditFactor >= 20 ? 'var(--pos)' : creditFactor >= 13 ? 'var(--warn)' : 'var(--neg)' },
+              { label: 'Emergency fund', value: `${emergencyFactor}/25`, color: emergencyFactor >= 20 ? 'var(--pos)' : emergencyFactor >= 13 ? 'var(--warn)' : 'var(--neg)' },
+            ].map(f => (
+              <div key={f.label} className="pw-health-factor">
+                <span className="pw-health-factor-dot" style={{ background: f.color }}/>
+                <span>{f.label}</span>
+                <span className="pw-num" style={{ color: f.color, fontWeight: 600 }}>{f.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{ textAlign: 'right', flexShrink: 0 }}>
+          <div style={{ fontSize: 11, color: 'var(--text-faint)', marginBottom: 4 }}>Score</div>
+          <div style={{ fontSize: 36, fontWeight: 800, fontFamily: 'var(--font-mono)', color: healthColor, letterSpacing: '-0.03em', lineHeight: 1 }}>
+            <NumberFlow value={healthScore} />
+          </div>
+          <div style={{ fontSize: 11, color: 'var(--text-faint)', marginTop: 2 }}>out of 100</div>
         </div>
       </div>
 
@@ -831,7 +912,7 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn }) {
         <div className="pw-card">
           <div className="pw-card-head">
             <div className="pw-card-title">Accounts</div>
-            <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 8px', fontSize: 12 }}>Manage</button>
+            <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 8px', fontSize: 12 }} onClick={() => setScreen('transactions')}>Manage</button>
           </div>
           <div>{ACCOUNTS.map(a => <AccountRow key={a.id} a={a}/>)}</div>
         </div>
@@ -842,7 +923,7 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn }) {
               <div className="pw-card-title">Recent activity</div>
               <div className="pw-card-sub">{fmt(todayTotal, { decimals: 2 })} today · 7 transactions</div>
             </div>
-            <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 8px', fontSize: 12 }}>View all <Icon name="chevron-right" size={14}/></button>
+            <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 8px', fontSize: 12 }} onClick={() => setScreen('transactions')}>View all <Icon name="chevron-right" size={14}/></button>
           </div>
           <div>{recentTxns.map(t => <TxnRow key={t.id} t={t} compact/>)}</div>
         </div>
@@ -855,7 +936,7 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn }) {
               <div className="pw-card-title">Budgets</div>
               <div className="pw-card-sub">November · {BUDGETS.filter(b => b.spent > b.budget).length} over · {BUDGETS.length - BUDGETS.filter(b => b.spent > b.budget).length} on track</div>
             </div>
-            <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 8px', fontSize: 12 }}>Edit</button>
+            <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 8px', fontSize: 12 }} onClick={() => setScreen('budgets')}>Edit</button>
           </div>
           <div className="pw-card-body">
             <div style={{ display: 'grid', gap: 12 }}>
@@ -870,7 +951,7 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn }) {
               <div className="pw-card-title">Goals</div>
               <div className="pw-card-sub">{GOALS.length} active</div>
             </div>
-            <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 8px', fontSize: 12 }}>+ Add goal</button>
+            <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 8px', fontSize: 12 }} onClick={onAddGoal}>+ Add goal</button>
           </div>
           <div className="pw-card-body">
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 12 }}>
@@ -901,7 +982,7 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn }) {
 }
 
 /* ─── Transactions ─── */
-function Transactions({ txns }) {
+function Transactions({ txns, onAddTxn, onExport }) {
   const allTxns = txns || TRANSACTIONS;
   const [q, setQ] = useState('');
   const [activeCats, setActiveCats] = useState(new Set());
@@ -956,8 +1037,8 @@ function Transactions({ txns }) {
           </div>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button className="pw-btn"><Icon name="download" size={14}/>CSV</button>
-          <button className="pw-btn pw-btn-primary"><Icon name="plus" size={14}/>New transaction</button>
+          <button className="pw-btn" onClick={() => onExport?.(allTxns)}><Icon name="download" size={14}/>CSV</button>
+          <button className="pw-btn pw-btn-primary" onClick={onAddTxn}><Icon name="plus" size={14}/>New transaction</button>
         </div>
       </div>
 
@@ -992,9 +1073,9 @@ function Transactions({ txns }) {
             <Icon name="check" size={14} style={{ color: 'var(--brand)' }}/>
             <span style={{ fontSize: 13, fontWeight: 500 }}>{selected.size} selected</span>
             <span style={{ flex: 1 }}/>
-            <button className="pw-btn" style={{ padding: '4px 10px', fontSize: 12 }}>Bulk categorize</button>
-            <button className="pw-btn" style={{ padding: '4px 10px', fontSize: 12 }}>Tag</button>
-            <button className="pw-btn" style={{ padding: '4px 10px', fontSize: 12 }}>Export</button>
+            <button className="pw-btn" style={{ padding: '4px 10px', fontSize: 12 }} onClick={() => alert(`Categorize ${selected.size} transactions`)}>Bulk categorize</button>
+            <button className="pw-btn" style={{ padding: '4px 10px', fontSize: 12 }} onClick={() => alert(`Tag ${selected.size} transactions`)}>Tag</button>
+            <button className="pw-btn" style={{ padding: '4px 10px', fontSize: 12 }} onClick={() => onExport?.(allTxns.filter(t => selected.has(t.id)))}>Export</button>
             <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 8px', fontSize: 12 }} onClick={() => setSelected(new Set())}><Icon name="x" size={12}/></button>
           </div>
         )}
@@ -1062,12 +1143,13 @@ function Transactions({ txns }) {
 }
 
 /* ─── Budgets ─── */
-function Budgets() {
+function Budgets({ onAddBudget }) {
   const totalBudget = BUDGETS.reduce((s, b) => s + b.budget, 0);
   const totalSpent = BUDGETS.reduce((s, b) => s + b.spent, 0);
   const over = BUDGETS.filter(b => b.spent > b.budget);
   const remaining = totalBudget - totalSpent;
   const daysLeft = 5;
+  const [suggestionApplied, setSuggestionApplied] = useState(false);
 
   return (
     <div className="pw-screen pw-fadein">
@@ -1080,7 +1162,7 @@ function Budgets() {
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <button className="pw-btn"><Icon name="calendar" size={14}/>Nov 2025</button>
-          <button className="pw-btn pw-btn-primary"><Icon name="plus" size={14}/>New budget</button>
+          <button className="pw-btn pw-btn-primary" onClick={onAddBudget}><Icon name="plus" size={14}/>New budget</button>
         </div>
       </div>
 
@@ -1130,7 +1212,10 @@ function Budgets() {
               reduce Shopping budget to $300 based on your 3-month average of $265/mo outside of one-time purchases.
             </span>
           </div>
-          <button className="pw-btn" style={{ padding: '4px 10px', fontSize: 12, whiteSpace: 'nowrap' }}>Apply suggestion</button>
+          {suggestionApplied
+            ? <span className="pw-tag pw-chip-pos" style={{ fontSize: 12 }}><Icon name="check" size={11}/>Applied</span>
+            : <button className="pw-btn" style={{ padding: '4px 10px', fontSize: 12, whiteSpace: 'nowrap' }} onClick={() => setSuggestionApplied(true)}>Apply suggestion</button>
+          }
         </div>
       </div>
 
@@ -1188,7 +1273,7 @@ function BudgetCard({ b }) {
 }
 
 /* ─── Goals ─── */
-function Goals() {
+function Goals({ onAddGoal, onContribute }) {
   const totalSaved = GOALS.reduce((s, g) => s + g.current, 0);
   const totalTarget = GOALS.reduce((s, g) => s + g.target, 0);
   const monthlyContrib = GOALS.reduce((s, g) => s + g.contrib * 4.33, 0);
@@ -1201,8 +1286,10 @@ function Goals() {
           <h1 style={{ margin: '4px 0 0', fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, letterSpacing: '-0.02em' }}>Goals</h1>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button className="pw-btn"><Icon name="calendar" size={14}/>Schedule</button>
-          <button className="pw-btn pw-btn-primary"><Icon name="plus" size={14}/>Create goal</button>
+          <button className="pw-btn" onClick={() => alert('Contribution scheduling coming soon — set up auto-transfers in Settings.')}>
+            <Icon name="calendar" size={14}/>Schedule
+          </button>
+          <button className="pw-btn pw-btn-primary" onClick={onAddGoal}><Icon name="plus" size={14}/>Create goal</button>
         </div>
       </div>
 
@@ -1216,13 +1303,13 @@ function Goals() {
       </div>
 
       <div style={{ display: 'grid', gap: 16 }}>
-        {GOALS.map(g => <GoalCard key={g.id} g={g}/>)}
+        {GOALS.map(g => <GoalCard key={g.id} g={g} onContribute={onContribute}/>)}
       </div>
     </div>
   );
 }
 
-function GoalCard({ g }) {
+function GoalCard({ g, onContribute }) {
   const pct = g.current / g.target;
   const remaining = g.target - g.current;
   const weeks = Math.ceil(remaining / g.contrib);
@@ -1270,8 +1357,8 @@ function GoalCard({ g }) {
           </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <button className="pw-btn pw-btn-primary" style={{ padding: '6px 14px', fontSize: 12 }}>Contribute</button>
-          <button className="pw-btn" style={{ padding: '6px 14px', fontSize: 12 }}>Adjust</button>
+          <button className="pw-btn pw-btn-primary" style={{ padding: '6px 14px', fontSize: 12 }} onClick={() => onContribute?.(g.id)}>Contribute</button>
+          <button className="pw-btn" style={{ padding: '6px 14px', fontSize: 12 }} onClick={() => alert(`Adjust "${g.name}": change your target amount or weekly contribution in Settings → Goals.`)}>Adjust</button>
         </div>
       </div>
     </div>
@@ -1279,13 +1366,15 @@ function GoalCard({ g }) {
 }
 
 /* ─── Cashflow ─── */
-function Cashflow() {
+function Cashflow({ onExport, setScreen }) {
   const ytdIncome = CASHFLOW.reduce((s, m) => s + m.income, 0);
   const ytdExp = CASHFLOW.reduce((s, m) => s + m.expenses, 0);
   const ytdNet = ytdIncome - ytdExp;
   const avgIncome = ytdIncome / CASHFLOW.length;
   const avgExp = ytdExp / CASHFLOW.length;
   const monthlyNet = avgIncome - avgExp;
+  const [cfView, setCfView] = useState('Monthly');
+  const [openSubIdx, setOpenSubIdx] = useState(null);
 
   const upcoming = SUBSCRIPTIONS.filter(s => {
     const d = new Date(s.next);
@@ -1303,11 +1392,11 @@ function Cashflow() {
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <div className="pw-segment">
-            <button className="active">Monthly</button>
-            <button>Weekly</button>
-            <button>Daily</button>
+            {['Monthly', 'Weekly', 'Daily'].map(v => (
+              <button key={v} className={cfView === v ? 'active' : ''} onClick={() => setCfView(v)}>{v}</button>
+            ))}
           </div>
-          <button className="pw-btn"><Icon name="download" size={14}/>Export</button>
+          <button className="pw-btn" onClick={() => onExport?.()}><Icon name="download" size={14}/>Export</button>
         </div>
       </div>
 
@@ -1404,7 +1493,7 @@ function Cashflow() {
               <span className="pw-num">{fmt(SUBSCRIPTIONS.reduce((s, x) => s + x.amount, 0) * 12, { decimals: 0 })}</span>/yr
             </div>
           </div>
-          <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 10px', fontSize: 12 }}>Manage</button>
+          <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 10px', fontSize: 12 }} onClick={() => setScreen('settings')}>Manage</button>
         </div>
         <div className="pw-row pw-row-head" style={{ gridTemplateColumns: '28px 1fr 100px 130px 80px 60px', gap: 12 }}>
           <span/><span>Service</span><span style={{ textAlign: 'right' }}>Amount</span><span>Next charge</span><span>Frequency</span><span/>
@@ -1412,7 +1501,7 @@ function Cashflow() {
         {SUBSCRIPTIONS.map((s, i) => {
           const cat = CATEGORIES[s.cat];
           return (
-            <div key={i} className="pw-row" style={{ gridTemplateColumns: '28px 1fr 100px 130px 80px 60px', gap: 12 }}>
+            <div key={i} className="pw-row" style={{ gridTemplateColumns: '28px 1fr 100px 130px 80px 60px', gap: 12, position: 'relative' }}>
               <div style={{ width: 24, height: 24, borderRadius: 6, background: cat.color + '20', color: cat.color, display: 'grid', placeItems: 'center', fontSize: 10, fontWeight: 700, fontFamily: 'var(--font-display)' }}>
                 {s.logo || s.name[0]}
               </div>
@@ -1420,7 +1509,28 @@ function Cashflow() {
               <div className="pw-num" style={{ fontSize: 13, fontWeight: 600, textAlign: 'right' }}>{fmt(s.amount)}</div>
               <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{new Date(s.next).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</div>
               <div><span className="pw-tag">monthly</span></div>
-              <button className="pw-btn pw-btn-ghost" style={{ padding: '2px 6px' }}><Icon name="more" size={14}/></button>
+              <div style={{ position: 'relative' }}>
+                <button className="pw-btn pw-btn-ghost" style={{ padding: '2px 6px' }} onClick={() => setOpenSubIdx(openSubIdx === i ? null : i)}>
+                  <Icon name="more" size={14}/>
+                </button>
+                {openSubIdx === i && (
+                  <div style={{ position: 'absolute', right: 0, top: '100%', zIndex: 20, background: 'var(--bg-elev)', border: '1px solid var(--border)', borderRadius: 10, boxShadow: 'var(--shadow-pop)', minWidth: 140, overflow: 'hidden' }}
+                       onClick={e => e.stopPropagation()}>
+                    <button style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', padding: '9px 14px', border: 'none', background: 'transparent', color: 'var(--text)', fontSize: 13, cursor: 'pointer', fontFamily: 'var(--font-body)', textAlign: 'left' }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-hover)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                      onClick={() => { alert(`Pausing ${s.name} — feature coming soon.`); setOpenSubIdx(null); }}>
+                      Pause billing
+                    </button>
+                    <button style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', padding: '9px 14px', border: 'none', background: 'transparent', color: 'var(--neg)', fontSize: 13, cursor: 'pointer', fontFamily: 'var(--font-body)', textAlign: 'left' }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(220,38,38,0.06)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                      onClick={() => { alert(`Cancel ${s.name}? This will remove it from your tracked subscriptions.`); setOpenSubIdx(null); }}>
+                      Cancel subscription
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           );
         })}
@@ -1452,7 +1562,9 @@ function Cashflow() {
 }
 
 /* ─── Insights ─── */
-function Insights() {
+function Insights({ setScreen }) {
+  const [dismissed, setDismissed] = useState(new Set());
+  const visible = INSIGHTS.filter(i => !dismissed.has(i.id));
   return (
     <div className="pw-screen pw-fadein">
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20 }}>
@@ -1463,7 +1575,7 @@ function Insights() {
           <h1 style={{ margin: '4px 0 0', fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, letterSpacing: '-0.02em' }}>Smart insights</h1>
           <div style={{ fontSize: 12.5, color: 'var(--text-muted)', marginTop: 6 }}>Personalized to your spending patterns · Updated 4 min ago</div>
         </div>
-        <button className="pw-btn"><Icon name="settings" size={14}/>Preferences</button>
+        <button className="pw-btn" onClick={() => setScreen('settings')}><Icon name="settings" size={14}/>Preferences</button>
       </div>
 
       <div className="pw-card" style={{
@@ -1490,12 +1602,18 @@ function Insights() {
               Driven by lower dining out (−$37 vs Oct) and the $48/mo subscription trim. Keep it up and your emergency fund completes by April 8.
             </div>
           </div>
-          <button className="pw-btn pw-btn-primary">See breakdown</button>
+          <button className="pw-btn pw-btn-primary" onClick={() => setScreen('cashflow')}>See breakdown</button>
         </div>
       </div>
 
       <div style={{ display: 'grid', gap: 12, marginBottom: 16 }}>
-        {INSIGHTS.map(ins => <InsightCard key={ins.id} ins={ins}/>)}
+        {visible.map(ins => <InsightCard key={ins.id} ins={ins} setScreen={setScreen} onDismiss={id => setDismissed(d => new Set([...d, id]))}/>)}
+        {visible.length === 0 && (
+          <div style={{ padding: 32, textAlign: 'center', color: 'var(--text-faint)', fontSize: 13 }}>
+            <Icon name="check" size={24} stroke={1.5}/>
+            <div style={{ marginTop: 8 }}>All caught up — no pending insights</div>
+          </div>
+        )}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 16 }}>
@@ -1515,13 +1633,20 @@ function Insights() {
   );
 }
 
-function InsightCard({ ins }) {
+function InsightCard({ ins, setScreen, onDismiss }) {
   const colorMap = { warn: 'var(--warn)', pos: 'var(--pos)', info: 'var(--brand)' };
   const iconMap = { warn: 'alert', pos: 'check', info: 'sparkles' };
   const bgMap = {
     warn: 'rgba(217, 119, 6, 0.06)',
     pos: 'rgba(22, 163, 74, 0.06)',
     info: 'rgba(22, 163, 74, 0.06)',
+  };
+  const actionScreenMap = {
+    i1: 'budgets', i2: 'cashflow', i3: 'goals', i4: 'transactions', i5: 'transactions',
+  };
+  const handleAction = () => {
+    const dest = actionScreenMap[ins.id];
+    if (dest) setScreen?.(dest);
   };
   return (
     <div className="pw-card" style={{ padding: 18, display: 'grid', gridTemplateColumns: '40px 1fr auto', gap: 16, alignItems: 'center' }}>
@@ -1538,8 +1663,8 @@ function InsightCard({ ins }) {
         <div style={{ fontSize: 12.5, color: 'var(--text-muted)', marginTop: 4, lineHeight: 1.55 }}>{ins.body}</div>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        <button className="pw-btn pw-btn-primary" style={{ padding: '6px 12px', fontSize: 12 }}>{ins.action}</button>
-        <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 12px', fontSize: 11.5 }}>Dismiss</button>
+        <button className="pw-btn pw-btn-primary" style={{ padding: '6px 12px', fontSize: 12 }} onClick={handleAction}>{ins.action}</button>
+        <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 12px', fontSize: 11.5 }} onClick={() => onDismiss?.(ins.id)}>Dismiss</button>
       </div>
     </div>
   );
@@ -1669,7 +1794,7 @@ function Topbar({ theme, setTheme, onCmd, onAddTxn }) {
   );
 }
 
-function CommandPalette({ setScreen, onClose, onAddTxn }) {
+function CommandPalette({ setScreen, onClose, onAddTxn, onAddGoal, onAddBudget }) {
   const [q, setQ] = useState('');
   const refIn = useRef(null);
   useEffect(() => { refIn.current?.focus(); }, []);
@@ -1684,9 +1809,9 @@ function CommandPalette({ setScreen, onClose, onAddTxn }) {
     { id: 'ai', label: 'Open AI Assistant', icon: 'message-circle', shortcut: 'G A', section: 'Navigate', run: () => setScreen('ai') },
     { id: 'settings', label: 'Go to Settings', icon: 'settings', shortcut: 'G S', section: 'Navigate', run: () => setScreen('settings') },
     { id: 'add-txn', label: 'Add a transaction', icon: 'plus', section: 'Actions', run: () => onAddTxn?.() },
-    { id: 'add-goal', label: 'Create a goal', icon: 'flag', section: 'Actions', run: () => {} },
-    { id: 'add-budget', label: 'Create a budget', icon: 'pie', section: 'Actions', run: () => {} },
-    { id: 'transfer', label: 'Transfer money', icon: 'arrow-right', section: 'Actions', run: () => {} },
+    { id: 'add-goal', label: 'Create a goal', icon: 'flag', section: 'Actions', run: () => onAddGoal?.() },
+    { id: 'add-budget', label: 'Create a budget', icon: 'pie', section: 'Actions', run: () => onAddBudget?.() },
+    { id: 'export', label: 'Export transactions CSV', icon: 'download', section: 'Actions', run: () => {} },
   ];
 
   const filtered = actions.filter(a => a.label.toLowerCase().includes(q.toLowerCase()));
@@ -1820,6 +1945,185 @@ function AddTxnModal({ onClose, onAdd }) {
   );
 }
 
+/* ─── Add Goal Modal ─── */
+function AddGoalModal({ onClose }) {
+  const [form, setForm] = useState({ name: '', target: '', contrib: '', due: '', icon: 'flag', color: '#16a34a' });
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+  const icons = [{ v: 'shield', l: 'Emergency' }, { v: 'plane', l: 'Travel' }, { v: 'home', l: 'Home' }, { v: 'laptop', l: 'Tech' }, { v: 'flag', l: 'Other' }];
+  const colors = ['#16a34a', '#0ea5e9', '#a855f7', '#f59e0b', '#ef4444'];
+  const submit = (e) => {
+    e.preventDefault();
+    alert(`Goal "${form.name}" created! In production, this would save to your goals.`);
+    onClose();
+  };
+  return (
+    <div className="pw-modal-overlay" onClick={onClose}>
+      <div className="pw-modal" onClick={e => e.stopPropagation()}>
+        <div className="pw-modal-head">
+          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 17 }}>Create a goal</div>
+          <button className="pw-icon-btn" style={{ width: 28, height: 28 }} onClick={onClose}><Icon name="x" size={14}/></button>
+        </div>
+        <form onSubmit={submit} className="pw-modal-body">
+          <div className="pw-field">
+            <label className="pw-field-label">Goal name</label>
+            <input className="pw-field-input" value={form.name} onChange={e => set('name', e.target.value)} placeholder="e.g. Emergency Fund, Tokyo Trip…" required/>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div className="pw-field">
+              <label className="pw-field-label">Target amount</label>
+              <input className="pw-field-input" type="number" step="100" value={form.target} onChange={e => set('target', e.target.value)} placeholder="10,000" required/>
+            </div>
+            <div className="pw-field">
+              <label className="pw-field-label">Weekly contribution</label>
+              <input className="pw-field-input" type="number" step="10" value={form.contrib} onChange={e => set('contrib', e.target.value)} placeholder="250"/>
+            </div>
+          </div>
+          <div className="pw-field">
+            <label className="pw-field-label">Target date</label>
+            <input className="pw-field-input" type="date" value={form.due} onChange={e => set('due', e.target.value)}/>
+          </div>
+          <div className="pw-field">
+            <label className="pw-field-label">Icon</label>
+            <div style={{ display: 'flex', gap: 8 }}>
+              {icons.map(ic => (
+                <button key={ic.v} type="button" onClick={() => set('icon', ic.v)} style={{
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, padding: '8px 10px',
+                  border: `1.5px solid ${form.icon === ic.v ? 'var(--brand)' : 'var(--border)'}`,
+                  borderRadius: 10, background: form.icon === ic.v ? 'var(--brand-soft)' : 'var(--bg-soft)',
+                  cursor: 'pointer', flex: 1, color: form.icon === ic.v ? 'var(--brand)' : 'var(--text-muted)',
+                }}>
+                  <Icon name={ic.v} size={16}/>
+                  <span style={{ fontSize: 10, fontFamily: 'var(--font-body)' }}>{ic.l}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="pw-field">
+            <label className="pw-field-label">Color</label>
+            <div style={{ display: 'flex', gap: 8 }}>
+              {colors.map(c => (
+                <button key={c} type="button" onClick={() => set('color', c)} style={{
+                  width: 28, height: 28, borderRadius: '50%', background: c, cursor: 'pointer',
+                  border: form.color === c ? `3px solid var(--text)` : '3px solid transparent',
+                  boxShadow: `0 0 0 1px ${c}`,
+                }}/>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 4 }}>
+            <button type="button" className="pw-btn" onClick={onClose}>Cancel</button>
+            <button type="submit" className="pw-btn pw-btn-primary"><Icon name="flag" size={14}/>Create goal</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Contribute Modal ─── */
+function ContributeModal({ goal, onClose }) {
+  const [amount, setAmount] = useState(goal?.contrib || '');
+  const presets = goal ? [goal.contrib, goal.contrib * 2, Math.round((goal.target - goal.current) / 4)] : [];
+  const submit = (e) => {
+    e.preventDefault();
+    alert(`${goal?.name}: $${amount} contribution recorded! Your new balance would be ${fmt((goal?.current || 0) + parseFloat(amount || 0), { decimals: 0 })}.`);
+    onClose();
+  };
+  if (!goal) return null;
+  const remaining = goal.target - goal.current;
+  const afterContrib = goal.current + parseFloat(amount || 0);
+  return (
+    <div className="pw-modal-overlay" onClick={onClose}>
+      <div className="pw-modal" onClick={e => e.stopPropagation()}>
+        <div className="pw-modal-head">
+          <div>
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 17 }}>Contribute to goal</div>
+            <div style={{ fontSize: 12, color: 'var(--text-faint)', marginTop: 2 }}>{goal.name}</div>
+          </div>
+          <button className="pw-icon-btn" style={{ width: 28, height: 28 }} onClick={onClose}><Icon name="x" size={14}/></button>
+        </div>
+        <form onSubmit={submit} className="pw-modal-body">
+          <div style={{ padding: 16, borderRadius: 12, background: 'var(--bg-soft)', border: '1px solid var(--border)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--text-faint)', marginBottom: 8 }}>
+              <span>Current</span><span>Target</span>
+            </div>
+            <div className="pw-bar" style={{ height: 8 }}>
+              <div className="pw-bar-fill" style={{ width: `${Math.min(100, (afterContrib / goal.target) * 100)}%`, background: goal.color, transition: 'width 0.3s var(--ease-out)' }}/>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginTop: 6 }}>
+              <span className="pw-num" style={{ fontWeight: 600 }}>{fmt(afterContrib, { decimals: 0 })}</span>
+              <span style={{ color: 'var(--text-faint)' }}>{fmt(remaining - parseFloat(amount || 0), { decimals: 0 })} remaining</span>
+            </div>
+          </div>
+          <div className="pw-field">
+            <label className="pw-field-label">Amount</label>
+            <input className="pw-field-input" type="number" step="0.01" value={amount} onChange={e => setAmount(e.target.value)} placeholder="0.00" required/>
+          </div>
+          <div style={{ display: 'flex', gap: 6 }}>
+            {presets.filter((v, i, a) => a.indexOf(v) === i && v > 0).slice(0, 3).map(p => (
+              <button key={p} type="button" className="pw-btn" style={{ flex: 1, justifyContent: 'center', fontSize: 12 }} onClick={() => setAmount(p)}>
+                {fmt(p, { decimals: 0 })}
+              </button>
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 4 }}>
+            <button type="button" className="pw-btn" onClick={onClose}>Cancel</button>
+            <button type="submit" className="pw-btn pw-btn-primary"><Icon name="plus" size={14}/>Contribute</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Add Budget Modal ─── */
+function AddBudgetModal({ onClose }) {
+  const existingCats = new Set(BUDGETS.map(b => b.cat));
+  const availableCats = Object.entries(CATEGORIES).filter(([k]) => !existingCats.has(k) && k !== 'income' && k !== 'transfer');
+  const [form, setForm] = useState({ cat: availableCats[0]?.[0] || 'travel', budget: '' });
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+  const submit = (e) => {
+    e.preventDefault();
+    alert(`Budget for ${CATEGORIES[form.cat]?.name} set at ${fmt(parseFloat(form.budget), { decimals: 0 })}/month.`);
+    onClose();
+  };
+  return (
+    <div className="pw-modal-overlay" onClick={onClose}>
+      <div className="pw-modal" onClick={e => e.stopPropagation()}>
+        <div className="pw-modal-head">
+          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 17 }}>New budget</div>
+          <button className="pw-icon-btn" style={{ width: 28, height: 28 }} onClick={onClose}><Icon name="x" size={14}/></button>
+        </div>
+        <form onSubmit={submit} className="pw-modal-body">
+          <div className="pw-field">
+            <label className="pw-field-label">Category</label>
+            <select className="pw-field-input" value={form.cat} onChange={e => set('cat', e.target.value)}>
+              {availableCats.map(([k, v]) => <option key={k} value={k}>{v.name}</option>)}
+              <optgroup label="Already budgeted">
+                {BUDGETS.map(b => <option key={b.cat} value={b.cat} disabled>{CATEGORIES[b.cat]?.name} (active)</option>)}
+              </optgroup>
+            </select>
+          </div>
+          <div className="pw-field">
+            <label className="pw-field-label">Monthly limit</label>
+            <input className="pw-field-input" type="number" step="10" value={form.budget} onChange={e => set('budget', e.target.value)} placeholder="e.g. 400" required/>
+          </div>
+          {form.budget && !isNaN(parseFloat(form.budget)) && (
+            <div style={{ padding: '10px 14px', borderRadius: 10, background: 'var(--brand-soft)', border: '1px solid var(--brand-rim)', fontSize: 12.5, color: 'var(--text-muted)' }}>
+              <span className="pw-num" style={{ fontWeight: 600, color: 'var(--brand)' }}>{fmt(parseFloat(form.budget) / 30.4, { decimals: 0 })}/day</span>
+              {' '}safe-to-spend for <strong>{CATEGORIES[form.cat]?.name}</strong>
+            </div>
+          )}
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 4 }}>
+            <button type="button" className="pw-btn" onClick={onClose}>Cancel</button>
+            <button type="submit" className="pw-btn pw-btn-primary"><Icon name="plus" size={14}/>Create budget</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardApp({ onSignOut }) {
   const [theme, setTheme] = useState(() => {
     if (typeof document === 'undefined') return 'light';
@@ -1829,7 +2133,26 @@ export default function DashboardApp({ onSignOut }) {
   const [range, setRange] = useState('3M');
   const [cmdOpen, setCmdOpen] = useState(false);
   const [showAddTxn, setShowAddTxn] = useState(false);
+  const [showAddGoal, setShowAddGoal] = useState(false);
+  const [showAddBudget, setShowAddBudget] = useState(false);
+  const [contributeGoal, setContributeGoal] = useState(null);
   const [txns, setTxns] = useState(TRANSACTIONS);
+
+  const handleExportCSV = (data) => {
+    const rows = [
+      ['Date', 'Merchant', 'Category', 'Amount', 'Account', 'Note'],
+      ...(data || txns).map(t => [
+        t.date, t.merchant, CATEGORIES[t.cat]?.name || t.cat,
+        t.amount, ACCOUNTS.find(a => a.id === t.account)?.name || t.account, t.note || '',
+      ]),
+    ];
+    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+    a.download = 'pennywise-transactions.csv';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
 
   // Apply theme to <html> and sync Tailwind .dark class
   useEffect(() => {
@@ -1852,7 +2175,7 @@ export default function DashboardApp({ onSignOut }) {
         setCmdOpen(o => !o);
         return;
       }
-      if (e.key === 'Escape') { setCmdOpen(false); setShowAddTxn(false); return; }
+      if (e.key === 'Escape') { setCmdOpen(false); setShowAddTxn(false); setShowAddGoal(false); setShowAddBudget(false); setContributeGoal(null); return; }
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
       if (lastG) {
         const map = { o: 'overview', t: 'transactions', b: 'budgets', g: 'goals', c: 'cashflow', i: 'insights', a: 'ai', s: 'settings' };
@@ -1876,19 +2199,22 @@ export default function DashboardApp({ onSignOut }) {
         <div className="pw-main">
           <Topbar theme={theme} setTheme={setTheme} onCmd={() => setCmdOpen(true)} onAddTxn={() => setShowAddTxn(true)}/>
           <div className="pw-workspace">
-            {screen === 'overview' && <Overview range={range} setRange={setRange} txns={txns} setScreen={setScreen} onAddTxn={() => setShowAddTxn(true)}/>}
-            {screen === 'transactions' && <Transactions txns={txns}/>}
-            {screen === 'budgets' && <Budgets/>}
-            {screen === 'goals' && <Goals/>}
-            {screen === 'cashflow' && <Cashflow/>}
-            {screen === 'insights' && <Insights/>}
+            {screen === 'overview' && <Overview range={range} setRange={setRange} txns={txns} setScreen={setScreen} onAddTxn={() => setShowAddTxn(true)} onAddGoal={() => setShowAddGoal(true)} onExport={handleExportCSV}/>}
+            {screen === 'transactions' && <Transactions txns={txns} onAddTxn={() => setShowAddTxn(true)} onExport={handleExportCSV}/>}
+            {screen === 'budgets' && <Budgets onAddBudget={() => setShowAddBudget(true)}/>}
+            {screen === 'goals' && <Goals onAddGoal={() => setShowAddGoal(true)} onContribute={setContributeGoal}/>}
+            {screen === 'cashflow' && <Cashflow onExport={handleExportCSV} setScreen={setScreen}/>}
+            {screen === 'insights' && <Insights setScreen={setScreen}/>}
             {screen === 'ai' && <AIAssistant data={AI_DATA}/>}
             {screen === 'settings' && <Settings theme={theme} setTheme={setTheme}/>}
           </div>
         </div>
       </div>
-      {cmdOpen && <CommandPalette setScreen={setScreen} onClose={() => setCmdOpen(false)} onAddTxn={() => { setShowAddTxn(true); setCmdOpen(false); }}/>}
+      {cmdOpen && <CommandPalette setScreen={setScreen} onClose={() => setCmdOpen(false)} onAddTxn={() => { setShowAddTxn(true); setCmdOpen(false); }} onAddGoal={() => { setShowAddGoal(true); setCmdOpen(false); }} onAddBudget={() => { setShowAddBudget(true); setCmdOpen(false); }}/>}
       {showAddTxn && <AddTxnModal onClose={() => setShowAddTxn(false)} onAdd={handleAddTxn}/>}
+      {showAddGoal && <AddGoalModal onClose={() => setShowAddGoal(false)}/>}
+      {showAddBudget && <AddBudgetModal onClose={() => setShowAddBudget(false)}/>}
+      {contributeGoal && <ContributeModal goal={GOALS.find(g => g.id === contributeGoal)} onClose={() => setContributeGoal(null)}/>}
     </>
   );
 }

@@ -47,8 +47,10 @@
   --text-faint: #a3a3a3;
   --grid-line: rgba(15, 23, 42, 0.05);
   --chart-fill: rgba(22, 163, 74, 0.12);
-  --shadow-card: 0 1px 0 rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.04);
-  --shadow-pop: 0 12px 32px rgba(15, 23, 42, 0.10), 0 4px 12px rgba(15, 23, 42, 0.06);
+  --shadow-card: 0 0 0 1px rgba(15,23,42,0.05), 0 1px 2px rgba(15,23,42,0.05), 0 4px 16px rgba(15,23,42,0.04);
+  --shadow-card-hover: 0 0 0 1px rgba(15,23,42,0.08), 0 4px 8px rgba(15,23,42,0.06), 0 12px 24px rgba(15,23,42,0.06);
+  --shadow-pop: 0 0 0 1px rgba(15,23,42,0.07), 0 8px 32px rgba(15,23,42,0.14), 0 32px 64px rgba(15,23,42,0.08);
+  --shadow-brand: 0 0 0 1px var(--brand-rim), 0 4px 16px rgba(22,163,74,0.22), 0 1px 3px rgba(22,163,74,0.18);
 }
 
 /* ─── Dark theme ─── */
@@ -74,8 +76,10 @@
   --pos: #22c55e;
   --neg: #f87171;
   --warn: #f59e0b;
-  --shadow-card: 0 1px 0 rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-pop: 0 16px 40px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 0 0 1px rgba(255,255,255,0.06), 0 1px 2px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.25);
+  --shadow-card-hover: 0 0 0 1px rgba(255,255,255,0.08), 0 4px 8px rgba(0,0,0,0.4), 0 12px 24px rgba(0,0,0,0.35);
+  --shadow-pop: 0 0 0 1px rgba(255,255,255,0.07), 0 8px 32px rgba(0,0,0,0.6), 0 32px 64px rgba(0,0,0,0.4);
+  --shadow-brand: 0 0 0 1px var(--brand-rim), 0 4px 16px rgba(34,197,94,0.28), 0 1px 3px rgba(34,197,94,0.22);
 }
 
 /* ─── App shell ─── */
@@ -165,18 +169,19 @@
   .pw-nav-item:hover { background: var(--bg-hover); color: var(--text); }
 }
 .pw-nav-item.active {
-  background: var(--bg-elev);
-  color: var(--text);
-  box-shadow: var(--shadow-card);
-  border: 1px solid var(--border);
+  background: var(--brand-soft);
+  color: var(--brand);
+  box-shadow: 0 0 0 1px var(--brand-rim), 0 2px 8px rgba(22,163,74,0.10);
+  border: 1px solid var(--brand-rim);
 }
 .pw-nav-item.active::before {
   content: '';
   position: absolute;
   left: -3px; top: 18%; bottom: 18%;
-  width: 2px;
-  background: var(--brand);
+  width: 3px;
+  background: linear-gradient(180deg, var(--brand) 0%, var(--brand-hover) 100%);
   border-radius: 2px;
+  box-shadow: 0 0 6px var(--brand-soft);
 }
 .pw-nav-item svg { flex-shrink: 0; }
 .pw-badge {
@@ -243,7 +248,7 @@
 .pw-icon-btn {
   width: 34px; height: 34px;
   display: grid; place-items: center;
-  border-radius: var(--r-md);
+  border-radius: 10px;
   background: transparent;
   border: 1px solid transparent;
   color: var(--text-muted);
@@ -289,10 +294,17 @@
 .pw-card {
   background: var(--bg-elev);
   border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-card);
+  border-radius: 16px;
+  box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255,255,255,0.06);
   position: relative;
   overflow: hidden;
+  transition: box-shadow 220ms var(--ease-out), border-color 220ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .pw-card:hover {
+    box-shadow: var(--shadow-card-hover), inset 0 1px 0 rgba(255,255,255,0.08);
+    border-color: var(--border-strong);
+  }
 }
 .pw-card-head {
   display: flex;
@@ -324,34 +336,38 @@
   align-items: center;
   gap: 6px;
   padding: 7px 14px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 13px;
   font-weight: 500;
   border: 1px solid var(--border);
   background: var(--bg-elev);
   color: var(--text);
   cursor: pointer;
-  transition: border-color 150ms var(--ease-out), background 150ms var(--ease-out), color 150ms var(--ease-out), transform 150ms var(--ease-out);
+  transition: border-color 150ms var(--ease-out), background 150ms var(--ease-out), color 150ms var(--ease-out), box-shadow 150ms var(--ease-out), transform 150ms var(--ease-out);
   white-space: nowrap;
   font-family: var(--font-body);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }
 .pw-btn:active { transform: scale(0.97); transition-duration: 80ms; }
 @media (hover: hover) and (pointer: fine) {
-  .pw-btn:hover { border-color: var(--border-strong); background: var(--bg-soft); }
+  .pw-btn:hover { border-color: var(--border-strong); background: var(--bg-soft); box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
 }
 .pw-btn-primary {
-  background: var(--brand);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--brand) 85%, white) 0%, var(--brand) 60%, var(--brand-hover) 100%);
   border-color: var(--brand-hover);
   color: white;
   font-weight: 600;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.18) inset, 0 4px 10px var(--brand-soft);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.20) inset, var(--shadow-brand);
 }
 @media (hover: hover) and (pointer: fine) {
-  .pw-btn-primary:hover { background: var(--brand-hover); border-color: var(--brand-hover); }
+  .pw-btn-primary:hover {
+    background: linear-gradient(180deg, var(--brand) 0%, var(--brand-hover) 100%);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.18) inset, 0 6px 20px rgba(22,163,74,0.38);
+  }
 }
-.pw-btn-ghost { background: transparent; border-color: transparent; color: var(--text-muted); }
+.pw-btn-ghost { background: transparent; border-color: transparent; color: var(--text-muted); box-shadow: none; }
 @media (hover: hover) and (pointer: fine) {
-  .pw-btn-ghost:hover { background: var(--bg-soft); color: var(--text); }
+  .pw-btn-ghost:hover { background: var(--bg-soft); color: var(--text); box-shadow: none; }
 }
 
 /* ─── Tags ─── */
@@ -394,9 +410,9 @@
 .pw-kpi-value {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   color: var(--text);
   line-height: 1.05;
   margin-top: 2px;
@@ -811,6 +827,356 @@
 .pw-ai-send:active:not(:disabled) {
   transform: scale(0.93);
   transition-duration: 80ms;
+}
+
+/* ============================================================
+   AI CHAT — ENHANCED COMPONENTS
+   ============================================================ */
+
+/* Typing dots */
+.pw-ai-dots {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 4px;
+}
+.pw-ai-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brand);
+}
+
+/* Mouse-tracking glow */
+.pw-ai-glow {
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.028;
+  background: radial-gradient(circle, var(--brand) 0%, transparent 70%);
+  filter: blur(72px);
+}
+
+/* Bubble wrapper (relative for copy btn) */
+.pw-ai-bubble-wrap {
+  position: relative;
+  max-width: 100%;
+}
+
+/* Copy button — appears on hover */
+.pw-ai-copy-btn {
+  position: absolute;
+  top: 6px;
+  right: -28px;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 150ms var(--ease-out);
+  flex-shrink: 0;
+}
+.pw-ai-msg-ai:hover .pw-ai-copy-btn {
+  opacity: 1;
+}
+
+/* Quick-action cards in empty state */
+.pw-ai-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  width: 100%;
+  max-width: 460px;
+  margin-top: 24px;
+}
+.pw-ai-quick-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-soft);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 150ms var(--ease-out), background 150ms var(--ease-out), box-shadow 150ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .pw-ai-quick-card:hover {
+    border-color: var(--brand-rim);
+    background: var(--brand-soft);
+    box-shadow: 0 4px 16px var(--brand-soft);
+  }
+}
+.pw-ai-quick-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--brand-soft);
+  color: var(--brand);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border: 1px solid var(--brand-rim);
+}
+.pw-ai-quick-label {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-display);
+  color: var(--text);
+  line-height: 1.3;
+}
+.pw-ai-quick-sub {
+  font-size: 11px;
+  color: var(--text-faint);
+  margin-top: 2px;
+}
+
+/* Attachment chips */
+.pw-ai-attach-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 6px 24px 0;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.pw-ai-attach-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  color: var(--text-muted);
+  font-size: 11.5px;
+  font-family: var(--font-body);
+}
+.pw-ai-attach-chip button {
+  display: grid;
+  place-items: center;
+  color: var(--text-faint);
+  cursor: pointer;
+  padding: 0;
+  transition: color 120ms;
+}
+.pw-ai-attach-chip button:hover { color: var(--neg); }
+
+/* Input outer wrapper */
+.pw-ai-input-outer {
+  position: relative;
+  padding: 10px 24px 20px;
+  flex-shrink: 0;
+}
+
+/* Input box with border */
+.pw-ai-input-wrap {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-elev);
+  transition: border-color 180ms var(--ease-out), box-shadow 180ms var(--ease-out);
+  overflow: hidden;
+}
+.pw-ai-input-wrap.focused {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-soft);
+}
+
+/* Textarea */
+.pw-ai-textarea {
+  width: 100%;
+  padding: 14px 16px 10px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  font-family: var(--font-body);
+  outline: none;
+  resize: none;
+  min-height: 52px;
+  max-height: 180px;
+  line-height: 1.55;
+  display: block;
+  box-sizing: border-box;
+}
+.pw-ai-textarea::placeholder { color: var(--text-faint); }
+.pw-ai-textarea:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* Input bottom action row */
+.pw-ai-input-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-top: 1px solid var(--border);
+}
+.pw-ai-input-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Active state for icon btn inside chat */
+.pw-ai-input-left .pw-icon-btn.active {
+  background: var(--brand-soft);
+  color: var(--brand);
+  border-color: var(--brand-rim);
+}
+
+/* Command palette */
+.pw-ai-cmd-palette {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  margin-bottom: 6px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-pop);
+  z-index: 50;
+  overflow: hidden;
+}
+.pw-ai-cmd-header {
+  padding: 8px 14px 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.pw-ai-cmd-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: background 100ms var(--ease-out);
+}
+.pw-ai-cmd-item:hover, .pw-ai-cmd-item.active {
+  background: var(--brand-soft);
+}
+.pw-ai-cmd-item.active .pw-ai-cmd-label {
+  color: var(--brand);
+}
+.pw-ai-cmd-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: var(--bg-soft);
+  color: var(--brand);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+.pw-ai-cmd-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  min-width: 90px;
+}
+.pw-ai-cmd-desc {
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+/* Thinking indicator (floating) */
+.pw-ai-thinking {
+  position: absolute;
+  bottom: 152px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 14px 7px 10px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  box-shadow: var(--shadow-pop);
+  z-index: 10;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.pw-ai-thinking-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-hover));
+  color: white;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.pw-ai-thinking-label {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   FINANCIAL HEALTH CARD
+   ============================================================ */
+.pw-health-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-elev);
+  margin-bottom: 16px;
+}
+.pw-health-info {
+  flex: 1;
+  min-width: 0;
+}
+.pw-health-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 4px;
+}
+.pw-health-grade {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.pw-health-factors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.pw-health-factor {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.pw-health-factor-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 /* ============================================================

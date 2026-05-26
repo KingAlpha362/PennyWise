@@ -14,9 +14,9 @@ export default function CTA({ onGetStarted }) {
           <div className="orb" style={{ width: '500px', height: '500px', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', background: 'radial-gradient(circle,rgba(22,163,74,0.06) 0%,transparent 65%)' }}/>
 
           <div className="relative z-10 p-10 sm:p-16 text-center">
-            <div className="label mb-5">Start Today — It&apos;s Free</div>
+            <div className="label mb-5">Join 14,000+ people who stopped guessing</div>
             <h2 className="font-display text-4xl md:text-5xl font-extrabold tracking-tight text-text mb-4 leading-[1.1]">
-              The last finance app<br/>you&apos;ll ever need.
+              Your finances, finally<br/>on autopilot.
             </h2>
             <p className="text-text-muted text-base max-w-[420px] mx-auto mb-8 leading-relaxed">
               Join 14,000+ users who found an average of <strong className="text-text">$156/month</strong> in hidden savings. 2 minutes to set up, no credit card required.
