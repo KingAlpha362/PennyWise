@@ -14,21 +14,21 @@ export default function SecurityIntegrations() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-16">
           <div className="flex flex-col items-center text-center p-6 bg-card rounded-2xl border border-border shadow-sm">
-            <div className="w-12 h-12 bg-[#16A34A]/10 rounded-full flex items-center justify-center mb-4 text-[#16A34A]">
+            <div className="w-12 h-12 bg-[var(--accent-dim)] rounded-full flex items-center justify-center mb-4 text-[var(--accent)]">
               <Lock size={24} />
             </div>
             <h3 className="text-lg font-bold text-text mb-2">AES-256 Encryption</h3>
             <p className="text-sm text-text-muted">All your financial data is encrypted at rest and in transit using hardware-level cryptography.</p>
           </div>
           <div className="flex flex-col items-center text-center p-6 bg-card rounded-2xl border border-border shadow-sm">
-            <div className="w-12 h-12 bg-[#c9922a]/10 rounded-full flex items-center justify-center mb-4 text-[#c9922a]">
+            <div className="w-12 h-12 bg-[var(--accent-dim)] rounded-full flex items-center justify-center mb-4 text-[var(--accent)]">
               <Shield size={24} />
             </div>
             <h3 className="text-lg font-bold text-text mb-2">SOC 2 Type II Certified</h3>
             <p className="text-sm text-text-muted">We adhere to the strictest security frameworks to ensure your information is never compromised.</p>
           </div>
           <div className="flex flex-col items-center text-center p-6 bg-card rounded-2xl border border-border shadow-sm">
-            <div className="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center mb-4 text-blue-500">
+            <div className="w-12 h-12 bg-[var(--accent-dim)] rounded-full flex items-center justify-center mb-4 text-[var(--accent)]">
               <Server size={24} />
             </div>
             <h3 className="text-lg font-bold text-text mb-2">Read-Only Access</h3>

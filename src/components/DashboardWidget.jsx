@@ -38,7 +38,7 @@ export default function DashboardWidget() {
 
       <div className="relative z-10 max-w-5xl mx-auto glass-card rounded-2xl overflow-hidden hover:scale-[1.01]">
         {/* Dashboard content */}
-        <div className="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 bg-bg-card min-h-[380px]">
+        <div className="p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[380px]" style={{ background: '#0d1017', '--text': '#F1F5F9', '--text-muted': 'rgba(241,245,249,0.55)', '--border': 'rgba(255,255,255,0.10)', '--border-card': 'rgba(255,255,255,0.07)', '--accent': '#22c55e', '--accent-dim': 'rgba(34,197,94,0.12)', '--bg': '#0d1017', '--bg-card': 'rgba(16,20,26,0.6)', '--bg-subtle': 'rgba(255,255,255,0.04)' }}>
           
           {/* Left sidebar */}
           <div className="lg:col-span-3 hidden lg:flex flex-col gap-3 border-r border-[rgba(255,255,255,0.06)] pr-4">
@@ -80,7 +80,7 @@ export default function DashboardWidget() {
                   <div className="font-semibold text-[0.75rem] text-text-muted mb-2 tracking-wider uppercase">Wealth Growth</div>
                   <div className="font-display font-black text-4xl text-text tracking-tight">$7,400</div>
                 </div>
-                <div className="font-semibold text-[0.75rem] text-accent bg-[rgba(201,185,154,0.1)] px-4 py-2 rounded-full tracking-wider">+131% YTD</div>
+                <div className="font-semibold text-[0.75rem] text-accent bg-[rgba(34,197,94,0.12)] px-4 py-2 rounded-full tracking-wider">+131% YTD</div>
               </div>
               <div style={{ height: 160 }}>
                 <ResponsiveContainer width="100%" height="100%">

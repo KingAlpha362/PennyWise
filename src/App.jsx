@@ -16,6 +16,9 @@ import HowItWorks from './components/HowItWorks';
 import SecurityIntegrations from './components/SecurityIntegrations';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
+import ComparisonTable from './components/ComparisonTable';
+import ROICalculator from './components/ROICalculator';
+import FAQ from './components/FAQ';
 import DashboardApp from './components/DashboardApp';
 import AuthForm from './components/AuthForm';
 import { useState } from 'react';
@@ -89,16 +92,21 @@ export default function App() {
       <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <HowItWorks />
       <div className="h-px w-full bg-black/15 dark:bg-black/40" />
+      <ROICalculator />
+      <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <SecurityIntegrations />
       <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <Features />
       <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <Benefits />
       <div className="h-px w-full bg-black/15 dark:bg-black/40" />
+      <ComparisonTable />
       <DashboardPreview />
       <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <Testimonials />
       <Pricing />
+      <div className="h-px w-full bg-black/15 dark:bg-black/40" />
+      <FAQ />
       <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <CTA onGetStarted={() => setAppView('signup')} />
       <Footer />

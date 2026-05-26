@@ -1839,6 +1839,7 @@ export default function DashboardApp({ onSignOut }) {
     else root.classList.remove('dark');
     return () => {
       root.removeAttribute('data-theme');
+      root.classList.remove('dark');
     };
   }, [theme]);
 

@@ -1,14 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function Hero({ onGetStarted }) {
-  const [isDark, setIsDark] = useState(() => typeof document !== 'undefined' ? document.documentElement.classList.contains('dark') : false);
-
   useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setIsDark(document.documentElement.classList.contains('dark'));
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-
     const timer = setTimeout(() => {
       const heroLine = document.getElementById('heroLine');
       const dotEnd = document.getElementById('dotEnd');
@@ -21,10 +14,7 @@ export default function Hero({ onGetStarted }) {
         }, 2400);
       }
     }, 1200);
-    return () => {
-      clearTimeout(timer);
-      observer.disconnect();
-    };
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -42,27 +32,35 @@ export default function Hero({ onGetStarted }) {
             Instantly.
           </h1>
 
-          <p className="hero-t3 mt-6 text-base md:text-lg leading-relaxed max-w-[420px]" style={{ color: isDark ? 'rgba(255,255,255,0.8)' : '#444444' }}>
-            Build wealth without thinking about it. PennyWise uses subtle AI to organize your finances, giving you absolute clarity over every dollar.
+          <p className="hero-t3 mt-5 text-base md:text-[1.05rem] leading-relaxed max-w-[440px] text-text-muted">
+            Connect your accounts in 2 minutes. Penny AI finds the patterns you miss and shows you exactly where your money leaks. Users save an average of <strong className="text-text">$156/month</strong> in their first 30 days.
           </p>
 
-          <div className="hero-t4 flex flex-col sm:flex-row gap-3 mt-10">
-            <button onClick={onGetStarted} className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2">
-              Get Started Free
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 6.5h10M7.5 2.5l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          <div className="hero-t4 flex flex-col sm:flex-row gap-3 mt-9">
+            <button onClick={onGetStarted} className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 text-[0.9rem] py-3 px-6">
+              Start free — takes 2 min
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 6.5h10M7.5 2.5l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </button>
-            <a href="#features" className="btn-secondary w-full sm:w-auto flex items-center justify-center no-underline">Learn More</a>
+            <a href="#features" className="btn-ghost w-full sm:w-auto flex items-center justify-center no-underline text-[0.9rem] py-3 px-6">See how it works</a>
           </div>
 
-          {/* Social proof */}
-          <div className="hero-t5 flex items-center gap-4 mt-10">
-            <div className="flex" style={{ marginRight: '4px' }}>
-              <div className="w-[30px] h-[30px] rounded-full bg-[rgba(17,17,17,0.08)] dark:bg-white/10 border-2 border-bg dark:border-[#10141a] flex items-center justify-center text-[0.6rem] font-bold z-30" style={{ color: isDark ? '#ffffff' : '#111111' }}>AL</div>
-              <div className="w-[30px] h-[30px] rounded-full bg-[rgba(17,17,17,0.04)] dark:bg-white/5 border-2 border-bg dark:border-[#10141a] flex items-center justify-center text-[0.6rem] font-bold -ml-2 z-20" style={{ color: isDark ? '#ffffff' : '#111111' }}>JM</div>
-              <div className="w-[30px] h-[30px] rounded-full bg-[rgba(17,17,17,0.06)] dark:bg-white/8 border-2 border-bg dark:border-[#10141a] flex items-center justify-center text-[0.6rem] font-bold -ml-2 z-10" style={{ color: isDark ? '#ffffff' : '#111111' }}>RK</div>
-              <div className="w-[30px] h-[30px] rounded-full bg-[rgba(17,17,17,0.02)] dark:bg-white/5 border-2 border-bg dark:border-[#10141a] flex items-center justify-center text-[0.65rem] -ml-2 z-0" style={{ color: isDark ? '#ffffff' : '#111111' }}>+</div>
+          {/* Social proof row */}
+          <div className="hero-t5 flex flex-wrap items-center gap-5 mt-8">
+            <div className="flex items-center gap-3">
+              <div className="flex">
+                {['AL','JM','RK','SK'].map((i, idx) => (
+                  <div key={i} className="w-7 h-7 rounded-full bg-accent-dim border-2 border-bg flex items-center justify-center text-[0.55rem] font-bold text-accent" style={{ marginLeft: idx > 0 ? '-7px' : 0, zIndex: 4 - idx }}>{i}</div>
+                ))}
+              </div>
+              <span className="text-[0.8rem] text-text-muted"><strong className="text-text font-semibold">14,000+</strong> users</span>
             </div>
-            <span className="text-[0.78rem]" style={{ color: isDark ? 'rgba(255,255,255,0.7)' : '#555555' }}>Trusted by <strong style={{ color: isDark ? '#ffffff' : '#111111' }}>12,000+</strong> users worldwide</span>
+            <div className="w-px h-4 bg-border hidden sm:block"/>
+            <div className="flex items-center gap-1.5 text-[0.8rem] text-text-muted">
+              <span className="text-yellow-500 text-sm">★★★★★</span>
+              <strong className="text-text font-semibold">4.9</strong> on App Store
+            </div>
+            <div className="w-px h-4 bg-border hidden sm:block"/>
+            <div className="text-[0.8rem] text-text-muted">No credit card required</div>
           </div>
         </div>
 
@@ -85,13 +83,13 @@ export default function Hero({ onGetStarted }) {
                 <svg viewBox="0 0 420 110" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
                   <defs>
                     <linearGradient id="aG" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="rgba(201,185,154,0.18)" />
-                      <stop offset="100%" stopColor="rgba(201,185,154,0)" />
+                      <stop offset="0%" stopColor="rgba(22,163,74,0.15)" />
+                      <stop offset="100%" stopColor="rgba(22,163,74,0)" />
                     </linearGradient>
                   </defs>
-                  <line x1="0" y1="27" x2="420" y2="27" stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
-                  <line x1="0" y1="55" x2="420" y2="55" stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
-                  <line x1="0" y1="82" x2="420" y2="82" stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
+                  <line x1="0" y1="27" x2="420" y2="27" stroke="rgba(15,23,42,0.05)" strokeWidth="1" />
+                  <line x1="0" y1="55" x2="420" y2="55" stroke="rgba(15,23,42,0.05)" strokeWidth="1" />
+                  <line x1="0" y1="82" x2="420" y2="82" stroke="rgba(15,23,42,0.05)" strokeWidth="1" />
                   <path d="M0,88 C50,76 80,58 120,52 S175,38 210,28 S285,18 325,22 S385,30 420,16 L420,110 L0,110 Z" fill="url(#aG)" />
                   <path className="cline" id="heroLine" d="M0,88 C50,76 80,58 120,52 S175,38 210,28 S285,18 325,22 S385,30 420,16" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" />
                   <circle id="dotEnd" cx="420" cy="16" r="4" fill="var(--accent)" opacity="0" />
@@ -144,11 +142,7 @@ export default function Hero({ onGetStarted }) {
         </div>
       </div>
 
-      {/* Scroll cue */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10" style={{ animation: 'fadeIn 1s 1.6s both' }}>
-        <span className="text-[0.6rem] tracking-[0.22em] uppercase text-text-muted">Scroll</span>
-        <div className="w-px h-[38px] bg-gradient-to-b from-accent to-transparent"></div>
-      </div>
+
     </section>
   );
 }

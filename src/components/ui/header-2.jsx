@@ -53,7 +53,7 @@ export function Header({ onSignIn }) {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 w-full border-b border-black/10 transition-all ease-out duration-300',
         scrolled && !open &&
-        'bg-bg/80 supports-[backdrop-filter]:bg-bg/60 border-black/20 backdrop-blur-xl md:top-4 md:mx-auto md:rounded-2xl md:border md:max-w-5xl md:shadow-[0_24px_64px_rgba(0,0,0,0.4)]',
+        'bg-bg/90 supports-[backdrop-filter]:bg-bg/80 border-black/10 dark:border-white/10 backdrop-blur-xl md:top-4 md:mx-auto md:rounded-2xl md:border md:max-w-5xl md:shadow-[0_8px_32px_rgba(0,0,0,0.10),0_2px_8px_rgba(0,0,0,0.06)]',
         open && 'bg-bg/95 backdrop-blur-xl',
         !scrolled && !open && 'bg-transparent',
       )}

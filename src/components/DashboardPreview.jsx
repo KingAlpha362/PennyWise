@@ -42,12 +42,12 @@ export default function DashboardPreview() {
           <p className="text-text-muted mt-[10px] text-[0.88rem]">Your finances at a glance. Always clear, always actionable.</p>
         </div>
 
-        <div id="dashWrap" className="glass-card rounded-2xl overflow-hidden reveal hero-mockup" role="img" aria-label="Interactive dashboard preview showing total balance, monthly spend, and a cash flow chart">
+        <div id="dashWrap" className="glass-card rounded-2xl overflow-hidden reveal hero-mockup" role="img" aria-label="Interactive dashboard preview showing total balance, monthly spend, and a cash flow chart" style={{ background: '#0d1017', '--text': '#F1F5F9', '--text-muted': 'rgba(241,245,249,0.55)', '--border': 'rgba(255,255,255,0.10)', '--border-card': 'rgba(255,255,255,0.07)', '--accent': '#22c55e', '--bg': '#0d1017' }}>
           {/* Browser chrome */}
-          <div className="bg-[rgba(255,255,255,0.03)] border-b border-border py-3 px-[22px] flex items-center gap-[7px]">
-            <div className="w-[9px] h-[9px] rounded-full bg-[rgba(255,255,255,0.14)]"></div>
-            <div className="w-[9px] h-[9px] rounded-full bg-[rgba(255,255,255,0.09)]"></div>
-            <div className="w-[9px] h-[9px] rounded-full bg-[rgba(255,255,255,0.06)]"></div>
+          <div className="bg-[rgba(255,255,255,0.03)] border-b border-[rgba(255,255,255,0.08)] py-3 px-[22px] flex items-center gap-[7px]">
+            <div className="w-[9px] h-[9px] rounded-full bg-[#ff5f57]"></div>
+            <div className="w-[9px] h-[9px] rounded-full bg-[#febc2e]"></div>
+            <div className="w-[9px] h-[9px] rounded-full bg-[#28c840]"></div>
             <div className="flex-1 text-center text-[0.65rem] text-text-muted">pennywise.app/dashboard</div>
           </div>
 
@@ -63,12 +63,12 @@ export default function DashboardPreview() {
               <div className="bg-[rgba(255,255,255,0.03)] border border-border rounded-[14px] p-[18px]">
                 <div className="text-[0.62rem] text-text-muted uppercase tracking-[0.12em] mb-1.5">Monthly Spend</div>
                 <div className="font-display text-[1.7rem] tracking-[-0.04em]">$2,614</div>
-                <div className="text-[0.7rem] text-[rgba(255,255,255,0.28)] mt-[3px]">↓ −8% vs last month</div>
+                <div className="text-[0.7rem] text-text-muted mt-[3px]">-8% vs last month</div>
               </div>
-              <div className="bg-[rgba(201,185,154,0.06)] border border-[rgba(201,185,154,0.2)] rounded-[14px] p-[18px]">
+              <div className="bg-[rgba(34,197,94,0.07)] border border-[rgba(34,197,94,0.22)] rounded-[14px] p-[18px]">
                 <div className="text-[0.62rem] text-text-muted uppercase tracking-[0.12em] mb-1.5">Saved this month</div>
                 <div className="font-display text-[1.7rem] tracking-[-0.04em] text-accent">$586</div>
-                <div className="text-[0.7rem] text-accent mt-[3px]">✓ Goal achieved!</div>
+                <div className="text-[0.7rem] text-accent mt-[3px]">Goal achieved!</div>
               </div>
             </div>
 
@@ -78,13 +78,13 @@ export default function DashboardPreview() {
                 <div className="text-[0.8rem] font-semibold">Cash Flow — December 2024</div>
                 <div className="flex gap-5 text-[0.68rem] text-text-muted">
                   <span><span className="text-accent">●</span> Income</span>
-                  <span><span className="text-[rgba(255,255,255,0.28)]">●</span> Expenses</span>
+                  <span><span className="text-text-muted">●</span> Expenses</span>
                 </div>
               </div>
               <svg id="dashChart" viewBox="0 0 800 160" className="w-full h-auto">
                 <defs>
                   <linearGradient id="iG" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="rgba(201,185,154,0.14)" /><stop offset="100%" stopColor="rgba(201,185,154,0)" />
+                    <stop offset="0%" stopColor="rgba(34,197,94,0.18)" /><stop offset="100%" stopColor="rgba(34,197,94,0)" />
                   </linearGradient>
                   <linearGradient id="eG" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="rgba(255,255,255,0.05)" /><stop offset="100%" stopColor="rgba(255,255,255,0)" />

@@ -26,19 +26,20 @@ const plans = [
   },
   {
     name: "Pro",
-    description: "Best value for full control over your financial ecosystem.",
+    description: "Full AI-powered intelligence. Average user saves $1,872/yr — 18× what Pro costs.",
     price: 10,
     yearlyPrice: 100,
-    buttonText: "Get Started",
+    buttonText: "Start 7-day free trial",
     buttonVariant: "default",
     popular: true,
     includes: [
       "Everything in Starter, plus:",
       "Unlimited connected accounts",
-      "Advanced AI categorization",
-      "Real-time LLM routines",
+      "Penny AI financial assistant",
+      "Smart budget & goal tracking",
+      "Subscription detection & alerts",
       "Priority 24/7 support",
-      "SOC 2 certified compliance",
+      "SOC 2 + GDPR certified",
     ],
   },
 ];
@@ -166,7 +167,7 @@ export default function Pricing() {
           customVariants={revealVariants}
           className="text-text-muted max-w-lg mx-auto"
         >
-          Trusted by millions. Choose the right plan to get full access to your personalized financial command center.
+          Simple, transparent pricing. Users save an average of $156/month — Pro pays for itself in days.
         </TimelineContent>
 
         <TimelineContent

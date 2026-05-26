@@ -8,21 +8,21 @@ export default function HowItWorks() {
       icon: <Link2 size={32} />,
       title: "1. Link your accounts",
       desc: "Securely connect your banks, credit cards, and investment accounts in seconds using our Plaid integration.",
-      color: "bg-blue-500/10 text-blue-500",
+      color: "bg-[var(--accent-dim)] text-[var(--accent)]",
       delay: 0.1
     },
     {
       icon: <Sparkles size={32} />,
       title: "2. Let AI analyze",
       desc: "Our machine learning models categorize your spending, identify subscriptions, and find savings opportunities.",
-      color: "bg-[#16A34A]/10 text-[#16A34A]",
+      color: "bg-[var(--accent-dim)] text-[var(--accent)]",
       delay: 0.2
     },
     {
       icon: <TrendingUp size={32} />,
       title: "3. Build wealth",
       desc: "Follow the predictive allocation routines to crush debt, hit savings goals, and grow your net worth automatically.",
-      color: "bg-[#c9922a]/10 text-[#c9922a]",
+      color: "bg-[var(--accent-dim)] text-[var(--accent)]",
       delay: 0.3
     }
   ];

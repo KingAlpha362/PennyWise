@@ -904,7 +904,7 @@ select.pw-field-input { cursor: pointer; }
 .pw-settings-section-body {
   display: flex;
   flex-direction: column;
-  divide-y: var(--border);
+
 }
 .pw-settings-row {
   display: flex;
