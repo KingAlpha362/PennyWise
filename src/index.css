@@ -11,6 +11,8 @@
     --accent: #16A34A;
     --accent-dim: rgba(22, 163, 74, 0.08);
     --border-grid: rgba(17, 17, 17, 0.04);
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   }
 
   .dark {
@@ -57,16 +59,22 @@
     background: var(--bg-card);
     border: 1px solid var(--border-card);
     backdrop-filter: blur(10px);
-    transition: transform 0.4s cubic-bezier(.4,0,.2,1),
-                background 0.4s cubic-bezier(.4,0,.2,1),
-                border-color 0.4s cubic-bezier(.4,0,.2,1),
-                box-shadow 0.4s cubic-bezier(.4,0,.2,1);
+    transition: transform 200ms var(--ease-out),
+                background 200ms var(--ease-out),
+                border-color 200ms var(--ease-out),
+                box-shadow 200ms var(--ease-out);
   }
-  .glass-card:hover {
-    background: rgba(255,255,255,0.065);
-    border-color: rgba(201,185,154,0.28);
-    transform: translateY(-4px);
-    box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,185,154,0.08);
+  @media (hover: hover) and (pointer: fine) {
+    .glass-card:hover {
+      background: rgba(255,255,255,0.065);
+      border-color: rgba(201,185,154,0.28);
+      transform: translateY(-4px);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,185,154,0.08);
+    }
+    .glass-card:hover .icon-ring {
+      border-color: rgba(201,185,154,0.35);
+      background: rgba(201,185,154,0.13);
+    }
   }
 
   /* ── Scroll reveal */
@@ -97,7 +105,7 @@
     color: var(--bg);
     position: relative;
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
   }
   .btn-primary::after {
     content:'';
@@ -106,16 +114,25 @@
     background-size: 300% 100%;
     background-position: 200% center;
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 160ms var(--ease-out);
   }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(240,237,232,0.18); }
-  .btn-primary:hover::after { opacity: 1; animation: shimmer 0.7s ease forwards; }
+  .btn-primary:active {
+    transform: scale(0.97);
+    transition-duration: 100ms;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(240,237,232,0.18); }
+    .btn-primary:hover::after { opacity: 1; animation: shimmer 0.7s ease forwards; }
+  }
   .btn-ghost {
     border: 1px solid var(--border);
     color: var(--text);
-    transition: border-color 0.3s, background 0.3s, transform 0.3s;
+    transition: border-color 160ms var(--ease-out), background 160ms var(--ease-out), transform 160ms var(--ease-out);
   }
-  .btn-ghost:hover { border-color: rgba(201,185,154,0.45); background: rgba(201,185,154,0.05); transform: translateY(-2px); }
+  .btn-ghost:active { transform: scale(0.97); transition-duration: 100ms; }
+  @media (hover: hover) and (pointer: fine) {
+    .btn-ghost:hover { border-color: rgba(201,185,154,0.45); background: rgba(201,185,154,0.05); transform: translateY(-2px); }
+  }
 
   /* ── Nav links */
   .nav-link {
@@ -156,11 +173,7 @@
     border: 1px solid var(--border);
     background: rgba(201,185,154,0.07);
     display: flex; align-items: center; justify-content: center;
-    transition: border-color 0.3s, background 0.3s;
-  }
-  .glass-card:hover .icon-ring {
-    border-color: rgba(201,185,154,0.35);
-    background: rgba(201,185,154,0.13);
+    transition: border-color 160ms var(--ease-out), background 160ms var(--ease-out);
   }
 
   /* ── Bento grid */
@@ -185,9 +198,11 @@
     content:'';
     position:absolute; top:0; left:0; right:0; height:1px;
     background:linear-gradient(90deg,transparent,var(--accent),transparent);
-    opacity:0; transition:opacity 0.4s;
+    opacity:0; transition:opacity 200ms var(--ease-out);
   }
-  .benefit:hover::before { opacity:1; }
+  @media (hover: hover) and (pointer: fine) {
+    .benefit:hover::before { opacity:1; }
+  }
 
   /* ── Stat display font */
   .stat-n { font-family:'Instrument Serif',serif; font-size:clamp(2.4rem,5vw,4.5rem); line-height:1; }
@@ -221,3 +236,11 @@
 @keyframes drawPath{ from { stroke-dashoffset:2000; } to { stroke-dashoffset:0; } }
 @keyframes shimmer { 0% { background-position:200% center; } 100% { background-position:-200% center; } }
 @keyframes pulse   { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-t1, .hero-t2, .hero-t3, .hero-t4, .hero-t5 { animation: fadeIn 0.3s ease both; }
+  .hero-vis, .float-card { animation: fadeIn 0.3s ease both; }
+  .reveal { transition: opacity 0.3s ease !important; transform: none !important; }
+  .animate-marquee, .animate-marquee-reverse { animation-duration: 120s; }
+  .glass-card, .btn-primary, .btn-ghost { transition-duration: 0ms; }
+}

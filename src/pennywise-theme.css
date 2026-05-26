@@ -162,15 +162,15 @@ body {
   color: var(--color-text-primary);  
 }
 
-.card,  
-.feature-card,  
-.testimonial-card,  
+.card,
+.feature-card,
+.testimonial-card,
 .pricing-card,
-.glass-card {  
-  background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);  
-  border: 1px solid var(--color-border-light);  
-  box-shadow: var(--shadow-card);  
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);  
+.glass-card {
+  background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 200ms var(--ease-out), transform 200ms var(--ease-out), border-color 200ms var(--ease-out);
   border-radius: 16px;
   position: relative;
   overflow: hidden;
@@ -189,12 +189,14 @@ body {
   pointer-events: none;
 }
 
-.card:hover,  
-.feature-card:hover,
-.pricing-card:hover,
-.glass-card:hover {  
-  box-shadow: var(--shadow-card-hover);  
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .card:hover,
+  .feature-card:hover,
+  .pricing-card:hover,
+  .glass-card:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+  }
 }
 
 .hero-image,  
@@ -216,20 +218,23 @@ body {
     0 4px 10px rgba(21, 128, 61, 0.25),
     inset 0 1px 1px rgba(255, 255, 255, 0.35);
   text-shadow: 0 1px 2px rgba(0,0,0,0.15);
-  cursor: pointer;  
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);  
-}  
-.btn-primary:hover  { 
-  background: linear-gradient(180deg, var(--color-brand) 0%, var(--color-brand-hover) 100%);  
-  box-shadow: 
-    0 6px 14px rgba(21, 128, 61, 0.35),
-    inset 0 1px 1px rgba(255, 255, 255, 0.4);
-}  
-.btn-primary:active { 
-  transform: translateY(2px);
-  box-shadow: 
+  cursor: pointer;
+  transition: background 200ms var(--ease-out), box-shadow 200ms var(--ease-out), transform 160ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover {
+    background: linear-gradient(180deg, var(--color-brand) 0%, var(--color-brand-hover) 100%);
+    box-shadow:
+      0 6px 14px rgba(21, 128, 61, 0.35),
+      inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  }
+}
+.btn-primary:active {
+  transform: scale(0.97);
+  box-shadow:
     0 1px 2px rgba(21, 128, 61, 0.2),
-    inset 0 3px 6px rgba(0, 0, 0, 0.25); 
+    inset 0 3px 6px rgba(0, 0, 0, 0.25);
+  transition-duration: 100ms;
 }
 
 .btn-secondary {  
@@ -241,18 +246,21 @@ body {
   border-radius: 12px;  
   border: 1px solid var(--color-border-medium);  
   box-shadow: var(--shadow-card);
-  cursor: pointer;  
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);  
-}  
-.btn-secondary:hover {  
-  background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-border-light) 100%);  
-  box-shadow: var(--shadow-card-hover);
-  border-color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition: background 200ms var(--ease-out), box-shadow 200ms var(--ease-out), border-color 200ms var(--ease-out), transform 160ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn-secondary:hover {
+    background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-border-light) 100%);
+    box-shadow: var(--shadow-card-hover);
+    border-color: var(--color-text-tertiary);
+  }
 }
 .btn-secondary:active {
-  transform: translateY(2px);
+  transform: scale(0.97);
   box-shadow: var(--shadow-skeuo-pressed);
   background: var(--color-bg-secondary);
+  transition-duration: 100ms;
 }
 
 .stat-value {  
