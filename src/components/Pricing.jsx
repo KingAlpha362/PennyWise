@@ -166,7 +166,7 @@ export default function Pricing() {
           customVariants={revealVariants}
           className="text-text-muted max-w-lg mx-auto"
         >
-          Trusted by millions. Choose the right plan to get full access to your personalized financial command center.
+          Trusted by 12,000+ users. Choose the right plan to get full access to your personalized financial command center.
         </TimelineContent>
 
         <TimelineContent

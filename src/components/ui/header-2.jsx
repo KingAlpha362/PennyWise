@@ -62,8 +62,8 @@ export function Header({ onSignIn }) {
       <nav
         className={cn(
           'mx-auto flex w-full max-w-7xl items-center justify-between px-6 md:px-14',
-          'h-16 sm:h-20 md:h-24 transition-[height] ease-out duration-300',
-          scrolled && 'md:h-16',
+          'h-16 sm:h-18 md:h-20 transition-[height] ease-out duration-300',
+          scrolled && 'md:h-14',
         )}
       >
         {/* Logo */}
@@ -79,7 +79,7 @@ export function Header({ onSignIn }) {
             alt="PennyWise"
             className={cn(
               "w-auto object-contain transition-all duration-300",
-              scrolled ? "h-8 sm:h-9 md:h-11" : "h-10 sm:h-12 md:h-17"
+              scrolled ? "h-8 sm:h-9 md:h-10" : "h-9 sm:h-10 md:h-12"
             )}
           />
         </a>
@@ -97,7 +97,11 @@ export function Header({ onSignIn }) {
             aria-label="Toggle theme"
             className="ml-2 px-3"
           >
-            🌓
+            {isDark ? (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            )}
           </Button>
           <button className="btn-secondary ml-2" onClick={onSignIn}>Sign In</button>
           <button className="btn-primary" onClick={onSignIn}>Get Started</button>
@@ -106,7 +110,11 @@ export function Header({ onSignIn }) {
         {/* Mobile controls */}
         <div className="flex items-center gap-1 md:hidden">
           <Button size="icon" variant="ghost" onClick={toggleTheme} aria-label="Toggle theme">
-            🌓
+            {isDark ? (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            )}
           </Button>
           <Button
             size="icon"

@@ -35,7 +35,6 @@ export default function DashboardPreview() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12 reveal">
-          <div className="label mb-4">Live Preview</div>
           <h2 className="font-display" style={{ fontSize: 'clamp(2rem,4vw,3.4rem)', lineHeight: '1.08', letterSpacing: '-0.03em' }}>
             Intelligence meets<br /><em className="text-accent">simplicity.</em>
           </h2>
@@ -68,14 +67,17 @@ export default function DashboardPreview() {
               <div className="bg-[rgba(201,185,154,0.06)] border border-[rgba(201,185,154,0.2)] rounded-[14px] p-[18px]">
                 <div className="text-[0.62rem] text-text-muted uppercase tracking-[0.12em] mb-1.5">Saved this month</div>
                 <div className="font-display text-[1.7rem] tracking-[-0.04em] text-accent">$586</div>
-                <div className="text-[0.7rem] text-accent mt-[3px]">✓ Goal achieved!</div>
+                <div className="flex items-center gap-1 text-[0.7rem] text-accent mt-[3px]">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Goal achieved
+                  </div>
               </div>
             </div>
 
             {/* Cash flow chart */}
             <div className="bg-[rgba(255,255,255,0.02)] border border-border rounded-[14px] p-[22px] sm:col-span-3">
               <div className="flex justify-between items-center mb-4">
-                <div className="text-[0.8rem] font-semibold">Cash Flow — December 2024</div>
+                <div className="text-[0.8rem] font-semibold">Cash Flow: December 2024</div>
                 <div className="flex gap-5 text-[0.68rem] text-text-muted">
                   <span><span className="text-accent">●</span> Income</span>
                   <span><span className="text-[rgba(255,255,255,0.28)]">●</span> Expenses</span>

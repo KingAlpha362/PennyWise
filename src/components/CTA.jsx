@@ -17,7 +17,7 @@ export default function CTA({ onGetStarted }) {
       <div className="max-w-3xl mx-auto reveal relative z-10">
         <div className="glass-card rounded-2xl p-6 sm:p-16 text-center relative overflow-hidden border border-border">
           <div className="orb" style={{ width: '450px', height: '450px', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', background: 'radial-gradient(circle,rgba(22,163,74,0.06) 0%,transparent 65%)' }}></div>
-          <div className="label mb-5 relative text-accent border-accent/20">Start Today — It's Free</div>
+          <div className="label mb-5 relative text-accent border-accent/20">Start Today. It's Free</div>
           <h2 className="hero-title relative text-text mb-4">
             Your money.<br />Your rules.
           </h2>

@@ -1,10 +1,7 @@
 export default function Benefits() {
   return (
     <section id="benefits" className="relative px-6 md:px-14 py-16 md:py-24 overflow-hidden bg-bg text-text">
-      {/* Top Fade (transition from light section) */}
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-bg to-transparent z-[5] pointer-events-none" />
-
-
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="mb-12 reveal text-center">
@@ -18,7 +15,11 @@ export default function Benefits() {
           {/* Benefit 1: Wide Card */}
           <div className="md:col-span-8 glass-card benefit p-6 sm:p-8 reveal flex flex-col md:flex-row gap-8 items-center justify-between">
             <div className="flex-1 flex flex-col gap-5">
-              <div className="text-[2.4rem] leading-none">👁️</div>
+              <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
+              </div>
               <div>
                 <h3 className="text-[1.15rem] font-bold tracking-[-0.03em] mb-[7px] text-text">See where every single penny goes</h3>
                 <p className="text-text-muted text-[0.85rem] leading-[1.65]">Categorize automatically. View deep visual breakdowns of your daily cash flow effortlessly.</p>
@@ -32,9 +33,18 @@ export default function Benefits() {
                 <circle cx="32" cy="32" r="25" stroke="var(--accent-dim)" strokeWidth="8" fill="none" strokeDasharray="22 135" strokeDashoffset="-86" transform="rotate(-90 32 32)" />
               </svg>
               <div className="text-[0.75rem] text-text-muted dark:text-white/70 flex flex-col gap-2 font-semibold tracking-wide">
-                <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-accent"></div> Housing 32%</div>
-                <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-[rgba(22,163,74,0.3)]"></div> Food 23%</div>
-                <div className="flex items-center gap-2"><div className="w-2.5 h-2.5 rounded-full bg-[rgba(22,163,74,0.1)]"></div> Other 14%</div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-accent shrink-0 inline-block"></span>
+                  Housing 32%
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-[rgba(22,163,74,0.35)] shrink-0 inline-block"></span>
+                  Food 23%
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-[rgba(22,163,74,0.12)] border border-accent/20 shrink-0 inline-block"></span>
+                  Other 14%
+                </div>
               </div>
             </div>
           </div>
@@ -42,10 +52,14 @@ export default function Benefits() {
           {/* Benefit 2: Tall Card */}
           <div className="md:col-span-4 glass-card benefit p-6 sm:p-8 reveal flex flex-col justify-between gap-6">
             <div className="flex flex-col gap-4">
-              <div className="text-[2.4rem] leading-none">⚡</div>
+              <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+              </div>
               <div>
                 <h3 className="text-[1.15rem] font-bold tracking-[-0.03em] mb-[7px] text-text">Stay within budget effortlessly</h3>
-                <p className="text-text-muted text-[0.85rem] leading-[1.65]">Smart alerts and real-time tracking ensure you never overspend — without the guilt trips.</p>
+                <p className="text-text-muted text-[0.85rem] leading-[1.65]">Smart alerts and real-time tracking ensure you never overspend, without the guilt trips.</p>
               </div>
             </div>
             <div className="mt-auto">
@@ -60,7 +74,11 @@ export default function Benefits() {
           <div className="md:col-span-12 glass-card benefit p-6 sm:p-8 reveal flex flex-col md:flex-row items-center gap-8 justify-between">
             <div className="flex-1 flex flex-col gap-4">
               <div className="flex items-center gap-4 mb-1">
-                <div className="text-[2.4rem] leading-none">🌱</div>
+                <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                </div>
                 <h3 className="text-[1.3rem] font-bold tracking-[-0.03em] text-text">Build better financial habits</h3>
               </div>
               <p className="text-text-muted text-[0.9rem] leading-[1.7] max-w-[480px]">Weekly check-ins, habit streaks, and personalized coaching help you improve consistently over time. The more you engage, the smarter it gets.</p>
@@ -76,7 +94,7 @@ export default function Benefits() {
                 <div className="w-8 h-8 rounded-lg bg-[rgba(22,163,74,0.12)] border border-dashed border-[rgba(22,163,74,0.3)]"></div>
                 <div className="w-8 h-8 rounded-lg bg-[rgba(22,163,74,0.12)] border border-dashed border-[rgba(22,163,74,0.3)]"></div>
               </div>
-              <p className="text-[0.85rem] text-accent mt-[6px] font-bold">5 days strong! 🔥</p>
+              <p className="text-[0.85rem] text-accent mt-[6px] font-bold">5 days strong</p>
             </div>
           </div>
         </div>

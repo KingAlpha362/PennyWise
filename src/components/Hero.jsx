@@ -28,8 +28,7 @@ export default function Hero({ onGetStarted }) {
   }, []);
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center pt-48 sm:pt-56 pb-16 overflow-hidden bg-bg">
-
+    <section id="home" className="relative min-h-[100dvh] flex items-center pt-48 sm:pt-56 pb-16 overflow-hidden bg-bg">
 
       <div className="max-w-7xl mx-auto w-full px-6 md:px-14 grid md:grid-cols-2 gap-10 md:gap-14 items-center relative z-10">
         {/* Copy */}
@@ -138,16 +137,13 @@ export default function Hero({ onGetStarted }) {
                 <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80] block" style={{ animation: 'pulse 2s ease infinite' }}></span>
                 <span className="text-[0.62rem] text-text-muted">Smart Alert</span>
               </div>
-              <div className="text-[0.76rem] font-semibold leading-snug">Budget on track! 🎯</div>
+              <div className="flex items-center gap-1.5 text-[0.76rem] font-semibold leading-snug">
+                Budget on track
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Scroll cue */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10" style={{ animation: 'fadeIn 1s 1.6s both' }}>
-        <span className="text-[0.6rem] tracking-[0.22em] uppercase text-text-muted">Scroll</span>
-        <div className="w-px h-[38px] bg-gradient-to-b from-accent to-transparent"></div>
       </div>
     </section>
   );

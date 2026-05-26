@@ -4,7 +4,7 @@ export default function Features() {
       id: 1,
       colSpan: 'lg:col-span-8 lg:row-span-2 flex flex-col justify-between',
       title: 'Expense Tracking',
-      subtitle: 'Automatically categorize every transaction the moment it happens. From coffee to rent — nothing slips through the cracks.',
+      subtitle: 'Automatically categorize every transaction the moment it happens. From coffee to rent, nothing slips through the cracks.',
       icon: (
         <div className="w-8 h-8 rounded-full bg-[rgba(255,255,255,0.06)] flex items-center justify-center text-text">
           <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.4" /><path d="M10 6.5v3.5l2 2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>
@@ -14,21 +14,27 @@ export default function Features() {
         <div className="flex flex-col gap-2 mt-6">
           <div className="flex items-center justify-between bg-[rgba(255,255,255,0.04)] rounded-xl py-3 px-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-[rgba(201,185,154,0.1)] flex items-center justify-center text-[1.1rem]">🛒</div>
+              <div className="w-10 h-10 rounded-lg bg-[rgba(201,185,154,0.1)] flex items-center justify-center text-accent">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                </div>
               <div><div className="text-[0.85rem] font-semibold">Grocery Store</div><div className="text-[0.7rem] text-text-muted mt-0.5">Today, 10:24 AM</div></div>
             </div>
             <span className="text-[0.9rem] font-bold text-text">−$64.20</span>
           </div>
           <div className="flex items-center justify-between bg-[rgba(255,255,255,0.04)] rounded-xl py-3 px-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-[rgba(201,185,154,0.1)] flex items-center justify-center text-[1.1rem]">☕</div>
+              <div className="w-10 h-10 rounded-lg bg-[rgba(201,185,154,0.1)] flex items-center justify-center text-accent">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                </div>
               <div><div className="text-[0.85rem] font-semibold">Blue Bottle Coffee</div><div className="text-[0.7rem] text-text-muted mt-0.5">Yesterday, 8:05 AM</div></div>
             </div>
             <span className="text-[0.9rem] font-bold text-text">−$6.50</span>
           </div>
           <div className="flex items-center justify-between bg-[rgba(255,255,255,0.04)] rounded-xl py-3 px-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-[rgba(74,222,128,0.1)] flex items-center justify-center text-[1.1rem]">💰</div>
+              <div className="w-10 h-10 rounded-lg bg-[rgba(74,222,128,0.1)] flex items-center justify-center text-[#4ade80]">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                </div>
               <div><div className="text-[0.85rem] font-semibold">Salary Deposit</div><div className="text-[0.7rem] text-text-muted mt-0.5">Dec 1, 9:00 AM</div></div>
             </div>
             <span className="text-[0.9rem] font-bold text-[#4ade80]">+$3,200</span>
