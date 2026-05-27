@@ -38,7 +38,7 @@ function StatCell({ target, decimals, prefix, suffix, label, sub }) {
 
   return (
     <div ref={ref} className="reveal bg-bg px-8 py-10 text-center hover:bg-[var(--accent-dim)] transition-colors duration-200 cursor-default">
-      <div className="stat-value text-4xl md:text-5xl">{display}</div>
+      <div className="stat-value text-2xl sm:text-4xl md:text-5xl">{display}</div>
       <div className="text-[0.85rem] font-semibold mt-2 text-text">{label}</div>
       <div className="text-[0.75rem] mt-1 text-text-muted">{sub}</div>
     </div>

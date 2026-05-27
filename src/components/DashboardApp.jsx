@@ -256,6 +256,7 @@ function Icon({ name, size = 16, stroke = 1.75, className = '', style = {} }) {
     case 'logout': return <svg {...props}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>;
     case 'message-circle': return <svg {...props}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>;
     case 'crown': return <svg {...props}><path d="M3 18h18M5 18 2 8l5 4 5-7 5 7 5-4-3 10"/></svg>;
+    case 'menu': return <svg {...props}><path d="M3 12h18M3 6h18M3 18h18"/></svg>;
     case 'user': return <svg {...props}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>;
     case 'calendar': return <svg {...props}><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>;
     case 'alert': return <svg {...props}><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>;
@@ -1831,7 +1832,7 @@ function InsightCard({ ins, setScreen, onDismiss }) {
     if (dest) setScreen?.(dest);
   };
   return (
-    <div className="pw-card" style={{ padding: 18, display: 'grid', gridTemplateColumns: '40px 1fr auto', gap: 16, alignItems: 'center' }}>
+    <div className="pw-card pw-insight-card-inner" style={{ padding: 18, display: 'grid', gridTemplateColumns: '40px 1fr auto', gap: 16, alignItems: 'center' }}>
       <div style={{
         width: 40, height: 40, borderRadius: 10,
         background: bgMap[ins.severity], color: colorMap[ins.severity],
@@ -1963,6 +1964,10 @@ function Topbar({ theme, setTheme, onCmd, onAddTxn, onMenuToggle }) {
       </button>
 
       <div style={{ flex: 1 }}/>
+
+      <button className="pw-icon-btn" title="Search" onClick={onCmd} style={{ display: 'none' }} aria-label="Search">
+        <Icon name="search" size={16}/>
+      </button>
 
       <button className="pw-btn pw-btn-ghost" style={{ padding: '6px 10px' }} onClick={onAddTxn}>
         <Icon name="plus" size={14}/><span>Add</span>
@@ -2325,6 +2330,7 @@ export default function DashboardApp({ onSignOut }) {
   const [showAddBudget, setShowAddBudget] = useState(false);
   const [contributeGoal, setContributeGoal] = useState(null);
   const [txns, setTxns] = useState(TRANSACTIONS);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleExportCSV = (data) => {
     const rows = [
