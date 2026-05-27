@@ -66,7 +66,7 @@ const thirdColumn = testimonials.slice(6, 9);
 
 export default function Testimonials() {
   return (
-    <section className="bg-bg py-20 relative overflow-hidden testimonials-section">
+    <section className="bg-[var(--bg-subtle)] py-20 relative overflow-hidden testimonials-section">
       <div className="container z-10 mx-auto px-4 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

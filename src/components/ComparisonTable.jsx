@@ -39,7 +39,7 @@ function Cell({ value, isPenny }) {
 
 export default function ComparisonTable() {
   return (
-    <section className="bg-bg-subtle py-24 px-4 md:px-6 overflow-x-hidden border-y border-border">
+    <section className="bg-bg py-24 px-4 md:px-6 overflow-x-hidden">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -72,7 +72,7 @@ export default function ComparisonTable() {
             <thead>
               <tr className="bg-card border-b border-border">
                 <th className="text-left px-6 py-4 text-sm font-semibold text-text-muted w-[38%]">Feature</th>
-                <th className="px-4 py-4 text-center w-[16%]">
+                <th className="px-4 py-4 text-center w-[16%] bg-accent/[0.07] border-x border-accent/15">
                   <span className="inline-flex items-center gap-1.5 bg-accent/10 text-accent text-xs font-bold px-2.5 py-1 rounded-full border border-accent/20">
                     ✦ PennyWise
                   </span>
@@ -89,7 +89,7 @@ export default function ComparisonTable() {
                   className={`border-b border-border last:border-0 transition-colors hover:bg-[var(--accent-dim)] ${i % 2 === 0 ? "bg-bg" : "bg-card"}`}
                 >
                   <td className="px-6 py-4 text-sm font-medium text-text">{f.label}</td>
-                  <td className="px-4 py-4 text-center bg-accent/[0.03]">
+                  <td className="px-4 py-4 text-center bg-accent/[0.07] border-x border-accent/15">
                     <Cell value={f.penny} isPenny />
                   </td>
                   <td className="px-4 py-4 text-center">

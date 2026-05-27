@@ -1,3 +1,4 @@
+import BrowserChrome from './ui/browser-chrome';
 
 export default function Hero({ onGetStarted }) {
   return (
@@ -72,21 +73,22 @@ export default function Hero({ onGetStarted }) {
         />
 
         {/* preview frame */}
-        <div className="relative mx-auto max-w-6xl overflow-hidden rounded-2xl border border-[var(--border)] p-2 shadow-2xl ring-1 ring-[var(--bg)]"
+        <div className="relative mx-auto max-w-6xl overflow-hidden rounded-2xl border border-[var(--border)]"
           style={{ boxShadow: '0 0 0 1px rgba(0,0,0,0.06) inset, 0 32px 80px rgba(0,0,0,0.18), 0 8px 24px rgba(0,0,0,0.10)' }}
         >
+          <BrowserChrome url="pennywise.app/dashboard" />
           {/* light screenshot — hidden in dark mode */}
           <img
             src={`${import.meta.env.BASE_URL}dash-light.png`}
             alt="PennyWise dashboard — light mode"
-            className="w-full rounded-xl block dark:hidden"
+            className="w-full block dark:hidden"
             draggable={false}
           />
           {/* dark screenshot — shown in dark mode only */}
           <img
             src={`${import.meta.env.BASE_URL}dash-dark.png`}
             alt="PennyWise dashboard — dark mode"
-            className="w-full rounded-xl hidden dark:block"
+            className="w-full hidden dark:block"
             draggable={false}
           />
         </div>

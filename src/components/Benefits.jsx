@@ -2,9 +2,9 @@ import { Eye, Zap, Leaf } from 'lucide-react';
 
 export default function Benefits() {
   return (
-    <section id="benefits" className="relative px-6 md:px-14 py-16 md:py-24 overflow-hidden bg-bg text-text">
+    <section id="benefits" className="relative px-6 md:px-14 py-16 md:py-24 overflow-hidden bg-[var(--bg-subtle)] text-text">
       {/* Top Fade (transition from light section) */}
-      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-bg to-transparent z-[5] pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[var(--bg-subtle)] to-transparent z-[5] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="mb-12 reveal text-center">

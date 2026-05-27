@@ -1,7 +1,7 @@
 import { Shield, Lock, Server } from 'lucide-react';
 export default function SecurityIntegrations() {
   return (
-    <section className="bg-bg py-16 border-y border-border">
+    <section className="bg-bg py-16">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center justify-center text-center space-y-4 mb-12">
           <div className="border border-border text-xs font-bold px-3 py-1 rounded-full text-text-muted bg-card">

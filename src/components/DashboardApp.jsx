@@ -259,8 +259,31 @@ function Icon({ name, size = 16, stroke = 1.75, className = '', style = {} }) {
     case 'user': return <svg {...props}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>;
     case 'calendar': return <svg {...props}><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>;
     case 'alert': return <svg {...props}><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>;
+    case 'menu': return <svg {...props}><path d="M4 6h16M4 12h16M4 18h16"/></svg>;
+    case 'bar-chart': return <svg {...props}><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="4" width="4" height="17"/><path d="M3 3h18"/></svg>;
+    case 'chart-line': return <svg {...props}><path d="M3 17l6-6 4 4 8-8"/></svg>;
+    case 'chart-area': return <svg {...props}><path d="M3 17l6-6 4 4 8-8"/><path d="M3 17 9 11l4 4 8-8v12H3z" strokeWidth={0} fill="currentColor" opacity="0.25"/></svg>;
+    case 'bar-h': return <svg {...props}><rect x="3" y="4" width="10" height="3" rx="1"/><rect x="3" y="10.5" width="16" height="3" rx="1"/><rect x="3" y="17" width="7" height="3" rx="1"/></svg>;
     default: return <svg {...props}><circle cx="12" cy="12" r="8"/></svg>;
   }
+}
+
+function ChartTypePicker({ options, value, onChange }) {
+  return (
+    <div className="pw-chart-type-picker">
+      {options.map(opt => (
+        <button
+          key={opt.value}
+          title={opt.label}
+          className={`pw-chart-type-btn ${value === opt.value ? 'active' : ''}`}
+          onClick={() => onChange(opt.value)}
+        >
+          <Icon name={opt.icon} size={12} stroke={2}/>
+          <span>{opt.label}</span>
+        </button>
+      ))}
+    </div>
+  );
 }
 
 function CatDot({ cat, size = 28 }) {
@@ -315,7 +338,7 @@ function Sparkline({ data, width = 120, height = 32, stroke = 'currentColor', fi
   );
 }
 
-function AreaChart({ data, width = 720, height = 240, color, dateFmt = (i) => i }) {
+function AreaChart({ data, width = 720, height = 240, color, dateFmt = (i) => i, chartType = 'area' }) {
   const [hover, setHover] = useState(null);
   const ref = useRef(null);
   color = color || 'var(--brand)';
@@ -326,6 +349,26 @@ function AreaChart({ data, width = 720, height = 240, color, dateFmt = (i) => i 
   const min = Math.min(...values);
   const max = Math.max(...values);
   const range = max - min || 1;
+
+  const yTicks = 4;
+  const ticks = Array.from({ length: yTicks + 1 }, (_, i) => {
+    const v = min + (range * i) / yTicks;
+    return { v, y: pad.t + h - (i / yTicks) * h };
+  });
+
+  // Bar chart: aggregate into ~12 equal buckets
+  const N_BARS = 12;
+  const barBuckets = Array.from({ length: N_BARS }, (_, bi) => {
+    const start = Math.round((bi / N_BARS) * data.length);
+    const end = Math.round(((bi + 1) / N_BARS) * data.length);
+    const slice = data.slice(start, end);
+    const avg = slice.reduce((s, d) => s + d.v, 0) / slice.length;
+    const midIdx = Math.round((start + end) / 2);
+    return { v: avg, midIdx, start, end };
+  });
+  const barW = (w / N_BARS) * 0.55;
+
+  // Line/area chart
   const pts = data.map((d, i) => [
     pad.l + (i / (data.length - 1)) * w,
     pad.t + h - ((d.v - min) / range) * h,
@@ -334,23 +377,33 @@ function AreaChart({ data, width = 720, height = 240, color, dateFmt = (i) => i 
   const area = path + ` L${pad.l + w},${pad.t + h} L${pad.l},${pad.t + h} Z`;
 
   const onMove = (e) => {
+    if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * width;
-    if (x < pad.l || x > pad.l + w) return setHover(null);
-    const i = Math.round(((x - pad.l) / w) * (data.length - 1));
-    setHover({ i, x: pts[i][0], y: pts[i][1] });
+    if (chartType === 'bar') {
+      const bi = Math.floor(((x - pad.l) / w) * N_BARS);
+      if (bi < 0 || bi >= N_BARS) return setHover(null);
+      const b = barBuckets[bi];
+      const bx = pad.l + (bi / N_BARS) * w + w / N_BARS / 2;
+      const by = pad.t + h - ((b.v - min) / range) * h;
+      setHover({ i: b.midIdx, x: bx, y: by, barIdx: bi });
+    } else {
+      if (x < pad.l || x > pad.l + w) return setHover(null);
+      const i = Math.round(((x - pad.l) / w) * (data.length - 1));
+      setHover({ i, x: pts[i][0], y: pts[i][1] });
+    }
   };
 
-  const yTicks = 4;
-  const ticks = Array.from({ length: yTicks + 1 }, (_, i) => {
-    const v = min + (range * i) / yTicks;
-    return { v, y: pad.t + h - (i / yTicks) * h };
-  });
-  const xN = 5;
-  const xLabels = Array.from({ length: xN }, (_, i) => {
-    const idx = Math.round((i / (xN - 1)) * (data.length - 1));
-    return { idx, x: pts[idx][0] };
-  });
+  const xN = chartType === 'bar' ? N_BARS : 5;
+  const xLabels = chartType === 'bar'
+    ? barBuckets.map((b, bi) => ({ idx: b.midIdx, x: pad.l + (bi / N_BARS) * w + w / N_BARS / 2 }))
+    : Array.from({ length: xN }, (_, i) => {
+        const idx = Math.round((i / (xN - 1)) * (data.length - 1));
+        return { idx, x: pts[idx][0] };
+      });
+
+  // Only show every 3rd x label in bar mode to avoid crowding
+  const visibleXLabels = chartType === 'bar' ? xLabels.filter((_, i) => i % 3 === 0) : xLabels;
 
   return (
     <div style={{ position: 'relative', width: '100%' }}>
@@ -364,35 +417,60 @@ function AreaChart({ data, width = 720, height = 240, color, dateFmt = (i) => i 
       >
         <defs>
           <linearGradient id="pwAreaG" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity="0.25"/>
-            <stop offset="100%" stopColor={color} stopOpacity="0.02"/>
+            <stop offset="0%" stopColor={color} stopOpacity="0.3"/>
+            <stop offset="60%" stopColor={color} stopOpacity="0.08"/>
+            <stop offset="100%" stopColor={color} stopOpacity="0"/>
           </linearGradient>
         </defs>
         {ticks.map((t, i) => (
           <g key={i}>
-            <line x1={pad.l} x2={pad.l + w} y1={t.y} y2={t.y} stroke="var(--grid-line)"/>
-            <text x={pad.l - 8} y={t.y + 3} textAnchor="end" fontSize="10" fill="var(--text-faint)" fontFamily="var(--font-mono)">
+            <line x1={pad.l} x2={pad.l + w} y1={t.y} y2={t.y} stroke="var(--grid-line)" strokeDasharray="4 4"/>
+            <text x={pad.l - 8} y={t.y + 4} textAnchor="end" fontSize="11" fill="var(--text-muted)" fontFamily="var(--font-mono)">
               {fmtCompact(t.v)}
             </text>
           </g>
         ))}
-        {xLabels.map((t, i) => (
-          <text key={i} x={t.x} y={pad.t + h + 18} textAnchor="middle" fontSize="10" fill="var(--text-faint)" fontFamily="var(--font-mono)">
+        {visibleXLabels.map((t, i) => (
+          <text key={i} x={t.x} y={pad.t + h + 18} textAnchor="middle" fontSize="11" fill="var(--text-muted)" fontFamily="var(--font-mono)">
             {dateFmt(t.idx)}
           </text>
         ))}
-        <path d={area} fill="url(#pwAreaG)"/>
-        <path d={path} fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"/>
-        {hover && (
+
+        {chartType === 'bar' && barBuckets.map((b, bi) => {
+          const bx = pad.l + (bi / N_BARS) * w + w / N_BARS / 2;
+          const bh = ((b.v - min) / range) * h;
+          const isHov = hover?.barIdx === bi;
+          return (
+            <rect key={bi}
+              x={bx - barW / 2} y={pad.t + h - bh} width={barW} height={bh}
+              rx="3" fill={color} opacity={isHov ? 1 : 0.75}
+              style={{ transition: 'opacity 120ms' }}
+            />
+          );
+        })}
+
+        {chartType === 'area' && <path d={area} fill="url(#pwAreaG)"/>}
+        {(chartType === 'area' || chartType === 'line') && (
+          <path d={path} fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        )}
+
+        {hover && chartType !== 'bar' && (
           <g>
-            <line x1={hover.x} x2={hover.x} y1={pad.t} y2={pad.t + h} stroke={color} strokeDasharray="3 3" opacity="0.4"/>
+            <line x1={hover.x} x2={hover.x} y1={pad.t} y2={pad.t + h} stroke={color} strokeDasharray="3 3" opacity="0.5"/>
             <circle cx={hover.x} cy={hover.y} r="5" fill={color} stroke="var(--bg-elev)" strokeWidth="2.5"/>
           </g>
+        )}
+        {hover && chartType === 'bar' && (
+          <rect
+            x={(pad.l + (hover.barIdx / N_BARS) * w)} y={pad.t}
+            width={w / N_BARS} height={h}
+            fill={color} opacity="0.06" rx="3"
+          />
         )}
       </svg>
       {hover && (
         <div className="pw-tt" style={{
-          left: `${(hover.x / width) * 100}%`,
+          left: `${Math.max(5, Math.min(85, (hover.x / width) * 100))}%`,
           top: `${(hover.y / height) * 100}%`,
           transform: 'translate(-50%, -130%)',
         }}>
@@ -404,7 +482,7 @@ function AreaChart({ data, width = 720, height = 240, color, dateFmt = (i) => i 
   );
 }
 
-function CashflowBars({ data, width = 720, height = 220 }) {
+function CashflowBars({ data, width = 720, height = 220, chartType = 'bars' }) {
   const [hover, setHover] = useState(null);
   const pad = { t: 12, r: 8, b: 26, l: 44 };
   const w = width - pad.l - pad.r;
@@ -419,54 +497,98 @@ function CashflowBars({ data, width = 720, height = 220 }) {
     y: pad.t + h - (i / yTicks) * h,
   }));
 
+  // Line chart: compute smooth paths for income/expenses
+  const incomePts = data.map((d, i) => [pad.l + groupW * i + groupW / 2, pad.t + h - (d.income / max) * h]);
+  const expPts    = data.map((d, i) => [pad.l + groupW * i + groupW / 2, pad.t + h - (d.expenses / max) * h]);
+  const incomePath = smoothPath(incomePts);
+  const expPath    = smoothPath(expPts);
+  const incomeArea = incomePath + ` L${incomePts[incomePts.length-1][0]},${pad.t+h} L${incomePts[0][0]},${pad.t+h} Z`;
+  const expArea    = expPath    + ` L${expPts[expPts.length-1][0]},${pad.t+h} L${expPts[0][0]},${pad.t+h} Z`;
+
+  const tooltipContent = (d) => (
+    <div style={{ display: 'grid', gap: 3, fontSize: 11.5 }}>
+      <div style={{ color: 'var(--text-faint)', fontSize: 10, marginBottom: 4 }}>{d.m} {d.y}</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <span style={{ width: 6, height: 6, borderRadius: 3, background: 'var(--brand)' }}/>
+        <span style={{ color: 'var(--text-muted)' }}>Income</span>
+        <span className="pw-num" style={{ marginLeft: 8, fontWeight: 600 }}>{fmt(d.income, { decimals: 0 })}</span>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <span style={{ width: 6, height: 6, borderRadius: 3, background: 'var(--neg)' }}/>
+        <span style={{ color: 'var(--text-muted)' }}>Expenses</span>
+        <span className="pw-num" style={{ marginLeft: 8, fontWeight: 600 }}>{fmt(d.expenses, { decimals: 0 })}</span>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, paddingTop: 4, borderTop: '1px solid var(--border)', marginTop: 2 }}>
+        <span style={{ color: 'var(--text-muted)' }}>Net</span>
+        <span className="pw-num" style={{ marginLeft: 'auto', fontWeight: 600, color: d.income - d.expenses >= 0 ? 'var(--pos)' : 'var(--neg)' }}>
+          {fmt(d.income - d.expenses, { sign: true, decimals: 0 })}
+        </span>
+      </div>
+    </div>
+  );
+
   return (
     <div style={{ position: 'relative', width: '100%' }}>
       <svg viewBox={`0 0 ${width} ${height}`} width="100%" style={{ display: 'block', overflow: 'visible' }}>
+        <defs>
+          <linearGradient id="pwIncomeG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--brand)" stopOpacity="0.18"/>
+            <stop offset="100%" stopColor="var(--brand)" stopOpacity="0"/>
+          </linearGradient>
+          <linearGradient id="pwExpG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--neg)" stopOpacity="0.12"/>
+            <stop offset="100%" stopColor="var(--neg)" stopOpacity="0"/>
+          </linearGradient>
+        </defs>
         {ticks.map((t, i) => (
           <g key={i}>
-            <line x1={pad.l} x2={pad.l + w} y1={t.y} y2={t.y} stroke="var(--grid-line)"/>
-            <text x={pad.l - 8} y={t.y + 3} textAnchor="end" fontSize="10" fill="var(--text-faint)" fontFamily="var(--font-mono)">{fmtCompact(t.v)}</text>
+            <line x1={pad.l} x2={pad.l + w} y1={t.y} y2={t.y} stroke="var(--grid-line)" strokeDasharray="4 4"/>
+            <text x={pad.l - 8} y={t.y + 4} textAnchor="end" fontSize="11" fill="var(--text-muted)" fontFamily="var(--font-mono)">{fmtCompact(t.v)}</text>
           </g>
         ))}
-        {data.map((d, i) => {
+
+        {chartType === 'bars' && data.map((d, i) => {
           const cx = pad.l + groupW * i + groupW / 2;
           const incH = (d.income / max) * h;
           const expH = (d.expenses / max) * h;
-          const isHover = hover === i;
+          const isHov = hover === i;
           return (
             <g key={i} onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} style={{ cursor: 'pointer' }}>
               <rect x={pad.l + groupW * i} y={pad.t} width={groupW} height={h} fill="transparent"/>
-              <rect x={cx - barW - 2} y={pad.t + h - incH} width={barW} height={incH} rx="2" fill="var(--brand)" opacity={isHover ? 1 : 0.85}/>
-              <rect x={cx + 2} y={pad.t + h - expH} width={barW} height={expH} rx="2" fill="var(--text-faint)" opacity={isHover ? 1 : 0.55}/>
-              <text x={cx} y={pad.t + h + 16} textAnchor="middle" fontSize="10" fill={isHover ? 'var(--text)' : 'var(--text-faint)'} fontFamily="var(--font-mono)" fontWeight={isHover ? 600 : 400}>{d.m}</text>
+              <rect x={cx - barW - 2} y={pad.t + h - incH} width={barW} height={incH} rx="3" fill="var(--brand)" opacity={isHov ? 1 : 0.85}/>
+              <rect x={cx + 2} y={pad.t + h - expH} width={barW} height={expH} rx="3" fill="var(--neg)" opacity={isHov ? 0.85 : 0.55}/>
+              <text x={cx} y={pad.t + h + 16} textAnchor="middle" fontSize="11" fill={isHov ? 'var(--text)' : 'var(--text-muted)'} fontFamily="var(--font-mono)" fontWeight={isHov ? 600 : 400}>{d.m}</text>
             </g>
           );
         })}
+
+        {chartType === 'lines' && (
+          <>
+            <path d={incomeArea} fill="url(#pwIncomeG)"/>
+            <path d={expArea} fill="url(#pwExpG)"/>
+            <path d={incomePath} fill="none" stroke="var(--brand)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d={expPath} fill="none" stroke="var(--neg)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="5 3"/>
+            {data.map((d, i) => {
+              const isHov = hover === i;
+              return (
+                <g key={i} onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} style={{ cursor: 'pointer' }}>
+                  <rect x={pad.l + groupW * i} y={pad.t} width={groupW} height={h} fill="transparent"/>
+                  {isHov && <line x1={incomePts[i][0]} x2={incomePts[i][0]} y1={pad.t} y2={pad.t + h} stroke="var(--border-strong)" strokeDasharray="3 3"/>}
+                  <circle cx={incomePts[i][0]} cy={incomePts[i][1]} r={isHov ? 5 : 3} fill="var(--brand)" stroke="var(--bg-elev)" strokeWidth={isHov ? 2.5 : 1.5} style={{ transition: 'r 120ms' }}/>
+                  <circle cx={expPts[i][0]}    cy={expPts[i][1]}    r={isHov ? 5 : 3} fill="var(--neg)"   stroke="var(--bg-elev)" strokeWidth={isHov ? 2.5 : 1.5} style={{ transition: 'r 120ms' }}/>
+                  <text x={incomePts[i][0]} y={pad.t + h + 16} textAnchor="middle" fontSize="11" fill={isHov ? 'var(--text)' : 'var(--text-muted)'} fontFamily="var(--font-mono)" fontWeight={isHov ? 600 : 400}>{d.m}</text>
+                </g>
+              );
+            })}
+          </>
+        )}
       </svg>
       {hover !== null && (() => {
         const d = data[hover];
         const cx = pad.l + groupW * hover + groupW / 2;
         return (
           <div className="pw-tt" style={{ left: `${(cx / width) * 100}%`, top: 0, transform: 'translate(-50%, -12px)' }}>
-            <div style={{ color: 'var(--text-faint)', fontSize: 10, marginBottom: 4 }}>{d.m} {d.y}</div>
-            <div style={{ display: 'grid', gap: 3, fontSize: 11.5 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ width: 6, height: 6, borderRadius: 3, background: 'var(--brand)' }}/>
-                <span style={{ color: 'var(--text-muted)' }}>Income</span>
-                <span className="pw-num" style={{ marginLeft: 8, fontWeight: 600 }}>{fmt(d.income, { decimals: 0 })}</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ width: 6, height: 6, borderRadius: 3, background: 'var(--text-faint)' }}/>
-                <span style={{ color: 'var(--text-muted)' }}>Expenses</span>
-                <span className="pw-num" style={{ marginLeft: 8, fontWeight: 600 }}>{fmt(d.expenses, { decimals: 0 })}</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, paddingTop: 4, borderTop: '1px solid var(--border)', marginTop: 2 }}>
-                <span style={{ color: 'var(--text-muted)' }}>Net</span>
-                <span className="pw-num" style={{ marginLeft: 'auto', fontWeight: 600, color: d.income - d.expenses >= 0 ? 'var(--pos)' : 'var(--neg)' }}>
-                  {fmt(d.income - d.expenses, { sign: true, decimals: 0 })}
-                </span>
-              </div>
-            </div>
+            {tooltipContent(d)}
           </div>
         );
       })()}
@@ -493,7 +615,7 @@ function Donut({ data, size = 200, thickness = 24 }) {
     return `M${x0},${y0} A${r},${r} 0 ${large} 1 ${x1},${y1}`;
   };
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+    <div className="pw-donut-wrap">
       <svg width={size} height={size} style={{ flexShrink: 0 }}>
         {arcs.map((a, i) => {
           const c = CATEGORIES[a.cat]?.color || '#64748b';
@@ -535,6 +657,31 @@ function Donut({ data, size = 200, thickness = 24 }) {
           );
         })}
       </div>
+    </div>
+  );
+}
+
+function SpendingBars({ data }) {
+  const total = data.reduce((s, d) => s + d.amount, 0);
+  const sorted = [...data].sort((a, b) => b.amount - a.amount);
+  return (
+    <div className="pw-hbar-list">
+      {sorted.map((d, i) => {
+        const cat = CATEGORIES[d.cat];
+        const pct = (d.amount / total) * 100;
+        return (
+          <div key={i} className="pw-hbar-row">
+            <div style={{ fontSize: 12, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 6, overflow: 'hidden' }}>
+              <span style={{ width: 8, height: 8, borderRadius: 2, background: cat?.color, flexShrink: 0 }}/>
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{cat?.name}</span>
+            </div>
+            <div className="pw-hbar-track">
+              <div className="pw-hbar-fill" style={{ width: `${pct}%`, background: cat?.color }}/>
+            </div>
+            <div className="pw-num" style={{ fontSize: 12, fontWeight: 500, textAlign: 'right' }}>{fmt(d.amount, { decimals: 0 })}</div>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -773,6 +920,8 @@ function InsightMini({ ins }) {
    SCREENS
    ============================================================ */
 function Overview({ range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExport }) {
+  const [netWorthType, setNetWorthType] = useState('area');
+  const [spendingType, setSpendingType] = useState('donut');
   const latest = NET_WORTH[NET_WORTH.length - 1].v;
   const prior = NET_WORTH[NET_WORTH.length - 31].v;
   const monthDelta = latest - prior;
@@ -800,7 +949,7 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExp
 
   return (
     <div className="pw-screen pw-fadein">
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20 }}>
+      <div className="pw-screen-header" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20 }}>
         <div>
           <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-faint)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
             Tuesday · Nov 25, 2025
@@ -837,7 +986,7 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExp
       </div>
 
       <div className="pw-card" style={{ marginBottom: 16 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+        <div className="pw-kpi-grid-4">
           <KPI label="Net worth" rawValue={latest} numFormat={{ style: 'currency', currency: 'USD', maximumFractionDigits: 0 }} value={fmt(latest, { decimals: 0 })} delta={monthDelta} deltaPct={monthPct} sub="vs 30 days ago" series={NET_WORTH.slice(-30).map(d => d.v)}/>
           <KPI label="Income (Nov)" rawValue={thisMonth.income} value={fmt(thisMonth.income, { decimals: 0 })} delta={thisMonth.income - CASHFLOW[CASHFLOW.length - 2].income} sub="vs Oct"/>
           <KPI label="Spending (Nov)" rawValue={thisMonth.expenses} value={fmt(thisMonth.expenses, { decimals: 0 })} delta={thisMonth.expenses - CASHFLOW[CASHFLOW.length - 2].expenses} invert sub="vs Oct"/>
@@ -875,17 +1024,27 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExp
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 16, marginBottom: 16 }}>
+      <div className="pw-grid-2-1" style={{ gap: 16, marginBottom: 16 }}>
         <div className="pw-card">
           <div className="pw-card-head">
             <div>
               <div className="pw-card-title">Net worth</div>
               <div className="pw-card-sub">Last 90 days · all accounts</div>
             </div>
-            <Legend swatches={[{ color: 'var(--brand)', label: 'Total' }]}/>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <ChartTypePicker
+                value={netWorthType}
+                onChange={setNetWorthType}
+                options={[
+                  { value: 'area', label: 'Area', icon: 'chart-area' },
+                  { value: 'line', label: 'Line', icon: 'chart-line' },
+                  { value: 'bar',  label: 'Bar',  icon: 'bar-chart' },
+                ]}
+              />
+            </div>
           </div>
           <div className="pw-card-body" style={{ padding: '4px 8px 14px' }}>
-            <AreaChart data={NET_WORTH} height={240}
+            <AreaChart data={NET_WORTH} height={240} chartType={netWorthType}
                        dateFmt={(i) => {
                          const dt = new Date(2025, 7, 27);
                          dt.setDate(dt.getDate() + i);
@@ -900,15 +1059,25 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExp
               <div className="pw-card-title">Where money went</div>
               <div className="pw-card-sub">November · {fmt(thisMonth.expenses, { decimals: 0 })}</div>
             </div>
-            <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 8px' }}><Icon name="more" size={14}/></button>
+            <ChartTypePicker
+              value={spendingType}
+              onChange={setSpendingType}
+              options={[
+                { value: 'donut', label: 'Donut', icon: 'pie' },
+                { value: 'bars',  label: 'Bars',  icon: 'bar-h' },
+              ]}
+            />
           </div>
           <div className="pw-card-body" style={{ paddingTop: 4 }}>
-            <Donut data={CATEGORY_BREAKDOWN} size={170} thickness={20}/>
+            {spendingType === 'donut'
+              ? <Donut data={CATEGORY_BREAKDOWN} size={170} thickness={20}/>
+              : <SpendingBars data={CATEGORY_BREAKDOWN}/>
+            }
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: 16, marginBottom: 16 }}>
+      <div className="pw-grid-1-1" style={{ gap: 16, marginBottom: 16 }}>
         <div className="pw-card">
           <div className="pw-card-head">
             <div className="pw-card-title">Accounts</div>
@@ -929,7 +1098,7 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExp
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 16, marginBottom: 16 }}>
+      <div className="pw-grid-1-1" style={{ gap: 16, marginBottom: 16 }}>
         <div className="pw-card">
           <div className="pw-card-head">
             <div>
@@ -954,7 +1123,7 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExp
             <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 8px', fontSize: 12 }} onClick={onAddGoal}>+ Add goal</button>
           </div>
           <div className="pw-card-body">
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 12 }}>
+            <div className="pw-grid-2" style={{ gap: 12 }}>
               {GOALS.map(g => <MiniGoalCard key={g.id} g={g}/>)}
             </div>
           </div>
@@ -972,7 +1141,7 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExp
           </div>
         </div>
         <div className="pw-card-body">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+          <div className="pw-grid-3" style={{ gap: 12 }}>
             {INSIGHTS.slice(0, 3).map(ins => <InsightMini key={ins.id} ins={ins}/>)}
           </div>
         </div>
@@ -1025,7 +1194,7 @@ function Transactions({ txns, onAddTxn, onExport }) {
 
   return (
     <div className="pw-screen pw-fadein">
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 16 }}>
+      <div className="pw-screen-header" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 16 }}>
         <div>
           <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-faint)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Activity</div>
           <h1 style={{ margin: '4px 0 0', fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, letterSpacing: '-0.02em' }}>Transactions</h1>
@@ -1042,9 +1211,9 @@ function Transactions({ txns, onAddTxn, onExport }) {
         </div>
       </div>
 
-      <div className="pw-card" style={{ marginBottom: 16 }}>
+      <div className="pw-card pw-txn-card" style={{ marginBottom: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px', borderBottom: '1px solid var(--border-soft)', flexWrap: 'wrap' }}>
-          <div className="pw-search" style={{ flex: '0 0 320px', cursor: 'text' }}>
+          <div className="pw-search pw-txn-search-box" style={{ flex: '0 0 320px', cursor: 'text' }}>
             <Icon name="search" size={14}/>
             <input placeholder="Search merchant, note, amount…" value={q} onChange={e => setQ(e.target.value)}
                    style={{ flex: 1, border: 'none', background: 'transparent', outline: 'none', color: 'var(--text)', fontSize: 13, fontFamily: 'var(--font-body)' }}/>
@@ -1080,6 +1249,7 @@ function Transactions({ txns, onAddTxn, onExport }) {
           </div>
         )}
 
+        <div className="pw-txn-table">
         <div className="pw-row pw-row-head" style={{ gridTemplateColumns: '32px 84px 28px 1fr 140px 100px 110px', gap: 12 }}>
           <input type="checkbox" checked={selected.size === filtered.length && filtered.length > 0} onChange={toggleAll}/>
           <span>Date</span><span/><span>Merchant</span><span>Category</span><span>Account</span>
@@ -1137,6 +1307,7 @@ function Transactions({ txns, onAddTxn, onExport }) {
             </div>
           )}
         </div>
+        </div>
       </div>
     </div>
   );
@@ -1153,7 +1324,7 @@ function Budgets({ onAddBudget }) {
 
   return (
     <div className="pw-screen pw-fadein">
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20 }}>
+      <div className="pw-screen-header" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20 }}>
         <div>
           <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-faint)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
             November 2025 · {daysLeft} days remaining
@@ -1167,7 +1338,7 @@ function Budgets({ onAddBudget }) {
       </div>
 
       <div className="pw-card" style={{ marginBottom: 16, padding: 24 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr', gap: 24, alignItems: 'center' }}>
+        <div className="pw-grid-budget-kpi" style={{ gap: 24, alignItems: 'center' }}>
           <div>
             <div className="pw-kpi-label">Total budgeted</div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginTop: 4 }}>
@@ -1219,7 +1390,7 @@ function Budgets({ onAddBudget }) {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 16 }}>
+      <div className="pw-grid-2" style={{ gap: 16, marginBottom: 16 }}>
         {BUDGETS.map(b => <BudgetCard key={b.cat} b={b}/>)}
       </div>
     </div>
@@ -1280,7 +1451,7 @@ function Goals({ onAddGoal, onContribute }) {
 
   return (
     <div className="pw-screen pw-fadein">
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20 }}>
+      <div className="pw-screen-header" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20 }}>
         <div>
           <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-faint)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Saving for what's next</div>
           <h1 style={{ margin: '4px 0 0', fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, letterSpacing: '-0.02em' }}>Goals</h1>
@@ -1294,7 +1465,7 @@ function Goals({ onAddGoal, onContribute }) {
       </div>
 
       <div className="pw-card" style={{ marginBottom: 16 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+        <div className="pw-kpi-grid-4">
           <KPI label="Total saved" value={fmt(totalSaved, { decimals: 0 })} delta={2840} sub="this month"/>
           <KPI label="Across all goals" value={`${Math.round((totalSaved / totalTarget) * 100)}%`} delta={3.2} sub="of $114,700 target" isPercent/>
           <KPI label="Monthly contributions" value={fmt(monthlyContrib, { decimals: 0 })} delta={0} sub={`${GOALS.length} active goals`}/>
@@ -1320,7 +1491,7 @@ function GoalCard({ g, onContribute }) {
 
   return (
     <div className="pw-card" style={{ padding: 20 }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '100px 1fr auto', gap: 24, alignItems: 'center' }}>
+      <div className="pw-goal-card-grid" style={{ display: 'grid', gridTemplateColumns: '100px 1fr auto', gap: 24, alignItems: 'center' }}>
         <GoalRing pct={pct} color={g.color} size={90} stroke={8}/>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
@@ -1356,7 +1527,7 @@ function GoalCard({ g, onContribute }) {
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div className="pw-goal-card-actions" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <button className="pw-btn pw-btn-primary" style={{ padding: '6px 14px', fontSize: 12 }} onClick={() => onContribute?.(g.id)}>Contribute</button>
           <button className="pw-btn" style={{ padding: '6px 14px', fontSize: 12 }} onClick={() => alert(`Adjust "${g.name}": change your target amount or weekly contribution in Settings → Goals.`)}>Adjust</button>
         </div>
@@ -1374,6 +1545,7 @@ function Cashflow({ onExport, setScreen }) {
   const avgExp = ytdExp / CASHFLOW.length;
   const monthlyNet = avgIncome - avgExp;
   const [cfView, setCfView] = useState('Monthly');
+  const [cashflowType, setCashflowType] = useState('bars');
   const [openSubIdx, setOpenSubIdx] = useState(null);
 
   const upcoming = SUBSCRIPTIONS.filter(s => {
@@ -1385,7 +1557,7 @@ function Cashflow({ onExport, setScreen }) {
 
   return (
     <div className="pw-screen pw-fadein">
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20 }}>
+      <div className="pw-screen-header" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20 }}>
         <div>
           <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-faint)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Last 12 months</div>
           <h1 style={{ margin: '4px 0 0', fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, letterSpacing: '-0.02em' }}>Cashflow & forecast</h1>
@@ -1401,7 +1573,7 @@ function Cashflow({ onExport, setScreen }) {
       </div>
 
       <div className="pw-card" style={{ marginBottom: 16 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+        <div className="pw-kpi-grid-4">
           <KPI label="YTD Income" value={fmt(ytdIncome, { decimals: 0 })} delta={ytdIncome - 95000} sub="12 months"/>
           <KPI label="YTD Expenses" value={fmt(ytdExp, { decimals: 0 })} delta={ytdExp - 70000} invert sub="12 months"/>
           <KPI label="YTD Net savings" value={fmt(ytdNet, { decimals: 0 })} delta={ytdNet - 22000} sub={`${((ytdNet / ytdIncome) * 100).toFixed(1)}% savings rate`}/>
@@ -1415,14 +1587,24 @@ function Cashflow({ onExport, setScreen }) {
             <div className="pw-card-title">Monthly cashflow</div>
             <div className="pw-card-sub">Income vs expenses · last 12 months</div>
           </div>
-          <Legend swatches={[{ color: 'var(--brand)', label: 'Income' }, { color: 'var(--text-faint)', label: 'Expenses' }]}/>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Legend swatches={[{ color: 'var(--brand)', label: 'Income' }, { color: 'var(--neg)', label: 'Expenses' }]}/>
+            <ChartTypePicker
+              value={cashflowType}
+              onChange={setCashflowType}
+              options={[
+                { value: 'bars',  label: 'Bars',  icon: 'bar-chart' },
+                { value: 'lines', label: 'Lines', icon: 'chart-line' },
+              ]}
+            />
+          </div>
         </div>
         <div className="pw-card-body" style={{ padding: '4px 12px 14px' }}>
-          <CashflowBars data={CASHFLOW} height={240}/>
+          <CashflowBars data={CASHFLOW} height={240} chartType={cashflowType}/>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 16, marginBottom: 16 }}>
+      <div className="pw-grid-2-1" style={{ gap: 16, marginBottom: 16 }}>
         <div className="pw-card">
           <div className="pw-card-head">
             <div>
@@ -1567,7 +1749,7 @@ function Insights({ setScreen }) {
   const visible = INSIGHTS.filter(i => !dismissed.has(i.id));
   return (
     <div className="pw-screen pw-fadein">
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20 }}>
+      <div className="pw-screen-header" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20 }}>
         <div>
           <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-faint)', letterSpacing: '0.08em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 6 }}>
             <Icon name="sparkles" size={11}/>PennyWise · AI
@@ -1584,12 +1766,12 @@ function Insights({ setScreen }) {
         borderColor: 'var(--brand-rim)',
         padding: 24,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div className="pw-insights-takeaway" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <div style={{
             width: 48, height: 48, borderRadius: 14,
             background: 'linear-gradient(135deg, var(--brand), var(--brand-hover))',
             color: 'white', display: 'grid', placeItems: 'center',
-            boxShadow: '0 8px 20px var(--brand-soft)',
+            boxShadow: '0 8px 20px var(--brand-soft)', flexShrink: 0,
           }}>
             <Icon name="sparkles" size={22}/>
           </div>
@@ -1616,7 +1798,7 @@ function Insights({ setScreen }) {
         )}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 16 }}>
+      <div className="pw-grid-3" style={{ gap: 16, marginBottom: 16 }}>
         <TrendCard title="Eating out" value={384.18} delta={-9.2} desc="vs your 6-month average" data={[420, 510, 380, 460, 421, 384]}/>
         <TrendCard title="Subscriptions" value={142.88} delta={-25.1} desc="after canceling Disney+ and Headspace" data={[195, 192, 190, 188, 191, 143]}/>
         <TrendCard title="Coffee runs" value={68.40} delta={12.4} desc="up — looks like a winter pattern" data={[42, 38, 51, 56, 61, 68]}/>
@@ -1692,7 +1874,7 @@ function TrendCard({ title, value, delta, desc, data }) {
 /* ============================================================
    SHELL
    ============================================================ */
-function Sidebar({ screen, setScreen, theme, onSignOut }) {
+function Sidebar({ screen, setScreen, theme, onSignOut, isOpen, onClose }) {
   const overBudget = BUDGETS.filter(b => b.spent > b.budget).length;
   const items = [
     { group: 'Workspace', items: [
@@ -1714,7 +1896,7 @@ function Sidebar({ screen, setScreen, theme, onSignOut }) {
   const logoSrc = `${import.meta.env.BASE_URL}${theme === 'dark' ? 'PennyWhite.png' : 'PennyDark.png'}`;
 
   return (
-    <aside className="pw-sidebar">
+    <aside className={`pw-sidebar${isOpen ? ' pw-sidebar--open' : ''}`}>
       <div className="pw-brand">
         <img src={logoSrc} alt="PennyWise" style={{ height: 30, width: 'auto', objectFit: 'contain' }}/>
       </div>
@@ -1723,7 +1905,7 @@ function Sidebar({ screen, setScreen, theme, onSignOut }) {
         <div key={grp.group}>
           <div className="pw-nav-group-label">{grp.group}</div>
           {grp.items.map(it => (
-            <div key={it.id} className={`pw-nav-item ${screen === it.id ? 'active' : ''}`} onClick={() => setScreen(it.id)}>
+            <div key={it.id} className={`pw-nav-item ${screen === it.id ? 'active' : ''}`} onClick={() => { setScreen(it.id); onClose?.(); }}>
               <Icon name={it.icon} size={16}/>
               <span>{it.label}</span>
               {it.badge && (
@@ -1767,9 +1949,13 @@ function Sidebar({ screen, setScreen, theme, onSignOut }) {
   );
 }
 
-function Topbar({ theme, setTheme, onCmd, onAddTxn }) {
+function Topbar({ theme, setTheme, onCmd, onAddTxn, onMenuToggle }) {
   return (
     <header className="pw-topbar">
+      <button className="pw-hamburger" onClick={onMenuToggle} aria-label="Open menu">
+        <Icon name="menu" size={18}/>
+      </button>
+
       <button className="pw-search" style={{ width: 320 }} onClick={onCmd}>
         <Icon name="search" size={14}/>
         <span style={{ flex: 1, textAlign: 'left' }}>Search anything…</span>
@@ -2129,9 +2315,11 @@ export default function DashboardApp({ onSignOut }) {
     if (typeof document === 'undefined') return 'light';
     return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
   });
+  const [accent, setAccent] = useState('green');
   const [screen, setScreen] = useState('overview');
   const [range, setRange] = useState('3M');
   const [cmdOpen, setCmdOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showAddTxn, setShowAddTxn] = useState(false);
   const [showAddGoal, setShowAddGoal] = useState(false);
   const [showAddBudget, setShowAddBudget] = useState(false);
@@ -2166,6 +2354,14 @@ export default function DashboardApp({ onSignOut }) {
     };
   }, [theme]);
 
+  // Apply accent color override
+  useEffect(() => {
+    const root = document.documentElement;
+    if (accent === 'green') root.removeAttribute('data-accent');
+    else root.setAttribute('data-accent', accent);
+    return () => root.removeAttribute('data-accent');
+  }, [accent]);
+
   // Command palette + G-key navigation
   useEffect(() => {
     let lastG = false;
@@ -2195,9 +2391,10 @@ export default function DashboardApp({ onSignOut }) {
   return (
     <>
       <div className="pw-app">
-        <Sidebar screen={screen} setScreen={setScreen} theme={theme} onSignOut={onSignOut}/>
+        {sidebarOpen && <div className="pw-sidebar-overlay" onClick={() => setSidebarOpen(false)}/>}
+        <Sidebar screen={screen} setScreen={setScreen} theme={theme} onSignOut={onSignOut} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)}/>
         <div className="pw-main">
-          <Topbar theme={theme} setTheme={setTheme} onCmd={() => setCmdOpen(true)} onAddTxn={() => setShowAddTxn(true)}/>
+          <Topbar theme={theme} setTheme={setTheme} onCmd={() => setCmdOpen(true)} onAddTxn={() => setShowAddTxn(true)} onMenuToggle={() => setSidebarOpen(o => !o)}/>
           <div className="pw-workspace">
             {screen === 'overview' && <Overview range={range} setRange={setRange} txns={txns} setScreen={setScreen} onAddTxn={() => setShowAddTxn(true)} onAddGoal={() => setShowAddGoal(true)} onExport={handleExportCSV}/>}
             {screen === 'transactions' && <Transactions txns={txns} onAddTxn={() => setShowAddTxn(true)} onExport={handleExportCSV}/>}
@@ -2206,7 +2403,7 @@ export default function DashboardApp({ onSignOut }) {
             {screen === 'cashflow' && <Cashflow onExport={handleExportCSV} setScreen={setScreen}/>}
             {screen === 'insights' && <Insights setScreen={setScreen}/>}
             {screen === 'ai' && <AIAssistant data={AI_DATA}/>}
-            {screen === 'settings' && <Settings theme={theme} setTheme={setTheme}/>}
+            {screen === 'settings' && <Settings theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}/>}
           </div>
         </div>
       </div>

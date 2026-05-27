@@ -118,7 +118,7 @@ export default function Pricing() {
 
   return (
     <div
-      className="relative bg-bg overflow-x-hidden py-24 border-y border-border"
+      className="relative bg-[var(--bg-subtle)] overflow-x-hidden py-24"
       ref={pricingRef}
       id="pricing"
     >

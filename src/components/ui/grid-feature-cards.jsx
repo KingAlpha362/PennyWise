@@ -82,7 +82,7 @@ export function FeatureCard({ icon: Icon, title, description, delay = 0 }) {
   const squares = genRandomPattern(5);
 
   return (
-    <AnimatedContainer delay={delay} className="relative overflow-hidden p-7 flex flex-col gap-5 min-h-[196px]">
+    <AnimatedContainer delay={delay} className="glass-card rounded-2xl relative overflow-hidden p-7 flex flex-col gap-5 min-h-[196px]">
       <GridPattern width={20} height={20} x={-1} y={-1} squares={squares} />
       <div className="relative z-10 w-10 h-10 rounded-xl bg-[var(--accent-dim)] flex items-center justify-center">
         <Icon size={19} className="text-[var(--accent)]" strokeWidth={1.5} aria-hidden />

@@ -66,9 +66,9 @@ p, li, td, input, button {
 
 :root,  
 [data-theme="light"] {
-  --color-bg-primary:      #F5F4F1;
-  --color-bg-secondary:    #FFFFFF;
-  --color-bg-tertiary:     #ECEAE6;    
+  --color-bg-primary:      #EAECF0;
+  --color-bg-secondary:    #FCFCFE;
+  --color-bg-tertiary:     #E0E3E9;
   --color-bg-accent:       #f0fdf4;    
 
   --color-brand:           #15803d;    

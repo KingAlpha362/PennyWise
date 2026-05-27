@@ -12,7 +12,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer id="contact" className="relative border-t border-border pt-16 sm:pt-20 pb-10 bg-bg text-text overflow-hidden">
+    <footer id="contact" className="relative border-t border-border pt-16 sm:pt-20 pb-10 bg-[var(--bg-subtle)] text-text overflow-hidden">
       {/* Soft fade from previous section */}
       {/* Soft fade from previous section */}
       <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-transparent to-bg z-[5] pointer-events-none" />

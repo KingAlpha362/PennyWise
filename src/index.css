@@ -6,9 +6,9 @@
 @layer base {
   :root {
     /* Light-first design — Stripe/Linear aesthetic */
-    --bg: #F5F4F1;
-    --bg-card: #FFFFFF;
-    --bg-subtle: #ECEAE6;
+    --bg: #EAECF0;
+    --bg-card: #FCFCFE;
+    --bg-subtle: #E0E3E9;
     --border: rgba(15, 23, 42, 0.09);
     --border-card: rgba(15, 23, 42, 0.07);
     --text: #0F172A;
@@ -66,7 +66,7 @@
   /* ── Navbar */
   .navbar { transition: background 0.4s var(--ease-out), backdrop-filter 0.4s var(--ease-out), border-color 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out); }
   .navbar.scrolled {
-    background: rgba(245, 244, 241, 0.92);
+    background: rgba(234, 236, 240, 0.94);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);

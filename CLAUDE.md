@@ -32,7 +32,9 @@ All navigation is a single `appView` state in `src/App.jsx` — no router librar
 
 ### Landing page
 
-`src/App.jsx` assembles section components in this order: `Header`, `Hero`, `Press`, `DashboardWidget`, `Stats`, `HowItWorks`, `ROICalculator`, `SecurityIntegrations`, `Features`, `Benefits`, `ComparisonTable`, `DashboardPreview`, `Testimonials`, `Pricing`, `FAQ`, `CTA`, `Footer`.
+`src/App.jsx` assembles section components in this order: `Header`, `Hero`, `Press`, `Stats`, `HowItWorks`, `ROICalculator`, `SecurityIntegrations`, `Features`, `Benefits`, `ComparisonTable`, `DashboardPreview`, `Testimonials`, `Pricing`, `FAQ`, `CTA`, `Footer`.
+
+**Section "chapters".** There are no divider elements between sections in `App.jsx` — each section component sets its own background and they alternate between `bg-bg` (`--bg`) and `bg-[var(--bg-subtle)]` to form visual "chapters" (e.g. Hero/Press are base, Stats/HowItWorks are subtle, etc.). When adding or reordering sections, set the section's background to keep the alternating rhythm; do not add hard `border`/divider lines between them.
 
 Two animation systems run at mount — they must NOT target the same elements:
 
@@ -62,6 +64,8 @@ The landing page and dashboard have entirely separate CSS — do not mix them:
 | CSS files | `src/index.css` (Tailwind v4) + `src/pennywise-theme.css` | `src/dashboard.css` |
 | CSS variables | `--bg`, `--bg-card`, `--bg-subtle`, `--accent`, `--border`, `--text`, `--text-muted` | `--bg-elev`, `--brand`, `--pos`, `--neg`, `--warn`, `--pw-*` |
 | Class prefix | Tailwind utilities + `.glass-card`, `.btn-primary`, `.btn-secondary`, `.label`, `.prog-fill` | `.pw-card`, `.pw-btn`, `.pw-kpi`, `.pw-row`, `.pw-tag`, `.pw-screen`, etc. |
+
+**Landing has TWO overlapping token systems — a known gotcha.** `index.css` defines `--bg` / `--bg-card` / `--bg-subtle` (drive Tailwind `bg-bg`, `bg-card` utilities: chips, comparison table, FAQ, pricing, etc.). `pennywise-theme.css` separately defines `--color-bg-primary` / `--color-bg-secondary` / `--color-bg-tertiary` (drive the `body` background and `.glass-card` / `.card` / `.pricing-card` gradient backgrounds). **`.glass-card` is defined in both files**: `index.css`'s rule is inside `@layer components`, while `pennywise-theme.css`'s is unlayered — so the unlayered `pennywise-theme.css` version always wins regardless of import order. To retint landing surfaces consistently you must edit BOTH systems (page surface ≈ `--bg` and `--color-bg-primary`; cards ≈ `--bg-card` and `--color-bg-secondary`). Dashboard light/dark surfaces are independent: `--bg`/`--bg-elev`/`--bg-soft`/`--bg-rail` under `[data-theme]` in `dashboard.css`.
 
 ### Dark mode — two separate mechanisms
 

@@ -106,6 +106,23 @@ export default function DashboardPreview() {
             </div>
           </div>
         </div>
+
+        {/* Annotated callouts — what the preview demonstrates */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-8 mt-10 max-w-4xl mx-auto reveal">
+          {[
+            { label: 'Auto-categorized', desc: 'Every transaction sorted the moment it lands — no manual tagging.' },
+            { label: '30-day forecast', desc: 'The green line projects your balance forward so nothing surprises you.' },
+            { label: 'Goals on autopilot', desc: 'Savings targets track themselves and celebrate the moment you hit them.' },
+          ].map((c) => (
+            <div key={c.label} className="flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shrink-0" />
+                <span className="font-semibold text-[0.92rem] tracking-[-0.01em] text-text">{c.label}</span>
+              </div>
+              <p className="text-[0.82rem] text-text-muted leading-[1.6] pl-3.5">{c.desc}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

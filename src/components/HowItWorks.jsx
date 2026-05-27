@@ -2,33 +2,33 @@ import { motion } from 'framer-motion';
 import { Link2, Sparkles, TrendingUp } from 'lucide-react';
 import OrbitingAccounts from './ui/orbiting-accounts';
 
-export default function HowItWorks() {
-  const steps = [
-    {
-      icon: <Link2 size={32} />,
-      title: "1. Link your accounts",
-      desc: "Securely connect your banks, credit cards, and investment accounts in seconds using our Plaid integration.",
-      color: "bg-[var(--accent-dim)] text-[var(--accent)]",
-      delay: 0.1
-    },
-    {
-      icon: <Sparkles size={32} />,
-      title: "2. Let AI analyze",
-      desc: "Our machine learning models categorize your spending, identify subscriptions, and find savings opportunities.",
-      color: "bg-[var(--accent-dim)] text-[var(--accent)]",
-      delay: 0.2
-    },
-    {
-      icon: <TrendingUp size={32} />,
-      title: "3. Build wealth",
-      desc: "Follow the predictive allocation routines to crush debt, hit savings goals, and grow your net worth automatically.",
-      color: "bg-[var(--accent-dim)] text-[var(--accent)]",
-      delay: 0.3
-    }
-  ];
+const steps = [
+  {
+    icon: Link2,
+    num: '01',
+    title: 'Link your accounts',
+    desc: 'Securely connect your banks, credit cards, and investment accounts in seconds using our Plaid integration.',
+    delay: 0.1,
+  },
+  {
+    icon: Sparkles,
+    num: '02',
+    title: 'Let AI analyze',
+    desc: 'Our machine learning models categorize your spending, identify subscriptions, and find savings opportunities.',
+    delay: 0.2,
+  },
+  {
+    icon: TrendingUp,
+    num: '03',
+    title: 'Build wealth',
+    desc: 'Follow the predictive allocation routines to crush debt, hit savings goals, and grow your net worth automatically.',
+    delay: 0.3,
+  },
+];
 
+export default function HowItWorks() {
   return (
-    <section className="bg-bg py-24 relative overflow-hidden">
+    <section className="bg-[var(--bg-subtle)] py-24 relative overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
           <div className="flex justify-center">
@@ -44,31 +44,48 @@ export default function HowItWorks() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative max-w-5xl mx-auto">
-          {/* Connecting line for desktop */}
-          <div className="hidden md:block absolute top-1/2 left-[10%] right-[10%] h-0.5 bg-border -z-10 -translate-y-12"></div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
+          {steps.map((step, index) => {
+            const Icon = step.icon;
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: step.delay, ease: [0.23, 1, 0.32, 1] }}
+                viewport={{ once: true }}
+                className="glass-card rounded-2xl p-7 flex flex-col gap-5 relative overflow-hidden"
+              >
+                {/* watermark step number */}
+                <span
+                  aria-hidden
+                  className="absolute -top-3 -right-1 text-[6rem] font-black leading-none select-none pointer-events-none"
+                  style={{ color: 'color-mix(in srgb, var(--text) 5%, transparent)' }}
+                >
+                  {step.num}
+                </span>
 
-          {steps.map((step, index) => (
-            <motion.div 
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: step.delay }}
-              viewport={{ once: true }}
-              className="flex flex-col items-center text-center space-y-6"
-            >
-              <div className={`w-24 h-24 rounded-full flex items-center justify-center border-4 border-bg ${step.color} bg-card shadow-xl`}>
-                {step.icon}
-              </div>
-              <div className="space-y-3">
-                <h3 className="text-xl font-bold text-text">{step.title}</h3>
-                <p className="text-text-muted max-w-xs mx-auto leading-relaxed">{step.desc}</p>
-              </div>
-            </motion.div>
-          ))}
+                <div className="relative z-10 w-10 h-10 rounded-xl bg-[var(--accent-dim)] flex items-center justify-center shrink-0">
+                  <Icon size={19} strokeWidth={1.5} className="text-[var(--accent)]" aria-hidden />
+                </div>
+
+                <div className="relative z-10 flex flex-col gap-1.5">
+                  <span className="text-[0.68rem] font-bold tracking-[0.14em] uppercase text-[var(--accent)]">
+                    Step {step.num}
+                  </span>
+                  <h3 className="font-semibold text-[1rem] tracking-[-0.02em] text-text leading-snug">
+                    {step.title}
+                  </h3>
+                  <p className="text-[0.83rem] text-text-muted leading-[1.65]">
+                    {step.desc}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.4 }}

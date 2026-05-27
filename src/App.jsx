@@ -5,7 +5,6 @@ import { useGSAP } from '@gsap/react';
 import { Header } from './components/ui/header-2';
 import Hero from './components/Hero';
 import Press from './components/Press';
-import DashboardWidget from './components/DashboardWidget';
 import Stats from './components/Stats';
 import Features from './components/Features';
 import Benefits from './components/Benefits';
@@ -83,31 +82,18 @@ export default function App() {
     <div className="bg-bg text-text min-h-screen">
       <Header onSignIn={() => setAppView('signin')} />
       <Hero onGetStarted={() => setAppView('signup')} />
-      <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <Press />
-      <div className="h-px w-full bg-black/15 dark:bg-black/40" />
-      <DashboardWidget />
-      <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <Stats />
-      <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <HowItWorks />
-      <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <ROICalculator />
-      <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <SecurityIntegrations />
-      <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <Features />
-      <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <Benefits />
-      <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <ComparisonTable />
       <DashboardPreview />
-      <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <Testimonials />
       <Pricing />
-      <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <FAQ />
-      <div className="h-px w-full bg-black/15 dark:bg-black/40" />
       <CTA onGetStarted={() => setAppView('signup')} />
       <Footer />
     </div>

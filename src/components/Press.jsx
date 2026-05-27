@@ -78,7 +78,7 @@ export default function Press() {
   ];
 
   return (
-    <section className="py-10 md:py-16 border-b border-border/50 bg-bg relative overflow-hidden">
+    <section className="py-10 md:py-16 bg-bg relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
         <p className="text-[0.65rem] md:text-[0.75rem] font-bold tracking-[0.2em] text-text-muted uppercase mb-10 md:mb-12 reveal">
           As Featured In
