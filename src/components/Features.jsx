@@ -66,7 +66,7 @@ const bentoCards = [
     ),
     content: (
       <div className="mt-5 -mx-5 sm:-mx-8 -mb-5 sm:-mb-8 overflow-hidden rounded-b-2xl flex-1 min-h-[200px]">
-        <ScreenShot name="feat-transactions" alt="Transactions screen" className="object-cover object-top h-full" />
+        <ScreenShot name="feat-transactions" alt="Transactions screen" className="object-cover h-full w-full [object-position:40%_0]" />
       </div>
     ),
   },
@@ -82,7 +82,7 @@ const bentoCards = [
     ),
     content: (
       <div className="mt-4 -mx-5 sm:-mx-8 -mb-5 sm:-mb-8 overflow-hidden rounded-b-2xl" style={{ height: 180 }}>
-        <ScreenShot name="feat-budgets" alt="Budgets screen" className="object-cover object-top h-full" />
+        <ScreenShot name="feat-budgets" alt="Budgets screen" className="object-cover h-full w-full [object-position:40%_0]" />
       </div>
     ),
   },
@@ -98,7 +98,7 @@ const bentoCards = [
     ),
     content: (
       <div className="mt-4 -mx-5 sm:-mx-8 -mb-5 sm:-mb-8 overflow-hidden rounded-b-2xl" style={{ height: 180 }}>
-        <ScreenShot name="feat-insights" alt="Insights screen" className="object-cover object-top h-full" />
+        <ScreenShot name="feat-insights" alt="Insights screen" className="object-cover h-full w-full [object-position:40%_0]" />
       </div>
     ),
   },
@@ -114,7 +114,7 @@ const bentoCards = [
     ),
     content: (
       <div className="mt-4 -mx-5 sm:-mx-8 -mb-5 sm:-mb-8 overflow-hidden rounded-b-2xl" style={{ height: 220 }}>
-        <ScreenShot name="feat-goals" alt="Goals screen" className="object-cover object-top h-full" />
+        <ScreenShot name="feat-goals" alt="Goals screen" className="object-cover h-full w-full [object-position:40%_0]" />
       </div>
     ),
   },

@@ -88,7 +88,6 @@
   grid-template-columns: var(--sidebar-w) 1fr;
   height: 100vh;
   width: 100vw;
-  min-width: 900px;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
@@ -161,6 +160,7 @@
   font-size: 13.5px;
   font-weight: 500;
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
   position: relative;
   transition: background 120ms var(--ease-out), color 120ms var(--ease-out);
@@ -646,9 +646,10 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
 }
+.pw-ai-messages::-webkit-scrollbar { width: 4px; }
+.pw-ai-messages::-webkit-scrollbar-track { background: transparent; }
+.pw-ai-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 .pw-ai-empty {
   flex: 1;
   display: flex;
@@ -1187,6 +1188,7 @@
   inset: 0;
   z-index: 200;
   background: rgba(0, 0, 0, 0.45);
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   display: grid;
   place-items: start center;
@@ -1442,4 +1444,129 @@ select.pw-field-input { cursor: pointer; }
   place-items: center;
   flex-shrink: 0;
   box-shadow: 0 4px 12px var(--brand-soft);
+}
+
+/* ============================================================
+   MOBILE NAV — hamburger + sidebar overlay
+   ============================================================ */
+.pw-hamburger { display: none; }
+.pw-sidebar-overlay { display: none; }
+
+/* ============================================================
+   RESPONSIVE — mobile breakpoint (< 768px)
+   ============================================================ */
+@media (max-width: 767px) {
+  /* Single-column layout — sidebar slides in as drawer */
+  .pw-app {
+    grid-template-columns: 1fr;
+  }
+
+  /* Sidebar becomes a fixed slide-over drawer */
+  .pw-sidebar {
+    position: fixed;
+    inset-block: 0;
+    left: 0;
+    width: var(--sidebar-w);
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 220ms var(--ease-out);
+    border-right: 1px solid var(--border);
+  }
+  .pw-sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Dim backdrop behind open sidebar */
+  .pw-sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    background: rgba(0, 0, 0, 0.45);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+  }
+
+  /* Hamburger button — shown on mobile */
+  .pw-hamburger {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--border);
+    background: var(--bg-soft);
+    cursor: pointer;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  /* Hide wide search bar on mobile — too narrow */
+  .pw-search { display: none; }
+
+  /* Tighten topbar padding */
+  .pw-topbar { padding: 0 var(--space-3); gap: var(--space-2); }
+
+  /* Compact screen padding */
+  .pw-screen { padding: 16px 14px; }
+
+  /* Trend cards: 3-col → 1-col */
+  .pw-trend-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Insight card inner: icon / body / actions → stack */
+  .pw-insight-card-inner {
+    grid-template-columns: 40px 1fr !important;
+    grid-template-rows: auto auto;
+  }
+  .pw-insight-card-inner > :last-child {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  /* AI quick-action cards: stay 2-col (they're compact enough) */
+
+  /* AI glow: clamp oversized fixed dimensions */
+  .pw-ai-glow {
+    width: clamp(200px, 80vw, 500px) !important;
+    height: clamp(200px, 80vw, 500px) !important;
+  }
+
+  /* Forecast banner: stack on mobile */
+  .pw-ai-forecast {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* KPI grid: 2 per row instead of 4 */
+  .pw-kpi-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .pw-kpi-row .pw-kpi:nth-child(2) { border-right: none; }
+  .pw-kpi-row .pw-kpi:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
+  .pw-kpi-value { font-size: 22px !important; }
+  .pw-kpi { padding: 14px 14px; }
+
+  /* Transaction row: hide less-important columns */
+  .pw-row-account,
+  .pw-row-note { display: none; }
+
+  /* Subscription row: trim */
+  .pw-sub-meta { display: none; }
+}
+
+/* Tablet (768–1023px): full sidebar visible, KPI font slightly smaller */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .pw-kpi-value { font-size: 22px; }
+  .pw-kpi { padding: 14px 14px; }
+}
+
+/* Small phones — extra tightening */
+@media (max-width: 400px) {
+  .pw-ai-quick-grid {
+    grid-template-columns: 1fr;
+  }
 }

@@ -346,14 +346,24 @@ section {
   padding: 5rem 0;            
 }
 
-@media (max-width: 768px) {  
-  section {  
-    padding: 3.5rem 0;          
-  }  
-  
+@media (max-width: 768px) {
+  section {
+    padding: 3.5rem 0;
+  }
+
   .container {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  section {
+    padding: 2.5rem 0;
+  }
+  .container {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
   }
 }
 

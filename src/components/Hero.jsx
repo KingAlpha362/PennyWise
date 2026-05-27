@@ -63,7 +63,7 @@ export default function Hero({ onGetStarted }) {
       </div>
 
       {/* ── Dashboard screenshot preview ── */}
-      <div className="relative -mr-56 mt-8 overflow-hidden px-2 sm:mr-0 sm:mt-12 md:mt-16">
+      <div className="relative mt-8 overflow-hidden px-2 sm:mt-12 md:mt-16 lg:-mr-56">
         {/* gradient fade to page bg */}
         <div
           aria-hidden

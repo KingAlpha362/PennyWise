@@ -256,6 +256,7 @@ function Icon({ name, size = 16, stroke = 1.75, className = '', style = {} }) {
     case 'logout': return <svg {...props}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>;
     case 'message-circle': return <svg {...props}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>;
     case 'crown': return <svg {...props}><path d="M3 18h18M5 18 2 8l5 4 5-7 5 7 5-4-3 10"/></svg>;
+    case 'menu': return <svg {...props}><path d="M3 12h18M3 6h18M3 18h18"/></svg>;
     case 'user': return <svg {...props}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>;
     case 'calendar': return <svg {...props}><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>;
     case 'alert': return <svg {...props}><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>;
@@ -837,7 +838,7 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExp
       </div>
 
       <div className="pw-card" style={{ marginBottom: 16 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+        <div className="pw-kpi-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
           <KPI label="Net worth" rawValue={latest} numFormat={{ style: 'currency', currency: 'USD', maximumFractionDigits: 0 }} value={fmt(latest, { decimals: 0 })} delta={monthDelta} deltaPct={monthPct} sub="vs 30 days ago" series={NET_WORTH.slice(-30).map(d => d.v)}/>
           <KPI label="Income (Nov)" rawValue={thisMonth.income} value={fmt(thisMonth.income, { decimals: 0 })} delta={thisMonth.income - CASHFLOW[CASHFLOW.length - 2].income} sub="vs Oct"/>
           <KPI label="Spending (Nov)" rawValue={thisMonth.expenses} value={fmt(thisMonth.expenses, { decimals: 0 })} delta={thisMonth.expenses - CASHFLOW[CASHFLOW.length - 2].expenses} invert sub="vs Oct"/>
@@ -1616,7 +1617,7 @@ function Insights({ setScreen }) {
         )}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 16 }}>
+      <div className="pw-trend-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 16 }}>
         <TrendCard title="Eating out" value={384.18} delta={-9.2} desc="vs your 6-month average" data={[420, 510, 380, 460, 421, 384]}/>
         <TrendCard title="Subscriptions" value={142.88} delta={-25.1} desc="after canceling Disney+ and Headspace" data={[195, 192, 190, 188, 191, 143]}/>
         <TrendCard title="Coffee runs" value={68.40} delta={12.4} desc="up — looks like a winter pattern" data={[42, 38, 51, 56, 61, 68]}/>
@@ -1649,7 +1650,7 @@ function InsightCard({ ins, setScreen, onDismiss }) {
     if (dest) setScreen?.(dest);
   };
   return (
-    <div className="pw-card" style={{ padding: 18, display: 'grid', gridTemplateColumns: '40px 1fr auto', gap: 16, alignItems: 'center' }}>
+    <div className="pw-card pw-insight-card-inner" style={{ padding: 18, display: 'grid', gridTemplateColumns: '40px 1fr auto', gap: 16, alignItems: 'center' }}>
       <div style={{
         width: 40, height: 40, borderRadius: 10,
         background: bgMap[ins.severity], color: colorMap[ins.severity],
@@ -1692,7 +1693,7 @@ function TrendCard({ title, value, delta, desc, data }) {
 /* ============================================================
    SHELL
    ============================================================ */
-function Sidebar({ screen, setScreen, theme, onSignOut }) {
+function Sidebar({ screen, setScreen, theme, onSignOut, open, onClose }) {
   const overBudget = BUDGETS.filter(b => b.spent > b.budget).length;
   const items = [
     { group: 'Workspace', items: [
@@ -1714,7 +1715,7 @@ function Sidebar({ screen, setScreen, theme, onSignOut }) {
   const logoSrc = `${import.meta.env.BASE_URL}${theme === 'dark' ? 'PennyWhite.png' : 'PennyDark.png'}`;
 
   return (
-    <aside className="pw-sidebar">
+    <aside className={`pw-sidebar${open ? ' open' : ''}`}>
       <div className="pw-brand">
         <img src={logoSrc} alt="PennyWise" style={{ height: 30, width: 'auto', objectFit: 'contain' }}/>
       </div>
@@ -1723,7 +1724,7 @@ function Sidebar({ screen, setScreen, theme, onSignOut }) {
         <div key={grp.group}>
           <div className="pw-nav-group-label">{grp.group}</div>
           {grp.items.map(it => (
-            <div key={it.id} className={`pw-nav-item ${screen === it.id ? 'active' : ''}`} onClick={() => setScreen(it.id)}>
+            <div key={it.id} className={`pw-nav-item ${screen === it.id ? 'active' : ''}`} onClick={() => { setScreen(it.id); onClose?.(); }}>
               <Icon name={it.icon} size={16}/>
               <span>{it.label}</span>
               {it.badge && (
@@ -1767,9 +1768,13 @@ function Sidebar({ screen, setScreen, theme, onSignOut }) {
   );
 }
 
-function Topbar({ theme, setTheme, onCmd, onAddTxn }) {
+function Topbar({ theme, setTheme, onCmd, onAddTxn, onMenuOpen }) {
   return (
     <header className="pw-topbar">
+      <button className="pw-hamburger" onClick={onMenuOpen} title="Open menu" aria-label="Open navigation">
+        <Icon name="menu" size={16}/>
+      </button>
+
       <button className="pw-search" style={{ width: 320 }} onClick={onCmd}>
         <Icon name="search" size={14}/>
         <span style={{ flex: 1, textAlign: 'left' }}>Search anything…</span>
@@ -1777,6 +1782,10 @@ function Topbar({ theme, setTheme, onCmd, onAddTxn }) {
       </button>
 
       <div style={{ flex: 1 }}/>
+
+      <button className="pw-icon-btn" title="Search" onClick={onCmd} style={{ display: 'none' }} aria-label="Search">
+        <Icon name="search" size={16}/>
+      </button>
 
       <button className="pw-btn pw-btn-ghost" style={{ padding: '6px 10px' }} onClick={onAddTxn}>
         <Icon name="plus" size={14}/><span>Add</span>
@@ -2137,6 +2146,7 @@ export default function DashboardApp({ onSignOut }) {
   const [showAddBudget, setShowAddBudget] = useState(false);
   const [contributeGoal, setContributeGoal] = useState(null);
   const [txns, setTxns] = useState(TRANSACTIONS);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleExportCSV = (data) => {
     const rows = [
@@ -2195,9 +2205,10 @@ export default function DashboardApp({ onSignOut }) {
   return (
     <>
       <div className="pw-app">
-        <Sidebar screen={screen} setScreen={setScreen} theme={theme} onSignOut={onSignOut}/>
+        {sidebarOpen && <div className="pw-sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
+        <Sidebar screen={screen} setScreen={setScreen} theme={theme} onSignOut={onSignOut} open={sidebarOpen} onClose={() => setSidebarOpen(false)}/>
         <div className="pw-main">
-          <Topbar theme={theme} setTheme={setTheme} onCmd={() => setCmdOpen(true)} onAddTxn={() => setShowAddTxn(true)}/>
+          <Topbar theme={theme} setTheme={setTheme} onCmd={() => setCmdOpen(true)} onAddTxn={() => setShowAddTxn(true)} onMenuOpen={() => setSidebarOpen(true)}/>
           <div className="pw-workspace">
             {screen === 'overview' && <Overview range={range} setRange={setRange} txns={txns} setScreen={setScreen} onAddTxn={() => setShowAddTxn(true)} onAddGoal={() => setShowAddGoal(true)} onExport={handleExportCSV}/>}
             {screen === 'transactions' && <Transactions txns={txns} onAddTxn={() => setShowAddTxn(true)} onExport={handleExportCSV}/>}
