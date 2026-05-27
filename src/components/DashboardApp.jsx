@@ -2330,7 +2330,6 @@ export default function DashboardApp({ onSignOut }) {
   const [showAddBudget, setShowAddBudget] = useState(false);
   const [contributeGoal, setContributeGoal] = useState(null);
   const [txns, setTxns] = useState(TRANSACTIONS);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleExportCSV = (data) => {
     const rows = [
