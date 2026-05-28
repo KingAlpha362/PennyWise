@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -26,6 +26,12 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function App() {
   const [appView, setAppView] = useState('landing'); // landing, dashboard, signin, signup
+
+  useLayoutEffect(() => {
+    if (appView !== 'dashboard') {
+      document.documentElement.classList.add('dark');
+    }
+  }, [appView]);
 
   useGSAP(() => {
     // GSAP Scroll reveal

@@ -15,21 +15,6 @@ export function Header({ onSignIn }) {
     { label: 'Contact', href: '#contact' },
   ];
 
-  const [isDark, setIsDark] = React.useState(false);
-
-  // Sync dark-mode state
-  React.useEffect(() => {
-    const update = () =>
-      setIsDark(document.documentElement.classList.contains('dark'));
-    const observer = new MutationObserver(update);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class'],
-    });
-    update();
-    return () => observer.disconnect();
-  }, []);
-
   // Lock body scroll when menu is open
   React.useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -44,7 +29,6 @@ export function Header({ onSignIn }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, [open]);
 
-  const toggleTheme = () => document.documentElement.classList.toggle('dark');
   const close = () => setOpen(false);
 
   return (
@@ -73,9 +57,8 @@ export function Header({ onSignIn }) {
           className="flex items-center gap-2.5 no-underline text-inherit shrink-0"
           aria-label="PennyWise home"
         >
-          {/* Single <img> toggled via CSS avoids a flash on re-render */}
           <img
-            src={`${import.meta.env.BASE_URL}${isDark ? 'PennyWhite.png' : 'PennyDark.png'}`}
+            src={`${import.meta.env.BASE_URL}PennyWhite.png`}
             alt="PennyWise"
             className={cn(
               "w-auto object-contain transition-all duration-300",
@@ -91,23 +74,12 @@ export function Header({ onSignIn }) {
               {link.label}
             </a>
           ))}
-          <Button
-            variant="ghost"
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-            className="ml-2 px-3"
-          >
-            🌓
-          </Button>
           <button className="btn-secondary ml-2" onClick={onSignIn}>Sign In</button>
           <button className="btn-primary" onClick={onSignIn}>Get Started</button>
         </div>
 
         {/* Mobile controls */}
         <div className="flex items-center gap-1 md:hidden">
-          <Button size="icon" variant="ghost" onClick={toggleTheme} aria-label="Toggle theme">
-            🌓
-          </Button>
           <Button
             size="icon"
             variant="ghost"

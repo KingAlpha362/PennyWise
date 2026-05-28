@@ -2316,10 +2316,7 @@ function AddBudgetModal({ onClose }) {
 }
 
 export default function DashboardApp({ onSignOut }) {
-  const [theme, setTheme] = useState(() => {
-    if (typeof document === 'undefined') return 'light';
-    return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-  });
+  const [theme, setTheme] = useState('dark');
   const [accent, setAccent] = useState('green');
   const [screen, setScreen] = useState('overview');
   const [range, setRange] = useState('3M');
