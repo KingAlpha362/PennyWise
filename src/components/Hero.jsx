@@ -10,7 +10,7 @@ export default function Hero({ onGetStarted }) {
       {/* ── Centered copy ── */}
       <div className="max-w-3xl mx-auto px-6 text-center">
         <div className="label mb-6 inline-flex text-accent border-accent/20">
-          AI-powered personal finance
+          Personal finance demo
         </div>
 
         <h1
@@ -23,9 +23,7 @@ export default function Hero({ onGetStarted }) {
         </h1>
 
         <p className="mt-5 text-base md:text-[1.05rem] leading-relaxed max-w-[500px] mx-auto text-text-muted">
-          Connect your accounts once. PennyWise reads every transaction, flags every
-          anomaly, and maps your next 30 days - automatically. Users save an average of{' '}
-          <strong className="text-text">$156/month</strong> in their first 30 days.
+          Explore sample transactions, budgets, and savings goals in one dashboard. Try the product without connecting a bank or creating an account.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 mt-9 justify-center">
@@ -33,34 +31,20 @@ export default function Hero({ onGetStarted }) {
             onClick={onGetStarted}
             className="btn-primary inline-flex items-center justify-center gap-2 text-[0.9rem] py-3 px-7"
           >
-            Start free — takes 2 min
+            Explore the demo
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
               <path d="M1.5 6.5h10M7.5 2.5l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
           <a
-            href="#features"
+            href="#how-it-works"
             className="btn-ghost inline-flex items-center justify-center no-underline text-[0.9rem] py-3 px-7"
           >
             See how it works
           </a>
         </div>
 
-        {/* Social proof */}
-        <div className="flex flex-wrap items-center justify-center gap-5 mt-8 mb-14">
-          <div className="flex items-center gap-2">
-            <span className="text-[0.8rem] text-text-muted">
-              <strong className="text-text font-semibold">14,000+</strong> users saving more every month
-            </span>
-          </div>
-          <div className="w-px h-4 bg-border hidden sm:block" />
-          <div className="flex items-center gap-1.5 text-[0.8rem] text-text-muted">
-            <span className="text-yellow-500 text-sm">★★★★★</span>
-            <strong className="text-text font-semibold">4.9</strong> on App Store
-          </div>
-          <div className="w-px h-4 bg-border hidden sm:block" />
-          <div className="text-[0.8rem] text-text-muted">No credit card required</div>
-        </div>
+        <p className="text-sm text-text-muted mt-8 mb-14">Fictional data. No credentials required. No money moves.</p>
       </div>
 
       {/* ── Dashboard screenshot preview ── */}
@@ -81,14 +65,14 @@ export default function Hero({ onGetStarted }) {
           <img
             src={`${import.meta.env.BASE_URL}dash-light.png`}
             alt="PennyWise dashboard — light mode"
-            className="w-full block dark:hidden"
+            width="1440" height="900" className="w-full block dark:hidden"
             draggable={false}
           />
           {/* dark screenshot — shown in dark mode only */}
           <img
             src={`${import.meta.env.BASE_URL}dash-dark.png`}
             alt="PennyWise dashboard — dark mode"
-            className="w-full hidden dark:block"
+            width="1440" height="900" className="w-full hidden dark:block"
             draggable={false}
           />
         </div>

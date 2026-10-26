@@ -9,7 +9,7 @@ import {
   useRef,
   useState,
 } from "react"
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import { cn } from "@/lib/utils"
 
 const VerticalCutReveal = forwardRef(
@@ -36,6 +36,7 @@ const VerticalCutReveal = forwardRef(
     },
     ref
   ) => {
+    const reducedMotion = useReducedMotion();
     const containerRef = useRef(null)
     const text = typeof children === "string" ? children : children?.toString() || ""
     const [isAnimating, setIsAnimating] = useState(false)
@@ -118,6 +119,7 @@ const VerticalCutReveal = forwardRef(
       }),
     }
 
+    if (reducedMotion) return <span>{children}</span>;
     return (
       <span
         className={cn(

@@ -35,14 +35,14 @@ export default function DashboardPreview() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12 reveal">
-          <div className="label mb-4">Live Preview</div>
+          <div className="label mb-4">Sample dashboard</div>
           <h2 className="font-display" style={{ fontSize: 'clamp(2rem,4vw,3.4rem)', lineHeight: '1.08', letterSpacing: '-0.03em' }}>
             Intelligence meets<br /><em className="text-accent">simplicity.</em>
           </h2>
           <p className="text-text-muted mt-[10px] text-[0.88rem]">Your finances at a glance. Always clear, always actionable.</p>
         </div>
 
-        <div id="dashWrap" className="glass-card rounded-2xl overflow-hidden reveal hero-mockup" role="img" aria-label="Interactive dashboard preview showing total balance, monthly spend, and a cash flow chart" style={{ background: '#0d1017', '--text': '#F1F5F9', '--text-muted': 'rgba(241,245,249,0.55)', '--border': 'rgba(255,255,255,0.10)', '--border-card': 'rgba(255,255,255,0.07)', '--accent': '#22c55e', '--bg': '#0d1017' }}>
+        <div id="dashWrap" className="glass-card rounded-2xl overflow-hidden reveal hero-mockup" role="img" aria-label="Illustrative dashboard showing total balance, monthly spend, and a cash flow chart" style={{ background: '#0d1017', '--text': '#F1F5F9', '--text-muted': 'rgba(241,245,249,0.55)', '--border': 'rgba(255,255,255,0.10)', '--border-card': 'rgba(255,255,255,0.07)', '--accent': '#22c55e', '--bg': '#0d1017' }}>
           {/* Browser chrome */}
           <div className="bg-[rgba(255,255,255,0.03)] border-b border-[rgba(255,255,255,0.08)] py-3 px-[22px] flex items-center gap-[7px]">
             <div className="w-[9px] h-[9px] rounded-full bg-[#ff5f57]"></div>
@@ -110,9 +110,9 @@ export default function DashboardPreview() {
         {/* Annotated callouts — what the preview demonstrates */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-8 mt-10 max-w-4xl mx-auto reveal">
           {[
-            { label: 'Auto-categorized', desc: 'Every transaction sorted the moment it lands — no manual tagging.' },
-            { label: '30-day forecast', desc: 'The green line projects your balance forward so nothing surprises you.' },
-            { label: 'Goals on autopilot', desc: 'Savings targets track themselves and celebrate the moment you hit them.' },
+            { label: 'Auto-categorized', desc: 'Browse examples of categorized sample spending.' },
+            { label: '30-day forecast', desc: 'The green line illustrates a sample cashflow trend.' },
+            { label: 'Goal progress', desc: 'Explore progress toward fictional savings targets.' },
           ].map((c) => (
             <div key={c.label} className="flex flex-col gap-2">
               <div className="flex items-center gap-2">

@@ -98,10 +98,7 @@
   }
 
   /* ── Scroll reveal */
-  .reveal {
-    opacity: 0;
-    transform: translateY(28px);
-  }
+  .reveal { opacity: 1; }
 
   /* ── Marquee */
   @keyframes marquee {
@@ -373,4 +370,15 @@
   .reveal { transition: opacity 0.3s ease !important; transform: none !important; }
   .animate-marquee, .animate-marquee-reverse { animation-duration: 120s; }
   .glass-card, .btn-primary, .btn-secondary, .btn-ghost { transition-duration: 0ms; }
+}
+
+/* Content is visible by default; motion never gates access. */
+.app-root:focus { outline: none; }
+:where(button, a, input, select, textarea):focus-visible { outline: 3px solid var(--accent, #16a34a); outline-offset: 4px; }
+section[id], footer[id] { scroll-margin-top: 7rem; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  .app-root [style*="opacity: 0"], .app-root .reveal { opacity: 1 !important; transform: none !important; filter: none !important; }
+  .cline { stroke-dashoffset: 0 !important; }
 }

@@ -16,7 +16,7 @@ export const TestimonialsColumn = (props) => {
       repeatType: "loop",
     });
     return () => animRef.current?.stop();
-  }, [duration]);
+  }, [duration, yProgress]);
 
   return (
     <div

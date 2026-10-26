@@ -81,7 +81,7 @@ const ACCENT_OPTIONS = [
   { value: 'navy',   label: 'Indigo',     color: '#6366f1' },
 ];
 
-export default function Settings({ theme, setTheme, accent = 'green', setAccent }) {
+export default function Settings({ onExport, theme, setTheme, accent = 'green', setAccent }) {
   const [density, setDensity] = useState(() => document.documentElement.getAttribute('data-density') || 'comfortable');
   const [currency, setCurrency] = useState('USD');
   const [startScreen, setStartScreen] = useState('overview');
@@ -131,10 +131,10 @@ export default function Settings({ theme, setTheme, accent = 'green', setAccent 
               <div style={{ fontSize: 12.5, color: 'var(--text-faint)', marginTop: 2 }}>sam.chen@acmecorp.com</div>
               <div className="pw-settings-plan-badge">
                 <Icon name="crown" size={11} stroke={2}/>
-                Pro Plan — Active
+                Sample Pro profile
               </div>
             </div>
-            <button className="pw-btn" style={{ marginLeft: 'auto', fontSize: 12 }}>Edit profile</button>
+            <button className="pw-btn" style={{ marginLeft: 'auto', fontSize: 12 }} disabled title="Profile editing is not available in the demo">Edit profile (preview)</button>
           </div>
         </SettingsSection>
 
@@ -176,7 +176,7 @@ export default function Settings({ theme, setTheme, accent = 'green', setAccent 
               }}
             />
           </SettingsRow>
-          <SettingsRow label="Start screen" hint="Which screen opens when you sign in">
+          <SettingsRow label="Start screen" hint="Preview only; demo opens on Overview">
             <select
               className="pw-settings-select"
               value={startScreen}
@@ -189,7 +189,7 @@ export default function Settings({ theme, setTheme, accent = 'green', setAccent 
 
         {/* Currency & Region */}
         <SettingsSection icon="globe" title="Currency &amp; Region">
-          <SettingsRow label="Display currency" hint="Affects how amounts are shown throughout the app">
+          <SettingsRow label="Display currency" hint="Preview only; all demo amounts remain in USD">
             <select
               className="pw-settings-select"
               value={currency}
@@ -203,7 +203,7 @@ export default function Settings({ theme, setTheme, accent = 'green', setAccent 
 
         {/* AI Preferences */}
         <SettingsSection icon="sparkles" title="AI Preferences">
-          <SettingsRow label="Assistant name" hint="How Penny introduces herself">
+          <SettingsRow label="Assistant name" hint="Preview only; does not change assistant responses">
             <input
               className="pw-settings-input"
               value={aiName}
@@ -211,14 +211,14 @@ export default function Settings({ theme, setTheme, accent = 'green', setAccent 
               maxLength={20}
             />
           </SettingsRow>
-          <SettingsRow label="Response style" hint="How detailed AI responses are">
+          <SettingsRow label="Response style" hint="Preview only; does not change assistant responses">
             <PillGroup
               options={[{ value: 'brief', label: 'Brief' }, { value: 'detailed', label: 'Detailed' }]}
               value={aiStyle}
               onChange={setAiStyle}
             />
           </SettingsRow>
-          <SettingsRow label="Proactive suggestions" hint="Penny surfaces insights without being asked">
+          <SettingsRow label="Proactive suggestions" hint="Preview only; no background suggestions are sent">
             <Toggle checked={proactive} onChange={setProactive}/>
           </SettingsRow>
         </SettingsSection>
@@ -226,10 +226,10 @@ export default function Settings({ theme, setTheme, accent = 'green', setAccent 
         {/* Notifications */}
         <SettingsSection icon="bell" title="Notifications">
           {[
-            { key: 'budgetAlerts', label: 'Budget alerts', hint: 'Notify when a category nears its limit' },
-            { key: 'goalMilestones', label: 'Goal milestones', hint: 'Celebrate when goals hit 25%, 50%, 75%' },
-            { key: 'weeklySummary', label: 'Weekly summary', hint: 'Sunday digest of your week in review' },
-            { key: 'overspending', label: 'Overspending warnings', hint: 'Alert when you exceed a budget' },
+            { key: 'budgetAlerts', label: 'Budget alerts', hint: 'Preview only; no notifications are sent' },
+            { key: 'goalMilestones', label: 'Goal milestones', hint: 'Preview only; no notifications are sent' },
+            { key: 'weeklySummary', label: 'Weekly summary', hint: 'Preview only; no emails are sent' },
+            { key: 'overspending', label: 'Overspending warnings', hint: 'Preview only; no notifications are sent' },
           ].map(n => (
             <SettingsRow key={n.key} label={n.label} hint={n.hint}>
               <Toggle
@@ -242,14 +242,14 @@ export default function Settings({ theme, setTheme, accent = 'green', setAccent 
 
         {/* Privacy */}
         <SettingsSection icon="shield" title="Privacy &amp; Security">
-          <SettingsRow label="Two-factor authentication" hint="Require 2FA for every sign-in">
-            <Toggle checked={true} onChange={() => {}}/>
+          <SettingsRow label="Two-factor authentication" hint="No real authentication is implemented">
+            <span>Not available in demo</span>
           </SettingsRow>
-          <SettingsRow label="Data sharing" hint="Help improve PennyWise with anonymized usage data">
-            <Toggle checked={false} onChange={() => {}}/>
+          <SettingsRow label="Data sharing" hint="Do not enter personal financial information">
+            <span>No financial data is connected</span>
           </SettingsRow>
           <SettingsRow label="Export your data" hint="Download a full copy of your financial data">
-            <button className="pw-btn" style={{ fontSize: 12 }}>Export CSV</button>
+            <button className="pw-btn" style={{ fontSize: 12 }} onClick={() => onExport()}>Export CSV</button>
           </SettingsRow>
         </SettingsSection>
       </div>

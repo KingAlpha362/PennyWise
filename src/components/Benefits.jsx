@@ -10,7 +10,7 @@ export default function Benefits() {
         <div className="mb-12 reveal text-center">
           <div className="label mb-4">What PennyWise Accomplishes</div>
           <h2 className="font-display text-text" style={{ fontSize: 'clamp(2rem,4vw,3.4rem)', lineHeight: '1.08', letterSpacing: '-0.03em' }}>
-            Real outcomes.<br /><em className="text-accent">Real freedom.</em>
+            Explore your money.<br /><em className="text-accent">With more clarity.</em>
           </h2>
         </div>
 
@@ -23,7 +23,7 @@ export default function Benefits() {
               </div>
               <div>
                 <h3 className="text-[1.15rem] font-bold tracking-[-0.03em] mb-[7px] text-text">See where every single penny goes</h3>
-                <p className="text-text-muted text-[0.85rem] leading-[1.65]">Categorize automatically. View deep visual breakdowns of your daily cash flow effortlessly.</p>
+                <p className="text-text-muted text-[0.85rem] leading-[1.65]">Explore categorized sample transactions and visual breakdowns of fictional cashflow.</p>
               </div>
             </div>
 
@@ -49,7 +49,7 @@ export default function Benefits() {
               </div>
               <div>
                 <h3 className="text-[1.15rem] font-bold tracking-[-0.03em] mb-[7px] text-text">Stay within budget effortlessly</h3>
-                <p className="text-text-muted text-[0.85rem] leading-[1.65]">Smart alerts and real-time tracking ensure you never overspend — without the guilt trips.</p>
+                <p className="text-text-muted text-[0.85rem] leading-[1.65]">Compare sample spending against budgets and see which categories need attention.</p>
               </div>
             </div>
             <div className="mt-auto">
@@ -69,7 +69,7 @@ export default function Benefits() {
                 </div>
                 <h3 className="text-[1.3rem] font-bold tracking-[-0.03em] text-text">Build better financial habits</h3>
               </div>
-              <p className="text-text-muted text-[0.9rem] leading-[1.7] max-w-[480px]">Weekly check-ins, habit streaks, and personalized coaching help you improve consistently over time. The more you engage, the smarter it gets.</p>
+              <p className="text-text-muted text-[0.9rem] leading-[1.7] max-w-[480px]">Explore how progress tracking could support a regular review of your finances. The streak below is illustrative.</p>
             </div>
             <div className="flex-1 flex flex-col md:items-end w-full md:w-auto pt-6 md:pt-0 md:pl-8">
               <div className="text-[0.7rem] text-text-muted mb-[10px] uppercase tracking-[0.15em] font-bold">Weekly streak</div>

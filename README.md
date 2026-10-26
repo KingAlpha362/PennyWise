@@ -1,16 +1,16 @@
-# React + Vite
+# PennyWise
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React 19 + Vite personal finance product demo. Financial data is fictional. No real authentication, bank connections, billing, or live AI service is configured.
 
-Currently, two official plugins are available:
+## Local development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- npm ci
+- npm run dev
+- npm run build
+- npm run preview
+- npm run lint
+- npm test
 
-## React Compiler
+Browser regression suite: install Chromium with npx playwright install chromium, start the preview on port 4173, then run node tests/browser.mjs. The quality workflow runs this suite automatically for pull requests.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+See docs/review-and-validation.md for fixes, validation evidence, and demo limits. See docs/premium-landing-proposal.md for the separate editorial design proposal.
