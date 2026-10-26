@@ -49,7 +49,7 @@ export default function ROICalculator({ onGetStarted }) {
     <section className="bg-bg py-24 px-4 md:px-6">
       <div className="max-w-4xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
@@ -69,7 +69,7 @@ export default function ROICalculator({ onGetStarted }) {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
@@ -147,12 +147,12 @@ export default function ROICalculator({ onGetStarted }) {
               </div>
             </div>
 
-            <div className="bg-card border border-border rounded-xl px-5 py-4 flex items-center justify-between">
+            <div className="bg-card border border-border rounded-xl px-5 py-4 flex flex-wrap gap-4 items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-text">Proposed Pro price: $10/mo</p>
                 <p className="text-xs text-text-muted mt-0.5">No subscription is created in the demo.</p>
               </div>
-              <button onClick={onGetStarted} className="btn-primary text-sm py-2 px-4 whitespace-nowrap">
+              <button onClick={onGetStarted} className="ed-button ed-button-primary text-sm py-2 px-4 whitespace-nowrap">
                 Explore demo
               </button>
             </div>
@@ -160,7 +160,7 @@ export default function ROICalculator({ onGetStarted }) {
         </motion.div>
 
         <motion.p
-          initial={{ opacity: 0 }}
+          initial={false}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           viewport={{ once: true }}

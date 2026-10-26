@@ -1,22 +1,24 @@
-# PennyWise editorial landing design
+# PennyWise — richer product studio revision
 
-## Implemented direction
+Dark emerald default with a light alternative. Strong sans-serif hero, editorial secondary headings, layered glass art, full-width product showcase, interactive walkthrough and differentiated visual feature panels. Retains honest demo copy and existing USD prices.
 
-The landing page now uses a light-first editorial composition: Newsreader display typography, Inter body/UI type, cool paper surfaces, forest-green actions, and a statement illustration beside the opening copy. The dashboard remains its own design system and loads only when entered.
+## Generated artwork
 
-Palette: paper #F8FAFC, white #FFFFFF, ink #102A2B, emerald #176B54, muted slate #5B6B73, rule #D9E2E5. A scoped dark counterpart is available from the header. No new product claims or integrations are implied.
+Created with the built-in image generation tool. Original PNGs preserved; production copies converted to WebP.
 
-## Experience
+- public/images/emerald-progress.webp — 112,812 bytes. Decorative emerald-glass progress sculpture used in hero and closing section.
+- public/images/kyoto-goal.webp — 410,182 bytes. Generated travel illustration used with a clearly labeled sample savings goal.
 
-- Hero: “Make room for what matters.” with a fictional monthly statement and a working demo action.
-- Product tour: spending → plan → next chapter, controlled by three keyboard-accessible buttons with a live description and matching ledger, budget, or goal illustration.
-- Three concise benefits, followed by factual demo capabilities.
-- Optional savings calculator in an expandable disclosure.
-- Transparent monthly/yearly proposed pricing, concise native FAQ disclosures, closing demo action, and compact footer.
-- A single optional arrival animation on the desktop statement. No continuous decorative motion; reduced-motion preferences are honored.
+### Final prompts
+
+#### Image 1
+
+Use case: stylized-concept. Asset type: premium personal-finance SaaS landing page hero artwork, landscape 3:2. Create an exquisitely rendered sculptural still life: three translucent emerald glass ascending architectural steps, a satin silver sphere balanced on the middle step, a thin luminous mint glass circular arc framing the composition. Symbolizes thoughtful financial progress, not investment returns. Deep midnight teal studio background, directional softbox lighting, precise caustics, subtle reflective floor, cinematic luxury product photography quality, restrained mint and silver, physical glass detail. Composition clustered on right and lower center with clean dark negative space at left, close crop, visually substantial. No text, no letters, no logos, no coins, no currency symbols, no charts, no interface, no watermark.
+
+#### Image 2
+
+Use case: photorealistic-natural. Asset type: aspirational savings-goal image for PennyWise personal finance SaaS. Wide landscape editorial travel photograph of Kyoto Japan: beautiful quiet traditional lane with dark timber machiya houses and a distant pagoda, lush green foliage, early morning mist and soft pale golden sun, intimate human scale, cinematic composition, exquisite natural textures, refined travel magazine photography. No people needed, no text, no logos, no watermark. Rich forest greens, warm stone and muted copper, realistic photographic depth. This is an atmospheric illustrative travel goal image, not a financial claim.
 
 ## Validation
 
-Run npm run lint, npm test, npm run build, and the browser suite documented in README.md. The suite checks 360, 390, 768, 1024, and 1440 px; both landing themes; tour switching; calculator disclosure; pricing actions; menu Escape/focus return; and demo entry, transaction creation, and exit. The available local browser is also used for visual review. GitHub CI is the browser-suite execution environment because local Chromium child-process launch is restricted.
-
-This updates draft PR #2, which also contains the preceding demo fixes. No merge or production deployment is part of this change.
+Production build, lint and seven calculation tests pass locally. Browser coverage checks 360, 390, 768, 1024 and 1440 widths, theme switching, image loading, navigation and demo transaction entry. The normal local test launcher cannot spawn child processes in this environment; calculation tests were run directly and browser coverage runs in GitHub Actions.

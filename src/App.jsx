@@ -6,7 +6,7 @@ import AuthForm from './components/AuthForm';
 
 export default function App() {
   const [appView, setAppView] = useState('landing');
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('dark');
   const mainRef = useRef(null);
   const getStarted = () => setAppView('signup');
 

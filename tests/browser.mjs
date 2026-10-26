@@ -12,8 +12,13 @@ try {
     await page.getByRole('heading', { name: /Make room for\s*what matters\./ }).waitFor();
     assert.equal(await page.locator('a[href="#"]').count(), 0);
     await page.evaluate(() => document.fonts.ready);
-    await page.screenshot({ path: 'test-results/landing-' + width + '-light.png', fullPage: true });
+    await page.screenshot({ path: 'test-results/landing-' + width + '-initial-dark.png', fullPage: true });
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    await page.locator('.pw-feature-goal').scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => [...document.querySelectorAll('.editorial img')].every(img => img.complete && img.naturalWidth > 0));
+    await page.getByRole('button', { name: 'Open interactive demo', exact: true }).click();
+    await page.getByRole('heading', { name: 'Explore PennyWise', exact: true }).waitFor();
+    await page.getByRole('button', { name: 'Back to PennyWise' }).click();
     if (width < 1024) {
       await page.getByRole('button', { name: 'Open menu', exact: true }).click();
       await page.keyboard.press('Escape');
@@ -21,10 +26,10 @@ try {
       assert.ok(await page.getByRole('button', { name: 'Open menu', exact: true }).evaluate(el => el === document.activeElement));
     }
     await page.getByRole('button', { name: 'Toggle landing theme', exact: true }).click();
-    assert.equal(await page.locator('.editorial').getAttribute('data-landing-theme'), 'dark');
-    await page.screenshot({ path: 'test-results/landing-' + width + '-dark.png', fullPage: true });
-    await page.getByRole('button', { name: 'Toggle landing theme', exact: true }).click();
     assert.equal(await page.locator('.editorial').getAttribute('data-landing-theme'), 'light');
+    await page.screenshot({ path: 'test-results/landing-' + width + '-light.png', fullPage: true });
+    await page.getByRole('button', { name: 'Toggle landing theme', exact: true }).click();
+    assert.equal(await page.locator('.editorial').getAttribute('data-landing-theme'), 'dark');
     await page.getByRole('button', { name: 'Yearly', exact: true }).click();
     assert.equal(await page.getByRole('button', { name: 'Yearly', exact: true }).getAttribute('aria-pressed'), 'true');
     for (const name of ['Explore Starter demo', 'Explore Pro demo']) {
