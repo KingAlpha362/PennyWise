@@ -50,7 +50,7 @@ try {
     await page.getByText('Regression coffee', { exact: true }).waitFor();
     if (width < 768) await page.getByRole('button', { name: 'Open menu', exact: true }).click();
     await page.getByRole('button', { name: 'Sign out', exact: true }).click();
-    await page.getByRole('heading', { name: 'Make room forwhat matters.' }).waitFor();
+    await page.getByRole('heading', { name: /Make room for\s*what matters\./ }).waitFor();
     assert.deepEqual(errors, []);
     await page.close();
     console.log('Passed viewport ' + width);

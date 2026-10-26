@@ -1,6 +1,6 @@
 # PennyWise: premium editorial landing proposal
 
-This proposal is separate from the functional fixes. The editorial redesign has not been implemented.
+This proposal guided the editorial landing redesign now implemented in draft PR #2. See landing-design.md for the delivered experience. The effort estimates below are retained as the original planning record.
 
 ## Direction
 
