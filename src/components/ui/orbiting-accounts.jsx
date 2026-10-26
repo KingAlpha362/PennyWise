@@ -1,3 +1,4 @@
+import { useReducedMotion } from 'framer-motion';
 "use client"
 import { useEffect, useState, useRef, useCallback, memo  } from 'react';
 import { Landmark, CreditCard, TrendingUp, PiggyBank, Wallet, Bitcoin, ArrowRightLeft } from 'lucide-react';
@@ -168,9 +169,10 @@ export default function OrbitingAccounts() {
     return () => observer.disconnect();
   }, []);
 
+  const reducedMotion = useReducedMotion();
   // rAF animation loop
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || reducedMotion) return;
     let id;
     let last = performance.now();
     const tick = (now) => {
@@ -180,7 +182,7 @@ export default function OrbitingAccounts() {
     };
     id = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(id);
-  }, [isPaused]);
+  }, [isPaused, reducedMotion]);
 
   // Pause on hover OR touch (whole container)
   const handleTouchStart = useCallback(() => setIsPaused(true), []);

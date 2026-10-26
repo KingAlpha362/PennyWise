@@ -6,29 +6,29 @@ const steps = [
   {
     icon: Link2,
     num: '01',
-    title: 'Link your accounts',
-    desc: 'Securely connect your banks, credit cards, and investment accounts in seconds using our Plaid integration.',
+    title: 'Explore sample accounts',
+    desc: 'Browse fictional bank, card, and investment accounts without sharing credentials.',
     delay: 0.1,
   },
   {
     icon: Sparkles,
     num: '02',
-    title: 'Let AI analyze',
-    desc: 'Our machine learning models categorize your spending, identify subscriptions, and find savings opportunities.',
+    title: 'Review sample insights',
+    desc: 'Explore categorized transactions, sample subscriptions, and a local rule-based assistant.',
     delay: 0.2,
   },
   {
     icon: TrendingUp,
     num: '03',
-    title: 'Build wealth',
-    desc: 'Follow the predictive allocation routines to crush debt, hit savings goals, and grow your net worth automatically.',
+    title: 'Try a savings goal',
+    desc: 'Create a sample goal and record a contribution to see how progress tracking works.',
     delay: 0.3,
   },
 ];
 
 export default function HowItWorks() {
   return (
-    <section className="bg-[var(--bg-subtle)] py-24 relative overflow-hidden">
+    <section id="how-it-works" className="bg-[var(--bg-subtle)] py-24 relative overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
           <div className="flex justify-center">
@@ -40,7 +40,7 @@ export default function HowItWorks() {
             Three steps to financial clarity
           </h2>
           <p className="text-text-muted text-lg">
-            We've completely simplified the wealth building process. Set it up once, and let the system do the heavy lifting.
+            Explore the product concept with fictional financial data.
           </p>
         </div>
 
@@ -94,7 +94,7 @@ export default function HowItWorks() {
         >
           <div className="text-center mb-8">
             <h3 className="text-2xl font-extrabold text-text">All your assets. One ecosystem.</h3>
-            <p className="text-text-muted mt-2">PennyWise continuously syncs with your institutions.</p>
+            <p className="text-text-muted mt-2">An illustration of account types; no institutions are connected.</p>
           </div>
           <OrbitingAccounts />
         </motion.div>

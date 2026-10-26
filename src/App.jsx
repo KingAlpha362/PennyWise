@@ -1,107 +1,65 @@
-import { useEffect, useLayoutEffect } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { MotionConfig, useReducedMotion } from 'framer-motion';
 import { Header } from './components/ui/header-2';
 import Hero from './components/Hero';
-import Press from './components/Press';
-import Stats from './components/Stats';
 import Features from './components/Features';
 import Benefits from './components/Benefits';
 import DashboardPreview from './components/DashboardPreview';
-import Testimonials from './components/Testimonials';
 import Pricing from './components/Pricing';
 import HowItWorks from './components/HowItWorks';
 import SecurityIntegrations from './components/SecurityIntegrations';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
-import ComparisonTable from './components/ComparisonTable';
 import ROICalculator from './components/ROICalculator';
 import FAQ from './components/FAQ';
-import DashboardApp from './components/DashboardApp';
+const DashboardApp = lazy(() => import('./components/DashboardApp'));
 import AuthForm from './components/AuthForm';
-import { useState } from 'react';
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function App() {
-  const [appView, setAppView] = useState('landing'); // landing, dashboard, signin, signup
+  const [appView, setAppView] = useState('landing');
+  const [theme, setTheme] = useState('dark');
+  const mainRef = useRef(null);
+  const reducedMotion = useReducedMotion();
+  const getStarted = () => setAppView('signup');
 
   useLayoutEffect(() => {
-    if (appView !== 'dashboard') {
-      document.documentElement.classList.add('dark');
-    }
-  }, [appView]);
-
-  useGSAP(() => {
-    // GSAP Scroll reveal
-    ScrollTrigger.batch('.reveal', {
-      onEnter: (elements) => {
-        gsap.to(elements, {
-          opacity: 1,
-          y: 0,
-          stagger: 0.1,
-          duration: 0.8,
-          ease: "power3.out",
-          overwrite: true
-        });
-      },
-      once: true
-    });
-  });
+    if (appView !== 'dashboard') document.documentElement.classList.toggle('dark', theme === 'dark');
+  }, [appView, theme]);
 
   useEffect(() => {
-    // Progress fills observer
-    const progObserver = new IntersectionObserver((entries, io) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          const el = e.target;
-          const width = el.getAttribute('data-w');
-          if (width) {
-            el.style.width = width + '%';
-          }
-          io.unobserve(el);
-        }
-      });
-    }, { threshold: 0.5 });
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    mainRef.current?.focus({ preventScroll: true });
+  }, [appView]);
 
-    document.querySelectorAll('.prog-fill[data-w]').forEach((el) => progObserver.observe(el));
+  useEffect(() => {
+    if (appView !== 'landing') return;
+    const fills = document.querySelectorAll('.prog-fill[data-w]');
+    const fill = el => { el.style.width = Math.max(0, Math.min(100, Number(el.dataset.w))) + '%'; };
+    if (reducedMotion || !('IntersectionObserver' in window)) { fills.forEach(fill); return; }
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) { fill(entry.target); observer.unobserve(entry.target); }
+    }), { threshold: 0.5 });
+    fills.forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, [appView, reducedMotion]);
 
-    return () => {
-      progObserver.disconnect();
-    };
-  }, []);
-
-  if (appView === 'dashboard') {
-    return <DashboardApp onSignOut={() => setAppView('landing')} />;
-  }
-
-  if (appView === 'signin') {
-    return <AuthForm initialMode="signin" onAuthSuccess={() => setAppView('dashboard')} onBack={() => setAppView('landing')} />;
-  }
-
-  if (appView === 'signup') {
-    return <AuthForm initialMode="signup" onAuthSuccess={() => setAppView('dashboard')} onBack={() => setAppView('landing')} />;
-  }
-
-  return (
-    <div className="bg-bg text-text min-h-screen">
-      <Header onSignIn={() => setAppView('signin')} />
-      <Hero onGetStarted={() => setAppView('signup')} />
-      <Press />
-      <Stats />
-      <HowItWorks />
-      <ROICalculator />
-      <SecurityIntegrations />
-      <Features />
-      <Benefits />
-      <ComparisonTable />
-      <DashboardPreview />
-      <Testimonials />
-      <Pricing />
-      <FAQ />
-      <CTA onGetStarted={() => setAppView('signup')} />
-      <Footer />
-    </div>
-  );
+  return <MotionConfig reducedMotion="user">
+    <main ref={mainRef} tabIndex={-1} className="app-root min-h-screen bg-bg text-text">
+      {appView === 'dashboard' ? <Suspense fallback={<p role="status" className="p-8">Loading demo dashboard…</p>}><DashboardApp onSignOut={() => setAppView('landing')} /></Suspense> :
+      appView === 'signin' || appView === 'signup' ? <AuthForm initialMode={appView} onAuthSuccess={() => setAppView('dashboard')} onBack={() => setAppView('landing')} /> : <>
+        <Header onSignIn={() => setAppView('signin')} onGetStarted={getStarted} theme={theme} onToggleTheme={() => setTheme(t => t === 'dark' ? 'light' : 'dark')} />
+        <Hero onGetStarted={getStarted} />
+        <HowItWorks />
+        <ROICalculator onGetStarted={getStarted} />
+        <SecurityIntegrations />
+        <Features />
+        <Benefits />
+        <DashboardPreview />
+        <Pricing onGetStarted={getStarted} />
+        <FAQ />
+        <CTA onGetStarted={getStarted} />
+        <Footer />
+      </>}
+    </main>
+  </MotionConfig>;
 }

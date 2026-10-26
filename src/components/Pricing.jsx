@@ -11,35 +11,35 @@ import { motion } from "framer-motion";
 const plans = [
   {
     name: "Starter",
-    description: "Great for individuals getting started with personal finance.",
+    description: "A preview of the proposed entry plan.",
     price: 0,
     yearlyPrice: 0,
-    buttonText: "Try Free for 7 Days",
+    buttonText: "Explore Starter demo",
     buttonVariant: "outline",
     includes: [
       "Free features:",
-      "Up to 2 connected accounts",
+      "Up to 2 sample accounts",
       "Basic budget tracking",
-      "Standard encryption",
-      "Community support",
+      "Sample transactions",
+      "Budget overview",
     ],
   },
   {
     name: "Pro",
-    description: "Full AI-powered intelligence. Average user saves $1,872/yr — 18× what Pro costs.",
+    description: "A preview of the proposed advanced plan.",
     price: 10,
     yearlyPrice: 100,
-    buttonText: "Start 7-day free trial",
+    buttonText: "Explore Pro demo",
     buttonVariant: "default",
     popular: true,
     includes: [
       "Everything in Starter, plus:",
-      "Unlimited connected accounts",
-      "Penny AI financial assistant",
+      "Multiple sample accounts",
+      "Local demo assistant",
       "Smart budget & goal tracking",
-      "Subscription detection & alerts",
-      "Priority 24/7 support",
-      "SOC 2 + GDPR certified",
+      "Sample subscription overview",
+      "Illustrative cashflow charts",
+      "Session-only demo changes",
     ],
   },
 ];
@@ -57,6 +57,7 @@ const PricingSwitch = ({ onSwitch }) => {
       <div className="relative z-10 mx-auto flex w-fit rounded-full bg-bg border border-border p-1 shadow-sm">
         <button
           onClick={() => handleSwitch("0")}
+          aria-pressed={selected === "0"}
           className={cn(
             "relative z-10 w-fit h-10 rounded-full sm:px-6 px-3 sm:py-2 py-1 font-medium transition-colors cursor-pointer",
             selected === "0" ? "text-white" : "text-text-muted",
@@ -74,6 +75,7 @@ const PricingSwitch = ({ onSwitch }) => {
 
         <button
           onClick={() => handleSwitch("1")}
+          aria-pressed={selected === "1"}
           className={cn(
             "relative z-10 w-fit h-10 flex-shrink-0 rounded-full sm:px-6 px-3 sm:py-2 py-1 font-medium transition-colors cursor-pointer",
             selected === "1" ? "text-white" : "text-text-muted",
@@ -93,7 +95,7 @@ const PricingSwitch = ({ onSwitch }) => {
   );
 };
 
-export default function Pricing() {
+export default function Pricing({ onGetStarted }) {
   const [isYearly, setIsYearly] = useState(false);
   const pricingRef = useRef(null);
 
@@ -167,7 +169,7 @@ export default function Pricing() {
           customVariants={revealVariants}
           className="text-text-muted max-w-lg mx-auto"
         >
-          Simple, transparent pricing. Users save an average of $156/month — Pro pays for itself in days.
+          Proposed pricing in USD. Explore either plan in the free demo; no checkout, trial, or subscription is started.
         </TimelineContent>
 
         <TimelineContent
@@ -220,6 +222,7 @@ export default function Pricing() {
 
               <CardContent className="pt-0 flex-1 flex flex-col">
                 <button
+                  onClick={onGetStarted}
                   className={cn(
                     "w-full mb-8 text-center active:scale-95 cursor-pointer shadow-sm",
                     plan.popular

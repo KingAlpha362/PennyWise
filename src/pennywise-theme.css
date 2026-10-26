@@ -5,22 +5,27 @@
   --font-body:    'Inter', system-ui, sans-serif;  
 }
 
-body {  
+:where(html:not([data-theme])) body {  
   font-family: var(--font-body);  
   font-weight: 400;  
   -webkit-font-smoothing: antialiased;  
   -moz-osx-font-smoothing: grayscale;  
 }
 
-h1, h2, h3, h4, h5, h6,  
-.hero-title,  
-.section-heading,  
-.card-heading {  
+:where(html:not([data-theme])) h1,
+:where(html:not([data-theme])) h2,
+:where(html:not([data-theme])) h3,
+:where(html:not([data-theme])) h4,
+:where(html:not([data-theme])) h5,
+:where(html:not([data-theme])) h6,
+:where(html:not([data-theme])) .hero-title,
+:where(html:not([data-theme])) .section-heading,
+:where(html:not([data-theme])) .card-heading {  
   font-family: var(--font-heading);  
 }
 
-.hero-title,  
-h1 {  
+:where(html:not([data-theme])) .hero-title,
+:where(html:not([data-theme])) h1 {  
   font-family: var(--font-heading);  
   font-weight: 800;  
   font-size: clamp(2.2rem, 5vw, 3.8rem);  
@@ -28,7 +33,7 @@ h1 {
   letter-spacing: -0.025em;  
 }
 
-h2 {  
+:where(html:not([data-theme])) h2 {  
   font-family: var(--font-heading);  
   font-weight: 700;  
   font-size: clamp(1.5rem, 4vw, 3rem);  
@@ -36,21 +41,25 @@ h2 {
   letter-spacing: -0.015em;  
 }
 
-h3 {  
+:where(html:not([data-theme])) h3 {  
   font-family: var(--font-heading);  
   font-weight: 600;  
   font-size: clamp(1.25rem, 2.5vw, 1.75rem);  
   line-height: 1.2;  
 }
 
-p, li, td, input, button {  
+:where(html:not([data-theme])) p,
+:where(html:not([data-theme])) li,
+:where(html:not([data-theme])) td,
+:where(html:not([data-theme])) input,
+:where(html:not([data-theme])) button {  
   font-family: var(--font-body);  
   font-size: 1rem;  
   line-height: 1.7;  
 }
 
-.label-overline,  
-.as-featured-in {  
+:where(html:not([data-theme])) .label-overline,
+:where(html:not([data-theme])) .as-featured-in {  
   font-family: var(--font-body);  
   font-size: 0.75rem;        
   font-weight: 500;  
@@ -58,7 +67,7 @@ p, li, td, input, button {
   text-transform: uppercase;  
 }
 
-.pricing-feature-list li {  
+:where(html:not([data-theme])) .pricing-feature-list li {  
   font-size: 0.875rem;        
   font-weight: 400;  
   line-height: 1.6;  
@@ -157,16 +166,16 @@ p, li, td, input, button {
 
 
 
-body {  
+:where(html:not([data-theme])) body {  
   background-color: var(--color-bg-primary);  
   color: var(--color-text-primary);  
 }
 
-.card,
-.feature-card,
-.testimonial-card,
-.pricing-card,
-.glass-card {
+:where(html:not([data-theme])) .card,
+:where(html:not([data-theme])) .feature-card,
+:where(html:not([data-theme])) .testimonial-card,
+:where(html:not([data-theme])) .pricing-card,
+:where(html:not([data-theme])) .glass-card {
   background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
   border: 1px solid var(--color-border-light);
   box-shadow: var(--shadow-card);
@@ -176,11 +185,11 @@ body {
   overflow: hidden;
 }
 
-.card::after,  
-.feature-card::after,  
-.testimonial-card::after,  
-.pricing-card::after,
-.glass-card::after {
+:where(html:not([data-theme])) .card::after,
+:where(html:not([data-theme])) .feature-card::after,
+:where(html:not([data-theme])) .testimonial-card::after,
+:where(html:not([data-theme])) .pricing-card::after,
+:where(html:not([data-theme])) .glass-card::after {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -190,23 +199,23 @@ body {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .card:hover,
-  .feature-card:hover,
-  .pricing-card:hover,
-  .glass-card:hover {
+:where(html:not([data-theme])) .card:hover,
+:where(html:not([data-theme])) .feature-card:hover,
+:where(html:not([data-theme])) .pricing-card:hover,
+:where(html:not([data-theme])) .glass-card:hover {
     box-shadow: var(--shadow-card-hover);
     transform: translateY(-2px);
   }
 }
 
-.hero-image,  
-.hero-mockup {  
+:where(html:not([data-theme])) .hero-image,
+:where(html:not([data-theme])) .hero-mockup {  
   border: 1px solid var(--color-border-light);  
   box-shadow: var(--shadow-hero-image);  
   border-radius: 12px;  
 }
 
-.btn-primary {  
+:where(html:not([data-theme])) .btn-primary {  
   background: linear-gradient(180deg, var(--color-success) 0%, var(--color-brand) 100%);  
   color: var(--color-text-on-brand);  
   font-family: var(--font-body);  
@@ -222,14 +231,14 @@ body {
   transition: background 200ms var(--ease-out), box-shadow 200ms var(--ease-out), transform 160ms var(--ease-out);
 }
 @media (hover: hover) and (pointer: fine) {
-  .btn-primary:hover {
+:where(html:not([data-theme])) .btn-primary:hover {
     background: linear-gradient(180deg, var(--color-brand) 0%, var(--color-brand-hover) 100%);
     box-shadow:
       0 6px 14px rgba(21, 128, 61, 0.35),
       inset 0 1px 1px rgba(255, 255, 255, 0.4);
   }
 }
-.btn-primary:active {
+:where(html:not([data-theme])) .btn-primary:active {
   transform: scale(0.97);
   box-shadow:
     0 1px 2px rgba(21, 128, 61, 0.2),
@@ -237,7 +246,7 @@ body {
   transition-duration: 100ms;
 }
 
-.btn-secondary {  
+:where(html:not([data-theme])) .btn-secondary {  
   background: linear-gradient(180deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);  
   color: var(--color-text-primary);  
   font-family: var(--font-body);  
@@ -250,43 +259,43 @@ body {
   transition: background 200ms var(--ease-out), box-shadow 200ms var(--ease-out), border-color 200ms var(--ease-out), transform 160ms var(--ease-out);
 }
 @media (hover: hover) and (pointer: fine) {
-  .btn-secondary:hover {
+:where(html:not([data-theme])) .btn-secondary:hover {
     background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-border-light) 100%);
     box-shadow: var(--shadow-card-hover);
     border-color: var(--color-text-tertiary);
   }
 }
-.btn-secondary:active {
+:where(html:not([data-theme])) .btn-secondary:active {
   transform: scale(0.97);
   box-shadow: var(--shadow-skeuo-pressed);
   background: var(--color-bg-secondary);
   transition-duration: 100ms;
 }
 
-.stat-value {  
+:where(html:not([data-theme])) .stat-value {  
   color: var(--color-stat-value);  
   font-family: var(--font-heading);  
   font-weight: 800;  
 }
 
-.stat-card {  
+:where(html:not([data-theme])) .stat-card {  
   background: var(--color-stat-bg);  
   border: 1px solid var(--color-border-brand);  
   border-radius: 10px;  
   padding: 1rem 1.25rem;  
 }
 
-.testimonials-section {  
+:where(html:not([data-theme])) .testimonials-section {  
   background: var(--color-bg-secondary);  
 }
 
-.pricing-card--pro {  
+:where(html:not([data-theme])) .pricing-card--pro {  
   border: 2px solid var(--color-brand);  
   position: relative;  
 }
 
-.pricing-card--pro::before {  
-  content: 'Most popular';  
+:where(html:not([data-theme])) .pricing-card--pro::before {  
+  content: 'Pro preview';  
   position: absolute;  
   top: -13px;  
   left: 50%;  
@@ -306,12 +315,12 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {  
-  body {  
+:where(html:not([data-theme])) body {  
     font-weight: 450;           
   }  
 }
 
-.navbar {  
+:where(html:not([data-theme])) .navbar {  
   position: fixed;  
   top: 0;  
   z-index: 100;  
@@ -319,7 +328,7 @@ body {
   transition: background 0.2s ease, border-bottom 0.2s ease;  
 }
 
-.navbar.scrolled {  
+:where(html:not([data-theme])) .navbar.scrolled {  
   background: var(--color-bg-primary);  
   border-bottom: 1px solid var(--color-border-light);  
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
@@ -342,32 +351,32 @@ body {
   }
 }
 
-section {  
+:where(html:not([data-theme])) section {  
   padding: 5rem 0;            
 }
 
 @media (max-width: 768px) {
-  section {
+:where(html:not([data-theme])) section {
     padding: 3.5rem 0;
   }
 
-  .container {
+:where(html:not([data-theme])) .container {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  section {
+:where(html:not([data-theme])) section {
     padding: 2.5rem 0;
   }
-  .container {
+:where(html:not([data-theme])) .container {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
   }
 }
 
-/* Mobile-first utility for stacking */
+:where(html:not([data-theme])) /* Mobile-first utility for stacking */
 .mobile-stack {
   display: flex;
   flex-direction: column;
@@ -375,8 +384,15 @@ section {
 }
 
 @media (min-width: 768px) {
-  .mobile-stack {
+:where(html:not([data-theme])) .mobile-stack {
     flex-direction: row;
   }
 }
 
+
+/* Keep landing surfaces and typography from overriding dashboard tokens. */
+html:not([data-theme]) {
+  --color-bg-primary: var(--bg);
+  --color-bg-secondary: var(--bg-card);
+  --color-bg-tertiary: var(--bg-subtle);
+}

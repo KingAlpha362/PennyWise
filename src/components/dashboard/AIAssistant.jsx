@@ -122,13 +122,15 @@ function MessageBubble({ msg, isLast, onTypingDone }) {
   const isUser = msg.role === 'user';
   const [done, setDone] = useState(isUser || !isLast);
   const [copied, setCopied] = useState(false);
+  const copyTimer = useRef(null);
+  useEffect(() => () => clearTimeout(copyTimer.current), []);
 
   const handleDone = () => { setDone(true); onTypingDone?.(); };
   const handleCopy = () => {
-    navigator.clipboard.writeText(msg.text).then(() => {
+    navigator.clipboard?.writeText(msg.text).then(() => {
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+      copyTimer.current = setTimeout(() => setCopied(false), 2000);
+    }).catch(() => setCopied(false));
   };
 
   return (
@@ -169,13 +171,21 @@ function MessageBubble({ msg, isLast, onTypingDone }) {
    ============================================================ */
 export default function AIAssistant({ data }) {
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
+  const [input, setInputValue] = useState('');
+  const setInput = value => {
+    setInputValue(value);
+    const show = value.startsWith('/') && !value.includes(' ');
+    setShowCmdPalette(show);
+    setActiveCmd(show && value.length > 1 ? COMMANDS.findIndex(c => c.label.toLowerCase().startsWith(value.slice(1).toLowerCase())) : -1);
+  };
   const [isTyping, setIsTyping] = useState(false);
   const [attachments, setAttachments] = useState([]);
   const [showCmdPalette, setShowCmdPalette] = useState(false);
   const [activeCmd, setActiveCmd] = useState(-1);
   const [inputFocused, setInputFocused] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const responseTimer = useRef(null);
+  useEffect(() => () => clearTimeout(responseTimer.current), []);
   const bottomRef = useRef(null);
   const cmdPaletteRef = useRef(null);
   const { textareaRef, adjustHeight } = useAutoResizeTextarea({ minHeight: 52, maxHeight: 180 });
@@ -189,7 +199,7 @@ export default function AIAssistant({ data }) {
     setInput('');
     adjustHeight(true);
     setIsTyping(true);
-    setTimeout(() => {
+    responseTimer.current = setTimeout(() => {
       const response = generateResponse(t, data);
       setMessages(prev => [...prev, { role: 'ai', text: response, time: now() }]);
     }, 600);
@@ -198,20 +208,10 @@ export default function AIAssistant({ data }) {
   const handleTypingDone = () => setIsTyping(false);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    bottomRef.current?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   }, [messages]);
 
-  // Command palette: show when input starts with "/"
-  useEffect(() => {
-    if (input.startsWith('/') && !input.includes(' ')) {
-      setShowCmdPalette(true);
-      const q = input.slice(1).toLowerCase();
-      const match = q ? COMMANDS.findIndex(c => c.label.toLowerCase().startsWith(q)) : -1;
-      setActiveCmd(match);
-    } else {
-      setShowCmdPalette(false);
-    }
-  }, [input]);
+  // Palette state follows input events, avoiding cascading effect updates.
 
   // Mouse tracking for glow effect
   useEffect(() => {
@@ -251,7 +251,7 @@ export default function AIAssistant({ data }) {
   };
 
   const MOCK_FILES = ['receipt_nov.pdf', 'bank_statement.pdf', 'tax_form_2024.pdf', 'invoice.png'];
-  const handleAttach = () => setAttachments(prev => [...prev, MOCK_FILES[prev.length % MOCK_FILES.length]]);
+  const handleAttach = () => setAttachments(prev => [...prev, 'Sample attachment: ' + MOCK_FILES[prev.length % MOCK_FILES.length]]);
 
   const isEmpty = messages.length === 0;
 
@@ -291,7 +291,7 @@ export default function AIAssistant({ data }) {
           <button
             className="pw-btn pw-btn-ghost"
             style={{ padding: '4px 10px', fontSize: 12 }}
-            onClick={() => { setMessages([]); setAttachments([]); }}
+            onClick={() => { clearTimeout(responseTimer.current); setIsTyping(false); setMessages([]); setAttachments([]); }}
           >
             Clear chat
           </button>

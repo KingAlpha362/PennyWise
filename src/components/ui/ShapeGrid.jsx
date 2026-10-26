@@ -1,3 +1,4 @@
+import { useReducedMotion } from 'framer-motion';
 import { useRef, useEffect  } from 'react';
 
 const resolveColor = (colorStr) => {
@@ -18,6 +19,7 @@ const ShapeGrid = ({
   shape = 'square',
   hoverTrailAmount = 5
 }) => {
+  const reducedMotion = useReducedMotion();
   const canvasRef = useRef(null);
   const requestRef = useRef(null);
   const numSquaresX = useRef(0);
@@ -28,6 +30,7 @@ const ShapeGrid = ({
   const cellOpacities = useRef(new Map());
 
   useEffect(() => {
+    if (reducedMotion) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -395,7 +398,7 @@ const ShapeGrid = ({
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [direction, speed, borderColor, hoverFillColor, squareSize, shape, hoverTrailAmount]);
+  }, [reducedMotion, direction, speed, borderColor, hoverFillColor, squareSize, shape, hoverTrailAmount]);
 
   return <canvas ref={canvasRef} className="w-full h-full border-none block"></canvas>;
 };

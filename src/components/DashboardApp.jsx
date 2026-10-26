@@ -1,3 +1,5 @@
+import { summarizeMonth, updateBudgets } from '../lib/demo-finance';
+import DemoDialog from './dashboard/DemoDialog';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import NumberFlow from '@number-flow/react';
 import '../dashboard.css';
@@ -69,18 +71,6 @@ const CASHFLOW = [
   { m: 'Nov', y: 2025, income: 8480, expenses: 4982 },
 ];
 
-const CATEGORY_BREAKDOWN = [
-  { cat: 'rent', amount: 1850, prev: 1850 },
-  { cat: 'groceries', amount: 612.40, prev: 548.20 },
-  { cat: 'dining', amount: 384.18, prev: 421.55 },
-  { cat: 'transport', amount: 218.50, prev: 280.10 },
-  { cat: 'utilities', amount: 187.32, prev: 184.20 },
-  { cat: 'subs', amount: 142.88, prev: 142.88 },
-  { cat: 'shopping', amount: 411.20, prev: 178.40 },
-  { cat: 'entertainment', amount: 89.40, prev: 124.20 },
-  { cat: 'health', amount: 64.00, prev: 0 },
-  { cat: 'fees', amount: 22.40, prev: 12.00 },
-];
 
 const BUDGETS = [
   { cat: 'groceries', spent: 612.40, budget: 700, txns: 14 },
@@ -162,7 +152,7 @@ const INSIGHTS = [
     body: "You've spent $384 on dining this month — your weekly average crept from $68 → $96. Two restaurant dinners account for $252 of that.",
     action: 'Set $90/wk cap', cat: 'dining' },
   { id: 'i2', severity: 'pos', title: 'Subscriptions trimmed $48/mo',
-    body: "PennyWise canceled Disney+ and Headspace after 60 days of zero use. That's $576 a year back in your pocket.",
+    body: "Illustrative scenario: canceling unused Disney+ and Headspace subscriptions could reduce expenses. That's $576 a year back in your pocket.",
     action: 'Review 8 active subs', cat: 'subs' },
   { id: 'i3', severity: 'info', title: 'You can hit "Tokyo trip" by Feb 28',
     body: 'Bumping your weekly contribution from $87 → $110 closes the $2,320 gap five weeks early.',
@@ -260,7 +250,6 @@ function Icon({ name, size = 16, stroke = 1.75, className = '', style = {} }) {
     case 'user': return <svg {...props}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>;
     case 'calendar': return <svg {...props}><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>;
     case 'alert': return <svg {...props}><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>;
-    case 'menu': return <svg {...props}><path d="M4 6h16M4 12h16M4 18h16"/></svg>;
     case 'bar-chart': return <svg {...props}><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="4" width="4" height="17"/><path d="M3 3h18"/></svg>;
     case 'chart-line': return <svg {...props}><path d="M3 17l6-6 4 4 8-8"/></svg>;
     case 'chart-area': return <svg {...props}><path d="M3 17l6-6 4 4 8-8"/><path d="M3 17 9 11l4 4 8-8v12H3z" strokeWidth={0} fill="currentColor" opacity="0.25"/></svg>;
@@ -339,10 +328,9 @@ function Sparkline({ data, width = 120, height = 32, stroke = 'currentColor', fi
   );
 }
 
-function AreaChart({ data, width = 720, height = 240, color, dateFmt = (i) => i, chartType = 'area' }) {
+function AreaChart({ data, width = 720, height = 240, color = 'var(--brand)', dateFmt = (i) => i, chartType = 'area' }) {
   const [hover, setHover] = useState(null);
   const ref = useRef(null);
-  color = color || 'var(--brand)';
   const pad = { t: 14, r: 8, b: 26, l: 50 };
   const w = width - pad.l - pad.r;
   const h = height - pad.t - pad.b;
@@ -781,7 +769,7 @@ function RangeSegment({ range, setRange }) {
   return (
     <div className="pw-segment">
       {['1W','1M','3M','6M','1Y','ALL'].map(r => (
-        <button key={r} className={range === r ? 'active' : ''} onClick={() => setRange(r)}>{r}</button>
+        <button key={r} disabled={r === '6M' || r === '1Y'} title={r === '6M' || r === '1Y' ? 'Only 90 sample days are available' : undefined} className={range === r ? 'active' : ''} onClick={() => setRange(r)}>{r}</button>
       ))}
     </div>
   );
@@ -896,7 +884,7 @@ function MiniGoalCard({ g }) {
   );
 }
 
-function InsightMini({ ins }) {
+function InsightMini({ ins, onOpen }) {
   const colorMap = { warn: 'var(--warn)', pos: 'var(--pos)', info: 'var(--brand)' };
   const iconMap = { warn: 'alert', pos: 'check', info: 'sparkles' };
   return (
@@ -910,7 +898,7 @@ function InsightMini({ ins }) {
         <div style={{ fontSize: 12.5, fontWeight: 600 }}>{ins.title}</div>
       </div>
       <div style={{ fontSize: 11.5, color: 'var(--text-muted)', lineHeight: 1.55 }}>{ins.body}</div>
-      <button className="pw-btn" style={{ alignSelf: 'flex-start', padding: '4px 10px', fontSize: 11.5, marginTop: 2 }}>
+      <button onClick={onOpen} className="pw-btn" style={{ alignSelf: 'flex-start', padding: '4px 10px', fontSize: 11.5, marginTop: 2 }}>
         {ins.action} <Icon name="chevron-right" size={11}/>
       </button>
     </div>
@@ -920,23 +908,25 @@ function InsightMini({ ins }) {
 /* ============================================================
    SCREENS
    ============================================================ */
-function Overview({ range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExport }) {
+function Overview({ goals: GOALS, budgets: BUDGETS, range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExport }) {
   const [netWorthType, setNetWorthType] = useState('area');
   const [spendingType, setSpendingType] = useState('donut');
   const latest = NET_WORTH[NET_WORTH.length - 1].v;
   const prior = NET_WORTH[NET_WORTH.length - 31].v;
   const monthDelta = latest - prior;
   const monthPct = (monthDelta / prior) * 100;
-  const thisMonth = CASHFLOW[CASHFLOW.length - 1];
+  const thisMonth = summarizeMonth(txns);
+  const selectedDays = ({ '1W': 7, '1M': 30, '3M': 90 })[range] || NET_WORTH.length;
+  const netWorthData = NET_WORTH.slice(-selectedDays);
   const netSavings = thisMonth.income - thisMonth.expenses;
-  const savingsRate = (netSavings / thisMonth.income) * 100;
+  const savingsRate = thisMonth.income > 0 ? (netSavings / thisMonth.income) * 100 : 0;
   const recentTxns = (txns || TRANSACTIONS).slice(0, 7);
   const todayTotal = (txns || TRANSACTIONS).filter(t => t.date === '2025-11-25' && t.amount < 0).reduce((s, t) => s + t.amount, 0);
-  const aiSummary = buildAISummary(AI_DATA);
+  const aiSummary = buildAISummary({ ...AI_DATA, BUDGETS, GOALS, TRANSACTIONS: txns });
 
   // Financial health score (4 factors × 25 pts each)
   const budgetOver = BUDGETS.filter(b => b.spent > b.budget).length;
-  const savingsFactor = Math.round(Math.min(1, savingsRate / 25) * 25);
+  const savingsFactor = Math.round(Math.max(0, Math.min(1, savingsRate / 25)) * 25);
   const budgetFactor = Math.round((1 - budgetOver / BUDGETS.length) * 25);
   const cc1 = ACCOUNTS.find(a => a.id === 'cc1');
   const cc2 = ACCOUNTS.find(a => a.id === 'cc2');
@@ -1030,7 +1020,7 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExp
           <div className="pw-card-head">
             <div>
               <div className="pw-card-title">Net worth</div>
-              <div className="pw-card-sub">Last 90 days · all accounts</div>
+              <div className="pw-card-sub">Last {netWorthData.length} sample days · all accounts</div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <ChartTypePicker
@@ -1045,10 +1035,10 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExp
             </div>
           </div>
           <div className="pw-card-body" style={{ padding: '4px 8px 14px' }}>
-            <AreaChart data={NET_WORTH} height={240} chartType={netWorthType}
+            <AreaChart data={netWorthData} height={240} chartType={netWorthType}
                        dateFmt={(i) => {
                          const dt = new Date(2025, 7, 27);
-                         dt.setDate(dt.getDate() + i);
+                         dt.setDate(dt.getDate() + NET_WORTH.length - netWorthData.length + i);
                          return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
                        }}/>
           </div>
@@ -1071,8 +1061,8 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExp
           </div>
           <div className="pw-card-body" style={{ paddingTop: 4 }}>
             {spendingType === 'donut'
-              ? <Donut data={CATEGORY_BREAKDOWN} size={170} thickness={20}/>
-              : <SpendingBars data={CATEGORY_BREAKDOWN}/>
+              ? <Donut data={thisMonth.breakdown} size={170} thickness={20}/>
+              : <SpendingBars data={thisMonth.breakdown}/>
             }
           </div>
         </div>
@@ -1143,7 +1133,7 @@ function Overview({ range, setRange, txns, setScreen, onAddTxn, onAddGoal, onExp
         </div>
         <div className="pw-card-body">
           <div className="pw-grid-3" style={{ gap: 12 }}>
-            {INSIGHTS.slice(0, 3).map(ins => <InsightMini key={ins.id} ins={ins}/>)}
+            {INSIGHTS.slice(0, 3).map(ins => <InsightMini key={ins.id} ins={ins} onOpen={() => setScreen('insights')}/>)}
           </div>
         </div>
       </div>
@@ -1160,7 +1150,7 @@ function Transactions({ txns, onAddTxn, onExport }) {
   const [selected, setSelected] = useState(new Set());
 
   const filtered = useMemo(() => allTxns.filter(t => {
-    if (q && !t.merchant.toLowerCase().includes(q.toLowerCase()) && !(t.note || '').toLowerCase().includes(q.toLowerCase())) return false;
+    if (q && !t.merchant.toLowerCase().includes(q.toLowerCase()) && !(t.note || '').toLowerCase().includes(q.toLowerCase()) && !String(t.amount).includes(q)) return false;
     if (activeCats.size && !activeCats.has(t.cat)) return false;
     if (activeAcct !== 'all' && t.account !== activeAcct) return false;
     return true;
@@ -1186,7 +1176,7 @@ function Transactions({ txns, onAddTxn, onExport }) {
     next.has(c) ? next.delete(c) : next.add(c);
     setActiveCats(next);
   };
-  const toggleAll = () => setSelected(selected.size === filtered.length ? new Set() : new Set(filtered.map(t => t.id)));
+  const toggleAll = () => setSelected(filtered.length > 0 && filtered.every(t => selected.has(t.id)) ? new Set() : new Set(filtered.map(t => t.id)));
   const toggleOne = (id) => {
     const next = new Set(selected);
     next.has(id) ? next.delete(id) : next.add(id);
@@ -1243,8 +1233,8 @@ function Transactions({ txns, onAddTxn, onExport }) {
             <Icon name="check" size={14} style={{ color: 'var(--brand)' }}/>
             <span style={{ fontSize: 13, fontWeight: 500 }}>{selected.size} selected</span>
             <span style={{ flex: 1 }}/>
-            <button className="pw-btn" style={{ padding: '4px 10px', fontSize: 12 }} onClick={() => alert(`Categorize ${selected.size} transactions`)}>Bulk categorize</button>
-            <button className="pw-btn" style={{ padding: '4px 10px', fontSize: 12 }} onClick={() => alert(`Tag ${selected.size} transactions`)}>Tag</button>
+            <button className="pw-btn" style={{ padding: '4px 10px', fontSize: 12 }} onClick={() => alert(`Categorize ${selected.size} transactions`)}>Bulk categorize (preview)</button>
+            <button className="pw-btn" style={{ padding: '4px 10px', fontSize: 12 }} onClick={() => alert(`Tag ${selected.size} transactions`)}>Tag (preview)</button>
             <button className="pw-btn" style={{ padding: '4px 10px', fontSize: 12 }} onClick={() => onExport?.(allTxns.filter(t => selected.has(t.id)))}>Export</button>
             <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 8px', fontSize: 12 }} onClick={() => setSelected(new Set())}><Icon name="x" size={12}/></button>
           </div>
@@ -1252,7 +1242,7 @@ function Transactions({ txns, onAddTxn, onExport }) {
 
         <div className="pw-txn-table">
         <div className="pw-row pw-row-head" style={{ gridTemplateColumns: '32px 84px 28px 1fr 140px 100px 110px', gap: 12 }}>
-          <input type="checkbox" checked={selected.size === filtered.length && filtered.length > 0} onChange={toggleAll}/>
+          <input type="checkbox" checked={filtered.length > 0 && filtered.every(t => selected.has(t.id)) && filtered.length > 0} onChange={toggleAll}/>
           <span>Date</span><span/><span>Merchant</span><span>Category</span><span>Account</span>
           <span style={{ textAlign: 'right' }}>Amount</span>
         </div>
@@ -1315,7 +1305,7 @@ function Transactions({ txns, onAddTxn, onExport }) {
 }
 
 /* ─── Budgets ─── */
-function Budgets({ onAddBudget }) {
+function Budgets({ budgets: BUDGETS, onAddBudget, onApplySuggestion }) {
   const totalBudget = BUDGETS.reduce((s, b) => s + b.budget, 0);
   const totalSpent = BUDGETS.reduce((s, b) => s + b.spent, 0);
   const over = BUDGETS.filter(b => b.spent > b.budget);
@@ -1333,7 +1323,7 @@ function Budgets({ onAddBudget }) {
           <h1 style={{ margin: '4px 0 0', fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, letterSpacing: '-0.02em' }}>Budgets</h1>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button className="pw-btn"><Icon name="calendar" size={14}/>Nov 2025</button>
+          <button className="pw-btn" disabled title="The demo uses a fixed sample period"><Icon name="calendar" size={14}/>Nov 2025 (sample period)</button>
           <button className="pw-btn pw-btn-primary" onClick={onAddBudget}><Icon name="plus" size={14}/>New budget</button>
         </div>
       </div>
@@ -1386,7 +1376,7 @@ function Budgets({ onAddBudget }) {
           </div>
           {suggestionApplied
             ? <span className="pw-tag pw-chip-pos" style={{ fontSize: 12 }}><Icon name="check" size={11}/>Applied</span>
-            : <button className="pw-btn" style={{ padding: '4px 10px', fontSize: 12, whiteSpace: 'nowrap' }} onClick={() => setSuggestionApplied(true)}>Apply suggestion</button>
+            : <button className="pw-btn" style={{ padding: '4px 10px', fontSize: 12, whiteSpace: 'nowrap' }} onClick={() => { onApplySuggestion(); setSuggestionApplied(true); }}>Apply suggestion</button>
           }
         </div>
       </div>
@@ -1445,7 +1435,7 @@ function BudgetCard({ b }) {
 }
 
 /* ─── Goals ─── */
-function Goals({ onAddGoal, onContribute }) {
+function Goals({ goals: GOALS, onAddGoal, onContribute }) {
   const totalSaved = GOALS.reduce((s, g) => s + g.current, 0);
   const totalTarget = GOALS.reduce((s, g) => s + g.target, 0);
   const monthlyContrib = GOALS.reduce((s, g) => s + g.contrib * 4.33, 0);
@@ -1458,7 +1448,7 @@ function Goals({ onAddGoal, onContribute }) {
           <h1 style={{ margin: '4px 0 0', fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 700, letterSpacing: '-0.02em' }}>Goals</h1>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button className="pw-btn" onClick={() => alert('Contribution scheduling coming soon — set up auto-transfers in Settings.')}>
+          <button className="pw-btn" onClick={() => alert('Scheduling is not available in this demo. No transfer is scheduled.')}>
             <Icon name="calendar" size={14}/>Schedule
           </button>
           <button className="pw-btn pw-btn-primary" onClick={onAddGoal}><Icon name="plus" size={14}/>Create goal</button>
@@ -1468,7 +1458,7 @@ function Goals({ onAddGoal, onContribute }) {
       <div className="pw-card" style={{ marginBottom: 16 }}>
         <div className="pw-kpi-grid-4">
           <KPI label="Total saved" value={fmt(totalSaved, { decimals: 0 })} delta={2840} sub="this month"/>
-          <KPI label="Across all goals" value={`${Math.round((totalSaved / totalTarget) * 100)}%`} delta={3.2} sub="of $114,700 target" isPercent/>
+          <KPI label="Across all goals" value={`${Math.round((totalSaved / totalTarget) * 100)}%`} delta={3.2} sub={`of ${fmt(totalTarget, { decimals: 0 })} target`} isPercent/>
           <KPI label="Monthly contributions" value={fmt(monthlyContrib, { decimals: 0 })} delta={0} sub={`${GOALS.length} active goals`}/>
           <KPI label="Next milestone" value="$3,200" delta={320} sub="MacBook (Dec 20)"/>
         </div>
@@ -1484,11 +1474,11 @@ function Goals({ onAddGoal, onContribute }) {
 function GoalCard({ g, onContribute }) {
   const pct = g.current / g.target;
   const remaining = g.target - g.current;
-  const weeks = Math.ceil(remaining / g.contrib);
+  const weeks = g.contrib > 0 ? Math.ceil(Math.max(0, remaining) / g.contrib) : null;
   const dueDate = new Date(g.due);
   const today = new Date('2025-11-25');
   const daysUntilDue = Math.round((dueDate - today) / 86400000);
-  const onPace = weeks * 7 <= daysUntilDue;
+  const onPace = weeks !== null && weeks * 7 <= daysUntilDue;
 
   return (
     <div className="pw-card" style={{ padding: 20 }}>
@@ -1524,13 +1514,13 @@ function GoalCard({ g, onContribute }) {
             </div>
             <div>
               <div style={{ color: 'var(--text-faint)', fontSize: 10.5, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 2 }}>ETA at pace</div>
-              <div style={{ fontWeight: 500, color: onPace ? 'var(--pos)' : 'var(--warn)' }}>{weeks} weeks</div>
+              <div style={{ fontWeight: 500, color: onPace ? 'var(--pos)' : 'var(--warn)' }}>{weeks === null ? 'Set a contribution' : weeks + ' weeks'}</div>
             </div>
           </div>
         </div>
         <div className="pw-goal-card-actions" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <button className="pw-btn pw-btn-primary" style={{ padding: '6px 14px', fontSize: 12 }} onClick={() => onContribute?.(g.id)}>Contribute</button>
-          <button className="pw-btn" style={{ padding: '6px 14px', fontSize: 12 }} onClick={() => alert(`Adjust "${g.name}": change your target amount or weekly contribution in Settings → Goals.`)}>Adjust</button>
+          <button className="pw-btn" style={{ padding: '6px 14px', fontSize: 12 }} onClick={() => alert(`Goal adjustment is a preview only. No changes were made to "${g.name}".`)}>Adjust</button>
         </div>
       </div>
     </div>
@@ -1545,8 +1535,7 @@ function Cashflow({ onExport, setScreen }) {
   const avgIncome = ytdIncome / CASHFLOW.length;
   const avgExp = ytdExp / CASHFLOW.length;
   const monthlyNet = avgIncome - avgExp;
-  const [cfView, setCfView] = useState('Monthly');
-  const [cashflowType, setCashflowType] = useState('bars');
+    const [cashflowType, setCashflowType] = useState('bars');
   const [openSubIdx, setOpenSubIdx] = useState(null);
 
   const upcoming = SUBSCRIPTIONS.filter(s => {
@@ -1566,7 +1555,7 @@ function Cashflow({ onExport, setScreen }) {
         <div style={{ display: 'flex', gap: 8 }}>
           <div className="pw-segment">
             {['Monthly', 'Weekly', 'Daily'].map(v => (
-              <button key={v} className={cfView === v ? 'active' : ''} onClick={() => setCfView(v)}>{v}</button>
+              <button key={v} className={v === 'Monthly' ? 'active' : ''} disabled={v !== 'Monthly'} title="Only monthly historical sample data is available">{v}</button>
             ))}
           </div>
           <button className="pw-btn" onClick={() => onExport?.()}><Icon name="download" size={14}/>Export</button>
@@ -1708,7 +1697,7 @@ function Cashflow({ onExport, setScreen }) {
                     <button style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', padding: '9px 14px', border: 'none', background: 'transparent', color: 'var(--neg)', fontSize: 13, cursor: 'pointer', fontFamily: 'var(--font-body)', textAlign: 'left' }}
                       onMouseEnter={e => e.currentTarget.style.background = 'rgba(220,38,38,0.06)'}
                       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                      onClick={() => { alert(`Cancel ${s.name}? This will remove it from your tracked subscriptions.`); setOpenSubIdx(null); }}>
+                      onClick={() => { alert(`Subscription cancellation is not available in this demo. No changes were made to ${s.name}.`); setOpenSubIdx(null); }}>
                       Cancel subscription
                     </button>
                   </div>
@@ -1810,7 +1799,7 @@ function Insights({ setScreen }) {
         <div style={{ fontSize: 12, color: 'var(--text-muted)', flex: 1 }}>
           Insights are generated on-device from your linked accounts. PennyWise never sells your data.
         </div>
-        <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 10px', fontSize: 11.5 }}>Privacy policy</button>
+        <button className="pw-btn pw-btn-ghost" style={{ padding: '4px 10px', fontSize: 11.5 }} disabled title="No production policy is published for this demo">Privacy policy (unavailable)</button>
       </div>
     </div>
   );
@@ -1875,7 +1864,7 @@ function TrendCard({ title, value, delta, desc, data }) {
 /* ============================================================
    SHELL
    ============================================================ */
-function Sidebar({ screen, setScreen, theme, onSignOut, isOpen, onClose }) {
+function Sidebar({ budgets: BUDGETS, transactions: TRANSACTIONS, screen, setScreen, theme, onSignOut, isOpen, onClose }) {
   const overBudget = BUDGETS.filter(b => b.spent > b.budget).length;
   const items = [
     { group: 'Workspace', items: [
@@ -1906,7 +1895,7 @@ function Sidebar({ screen, setScreen, theme, onSignOut, isOpen, onClose }) {
         <div key={grp.group}>
           <div className="pw-nav-group-label">{grp.group}</div>
           {grp.items.map(it => (
-            <div key={it.id} className={`pw-nav-item ${screen === it.id ? 'active' : ''}`} onClick={() => { setScreen(it.id); onClose?.(); }}>
+            <button key={it.id} type="button" aria-current={screen === it.id ? 'page' : undefined} className={`pw-nav-item ${screen === it.id ? 'active' : ''}`} onClick={() => { setScreen(it.id); onClose?.(); }}>
               <Icon name={it.icon} size={16}/>
               <span>{it.label}</span>
               {it.badge && (
@@ -1914,7 +1903,7 @@ function Sidebar({ screen, setScreen, theme, onSignOut, isOpen, onClose }) {
                   {it.badge}
                 </span>
               )}
-            </div>
+            </button>
           ))}
         </div>
       ))}
@@ -1973,7 +1962,7 @@ function Topbar({ theme, setTheme, onCmd, onAddTxn, onMenuToggle }) {
         <Icon name="plus" size={14}/><span>Add</span>
       </button>
 
-      <button className="pw-icon-btn" title="Notifications" style={{ position: 'relative' }}>
+      <button className="pw-icon-btn" title="Notifications are a preview only" disabled style={{ position: 'relative' }}>
         <Icon name="bell" size={16}/>
         <span style={{ position: 'absolute', top: 7, right: 8, width: 6, height: 6, borderRadius: 3, background: 'var(--brand)', border: '1.5px solid var(--bg)' }}/>
       </button>
@@ -2018,7 +2007,7 @@ function CommandPalette({ setScreen, onClose, onAddTxn, onAddGoal, onAddBudget }
       display: 'grid', placeItems: 'start center', paddingTop: '14vh',
     }} onClick={onClose}>
       <div onClick={e => e.stopPropagation()} style={{
-        width: 560, background: 'var(--bg-elev)', borderRadius: 14, border: '1px solid var(--border)',
+        width: 'min(560px, 94vw)', background: 'var(--bg-elev)', borderRadius: 14, border: '1px solid var(--border)',
         boxShadow: 'var(--shadow-pop)', overflow: 'hidden',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '14px 16px', borderBottom: '1px solid var(--border)' }}>
@@ -2071,13 +2060,13 @@ function AddTxnModal({ onClose, onAdd }) {
 
   const submit = (e) => {
     e.preventDefault();
-    if (!form.merchant || !form.amount) return;
+    if (!form.merchant.trim() || !form.amount || !form.date) return;
     const amt = parseFloat(form.amount);
-    if (isNaN(amt)) return;
+    if (!Number.isFinite(amt) || amt <= 0) return;
     onAdd({
       id: Date.now(),
       date: form.date,
-      merchant: form.merchant,
+      merchant: form.merchant.trim(),
       cat: form.cat,
       amount: form.cat === 'income' ? Math.abs(amt) : -Math.abs(amt),
       account: form.account,
@@ -2087,44 +2076,44 @@ function AddTxnModal({ onClose, onAdd }) {
   };
 
   return (
-    <div className="pw-modal-overlay" onClick={onClose}>
+    <DemoDialog onClose={onClose}>
       <div className="pw-modal" onClick={e => e.stopPropagation()}>
         <div className="pw-modal-head">
           <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 17 }}>Add transaction</div>
-          <button className="pw-icon-btn" style={{ width: 28, height: 28 }} onClick={onClose}><Icon name="x" size={14}/></button>
+          <button className="pw-icon-btn" style={{ width: 28, height: 28 }} onClick={onClose} aria-label="Close dialog"><Icon name="x" size={14}/></button>
         </div>
         <form onSubmit={submit} className="pw-modal-body">
           <div className="pw-field">
-            <label className="pw-field-label">Merchant</label>
-            <input className="pw-field-input" value={form.merchant} onChange={e => set('merchant', e.target.value)} placeholder="e.g. Whole Foods Market" required/>
+            <label className="pw-field-label" htmlFor="sample-field-1">Merchant</label>
+            <input id="sample-field-1" className="pw-field-input" value={form.merchant} onChange={e => set('merchant', e.target.value)} placeholder="e.g. Whole Foods Market" required/>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             <div className="pw-field">
-              <label className="pw-field-label">Amount</label>
-              <input className="pw-field-input" type="number" step="0.01" value={form.amount} onChange={e => set('amount', e.target.value)} placeholder="0.00" required/>
+              <label className="pw-field-label" htmlFor="sample-field-2">Amount</label>
+            <input id="sample-field-2" className="pw-field-input" type="number" min="0.01" step="0.01" value={form.amount} onChange={e => set('amount', e.target.value)} placeholder="0.00" required/>
             </div>
             <div className="pw-field">
-              <label className="pw-field-label">Date</label>
-              <input className="pw-field-input" type="date" value={form.date} onChange={e => set('date', e.target.value)}/>
+              <label className="pw-field-label" htmlFor="sample-field-3">Date</label>
+            <input id="sample-field-3" className="pw-field-input" type="date" value={form.date} onChange={e => set('date', e.target.value)}/>
             </div>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             <div className="pw-field">
-              <label className="pw-field-label">Category</label>
-              <select className="pw-field-input" value={form.cat} onChange={e => set('cat', e.target.value)}>
+              <label className="pw-field-label" htmlFor="sample-field-4">Category</label>
+            <select id="sample-field-4" className="pw-field-input" value={form.cat} onChange={e => set('cat', e.target.value)}>
                 {Object.entries(CATEGORIES).map(([k, v]) => <option key={k} value={k}>{v.name}</option>)}
               </select>
             </div>
             <div className="pw-field">
-              <label className="pw-field-label">Account</label>
-              <select className="pw-field-input" value={form.account} onChange={e => set('account', e.target.value)}>
+              <label className="pw-field-label" htmlFor="sample-field-5">Account</label>
+            <select id="sample-field-5" className="pw-field-input" value={form.account} onChange={e => set('account', e.target.value)}>
                 {ACCOUNTS.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}
               </select>
             </div>
           </div>
           <div className="pw-field">
-            <label className="pw-field-label">Note <span style={{ color: 'var(--text-faint)', fontWeight: 400 }}>(optional)</span></label>
-            <input className="pw-field-input" value={form.note} onChange={e => set('note', e.target.value)} placeholder="Add a note…"/>
+            <label className="pw-field-label" htmlFor="sample-field-6">Note <span style={{ color: 'var(--text-faint)', fontWeight: 400 }}>(optional)</span></label>
+            <input id="sample-field-6" className="pw-field-input" value={form.note} onChange={e => set('note', e.target.value)} placeholder="Add a note…"/>
           </div>
           <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 4 }}>
             <button type="button" className="pw-btn" onClick={onClose}>Cancel</button>
@@ -2132,49 +2121,50 @@ function AddTxnModal({ onClose, onAdd }) {
           </div>
         </form>
       </div>
-    </div>
+    </DemoDialog>
   );
 }
 
 /* ─── Add Goal Modal ─── */
-function AddGoalModal({ onClose }) {
+function AddGoalModal({ onClose, onAdd }) {
   const [form, setForm] = useState({ name: '', target: '', contrib: '', due: '', icon: 'flag', color: '#16a34a' });
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
   const icons = [{ v: 'shield', l: 'Emergency' }, { v: 'plane', l: 'Travel' }, { v: 'home', l: 'Home' }, { v: 'laptop', l: 'Tech' }, { v: 'flag', l: 'Other' }];
   const colors = ['#16a34a', '#0ea5e9', '#a855f7', '#f59e0b', '#ef4444'];
   const submit = (e) => {
     e.preventDefault();
-    alert(`Goal "${form.name}" created! In production, this would save to your goals.`);
+    if (!form.name.trim() || !Number.isFinite(Number(form.target)) || Number(form.target) <= 0 || !Number.isFinite(Number(form.contrib)) || Number(form.contrib) < 0) return;
+    onAdd({ id: crypto.randomUUID(), name: form.name.trim(), target: Number(form.target), current: 0, contrib: Number(form.contrib) || 0, due: form.due || '2026-11-25', icon: form.icon, color: form.color });
     onClose();
   };
   return (
-    <div className="pw-modal-overlay" onClick={onClose}>
+    <DemoDialog onClose={onClose}>
       <div className="pw-modal" onClick={e => e.stopPropagation()}>
         <div className="pw-modal-head">
           <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 17 }}>Create a goal</div>
-          <button className="pw-icon-btn" style={{ width: 28, height: 28 }} onClick={onClose}><Icon name="x" size={14}/></button>
+          <button className="pw-icon-btn" style={{ width: 28, height: 28 }} onClick={onClose} aria-label="Close dialog"><Icon name="x" size={14}/></button>
         </div>
         <form onSubmit={submit} className="pw-modal-body">
           <div className="pw-field">
-            <label className="pw-field-label">Goal name</label>
-            <input className="pw-field-input" value={form.name} onChange={e => set('name', e.target.value)} placeholder="e.g. Emergency Fund, Tokyo Trip…" required/>
+            <label className="pw-field-label" htmlFor="sample-field-7">Goal name</label>
+            <input id="sample-field-7" className="pw-field-input" value={form.name} onChange={e => set('name', e.target.value)} placeholder="e.g. Emergency Fund, Tokyo Trip…" required/>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             <div className="pw-field">
-              <label className="pw-field-label">Target amount</label>
-              <input className="pw-field-input" type="number" step="100" value={form.target} onChange={e => set('target', e.target.value)} placeholder="10,000" required/>
+              <label className="pw-field-label" htmlFor="sample-field-8">Target amount</label>
+            <input id="sample-field-8" className="pw-field-input" type="number" min="1" step="any" value={form.target} onChange={e => set('target', e.target.value)} placeholder="10,000" required/>
             </div>
             <div className="pw-field">
-              <label className="pw-field-label">Weekly contribution</label>
-              <input className="pw-field-input" type="number" step="10" value={form.contrib} onChange={e => set('contrib', e.target.value)} placeholder="250"/>
+              <label className="pw-field-label" htmlFor="sample-field-9">Weekly contribution</label>
+            <input id="sample-field-9" className="pw-field-input" type="number" min="0" step="any" value={form.contrib} onChange={e => set('contrib', e.target.value)} placeholder="250"/>
             </div>
           </div>
           <div className="pw-field">
-            <label className="pw-field-label">Target date</label>
-            <input className="pw-field-input" type="date" value={form.due} onChange={e => set('due', e.target.value)}/>
+            <label className="pw-field-label" htmlFor="sample-field-10">Target date</label>
+            <input id="sample-field-10" className="pw-field-input" type="date" value={form.due} onChange={e => set('due', e.target.value)}/>
           </div>
           <div className="pw-field">
-            <label className="pw-field-label">Icon</label>
+            <label className="pw-field-label" htmlFor="sample-field-11">Icon</label>
             <div style={{ display: 'flex', gap: 8 }}>
               {icons.map(ic => (
                 <button key={ic.v} type="button" onClick={() => set('icon', ic.v)} style={{
@@ -2193,7 +2183,7 @@ function AddGoalModal({ onClose }) {
             <label className="pw-field-label">Color</label>
             <div style={{ display: 'flex', gap: 8 }}>
               {colors.map(c => (
-                <button key={c} type="button" onClick={() => set('color', c)} style={{
+                <button key={c} type="button" aria-label={`Goal color ${c}`} aria-pressed={form.color === c} onClick={() => set('color', c)} style={{
                   width: 28, height: 28, borderRadius: '50%', background: c, cursor: 'pointer',
                   border: form.color === c ? `3px solid var(--text)` : '3px solid transparent',
                   boxShadow: `0 0 0 1px ${c}`,
@@ -2207,31 +2197,32 @@ function AddGoalModal({ onClose }) {
           </div>
         </form>
       </div>
-    </div>
+    </DemoDialog>
   );
 }
 
 /* ─── Contribute Modal ─── */
-function ContributeModal({ goal, onClose }) {
+function ContributeModal({ goal, onClose, onContribute }) {
   const [amount, setAmount] = useState(goal?.contrib || '');
   const presets = goal ? [goal.contrib, goal.contrib * 2, Math.round((goal.target - goal.current) / 4)] : [];
   const submit = (e) => {
     e.preventDefault();
-    alert(`${goal?.name}: $${amount} contribution recorded! Your new balance would be ${fmt((goal?.current || 0) + parseFloat(amount || 0), { decimals: 0 })}.`);
+    if (!Number.isFinite(Number(amount)) || Number(amount) <= 0 || Number(amount) > Math.max(0, goal.target - goal.current)) return;
+    onContribute(goal.id, Number(amount));
     onClose();
   };
   if (!goal) return null;
   const remaining = goal.target - goal.current;
   const afterContrib = goal.current + parseFloat(amount || 0);
   return (
-    <div className="pw-modal-overlay" onClick={onClose}>
+    <DemoDialog onClose={onClose}>
       <div className="pw-modal" onClick={e => e.stopPropagation()}>
         <div className="pw-modal-head">
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 17 }}>Contribute to goal</div>
             <div style={{ fontSize: 12, color: 'var(--text-faint)', marginTop: 2 }}>{goal.name}</div>
           </div>
-          <button className="pw-icon-btn" style={{ width: 28, height: 28 }} onClick={onClose}><Icon name="x" size={14}/></button>
+          <button className="pw-icon-btn" style={{ width: 28, height: 28 }} onClick={onClose} aria-label="Close dialog"><Icon name="x" size={14}/></button>
         </div>
         <form onSubmit={submit} className="pw-modal-body">
           <div style={{ padding: 16, borderRadius: 12, background: 'var(--bg-soft)', border: '1px solid var(--border)' }}>
@@ -2248,7 +2239,7 @@ function ContributeModal({ goal, onClose }) {
           </div>
           <div className="pw-field">
             <label className="pw-field-label">Amount</label>
-            <input className="pw-field-input" type="number" step="0.01" value={amount} onChange={e => setAmount(e.target.value)} placeholder="0.00" required/>
+            <input id="sample-field-11" className="pw-field-input" type="number" step="0.01" max={Math.max(0, remaining)} value={amount} onChange={e => setAmount(e.target.value)} placeholder="0.00" required/>
           </div>
           <div style={{ display: 'flex', gap: 6 }}>
             {presets.filter((v, i, a) => a.indexOf(v) === i && v > 0).slice(0, 3).map(p => (
@@ -2263,32 +2254,33 @@ function ContributeModal({ goal, onClose }) {
           </div>
         </form>
       </div>
-    </div>
+    </DemoDialog>
   );
 }
 
 /* ─── Add Budget Modal ─── */
-function AddBudgetModal({ onClose }) {
+function AddBudgetModal({ budgets: BUDGETS, onClose, onAdd }) {
   const existingCats = new Set(BUDGETS.map(b => b.cat));
   const availableCats = Object.entries(CATEGORIES).filter(([k]) => !existingCats.has(k) && k !== 'income' && k !== 'transfer');
   const [form, setForm] = useState({ cat: availableCats[0]?.[0] || 'travel', budget: '' });
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
   const submit = (e) => {
     e.preventDefault();
-    alert(`Budget for ${CATEGORIES[form.cat]?.name} set at ${fmt(parseFloat(form.budget), { decimals: 0 })}/month.`);
+    if (!availableCats.some(([cat]) => cat === form.cat) || !Number.isFinite(Number(form.budget)) || Number(form.budget) <= 0) return;
+    onAdd({ cat: form.cat, budget: Number(form.budget), spent: 0, txns: 0 });
     onClose();
   };
   return (
-    <div className="pw-modal-overlay" onClick={onClose}>
+    <DemoDialog onClose={onClose}>
       <div className="pw-modal" onClick={e => e.stopPropagation()}>
         <div className="pw-modal-head">
           <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 17 }}>New budget</div>
-          <button className="pw-icon-btn" style={{ width: 28, height: 28 }} onClick={onClose}><Icon name="x" size={14}/></button>
+          <button className="pw-icon-btn" style={{ width: 28, height: 28 }} onClick={onClose} aria-label="Close dialog"><Icon name="x" size={14}/></button>
         </div>
         <form onSubmit={submit} className="pw-modal-body">
           <div className="pw-field">
-            <label className="pw-field-label">Category</label>
-            <select className="pw-field-input" value={form.cat} onChange={e => set('cat', e.target.value)}>
+            <label className="pw-field-label" htmlFor="sample-field-12">Category</label>
+            <select id="sample-field-12" className="pw-field-input" value={form.cat} onChange={e => set('cat', e.target.value)}>
               {availableCats.map(([k, v]) => <option key={k} value={k}>{v.name}</option>)}
               <optgroup label="Already budgeted">
                 {BUDGETS.map(b => <option key={b.cat} value={b.cat} disabled>{CATEGORIES[b.cat]?.name} (active)</option>)}
@@ -2296,8 +2288,8 @@ function AddBudgetModal({ onClose }) {
             </select>
           </div>
           <div className="pw-field">
-            <label className="pw-field-label">Monthly limit</label>
-            <input className="pw-field-input" type="number" step="10" value={form.budget} onChange={e => set('budget', e.target.value)} placeholder="e.g. 400" required/>
+            <label className="pw-field-label" htmlFor="sample-field-13">Monthly limit</label>
+            <input id="sample-field-13" className="pw-field-input" type="number" step="10" value={form.budget} onChange={e => set('budget', e.target.value)} placeholder="e.g. 400" required/>
           </div>
           {form.budget && !isNaN(parseFloat(form.budget)) && (
             <div style={{ padding: '10px 14px', borderRadius: 10, background: 'var(--brand-soft)', border: '1px solid var(--brand-rim)', fontSize: 12.5, color: 'var(--text-muted)' }}>
@@ -2311,7 +2303,7 @@ function AddBudgetModal({ onClose }) {
           </div>
         </form>
       </div>
-    </div>
+    </DemoDialog>
   );
 }
 
@@ -2327,6 +2319,15 @@ export default function DashboardApp({ onSignOut }) {
   const [showAddBudget, setShowAddBudget] = useState(false);
   const [contributeGoal, setContributeGoal] = useState(null);
   const [txns, setTxns] = useState(TRANSACTIONS);
+  const [goals, setGoals] = useState(GOALS);
+  const [budgets, setBudgets] = useState(BUDGETS);
+  const liveBudgets = updateBudgets(budgets, txns);
+  const aiData = { ...AI_DATA, CASHFLOW: CASHFLOW.map((month, i) => i === CASHFLOW.length - 1 ? { ...month, income: summarizeMonth(txns).income, expenses: summarizeMonth(txns).expenses } : month), GOALS: goals, BUDGETS: liveBudgets, TRANSACTIONS: txns };
+  const previousTheme = useRef({ dark: document.documentElement.classList.contains('dark'), theme: document.documentElement.getAttribute('data-theme'), density: document.documentElement.getAttribute('data-density') });
+  useEffect(() => {
+    const previous = previousTheme.current;
+    return () => { document.documentElement.classList.toggle('dark', previous.dark); if (previous.theme) document.documentElement.setAttribute('data-theme', previous.theme); else document.documentElement.removeAttribute('data-theme'); if (previous.density) document.documentElement.setAttribute('data-density', previous.density); else document.documentElement.removeAttribute('data-density'); };
+  }, []);
 
   const handleExportCSV = (data) => {
     const rows = [
@@ -2352,7 +2353,6 @@ export default function DashboardApp({ onSignOut }) {
     else root.classList.remove('dark');
     return () => {
       root.removeAttribute('data-theme');
-      root.classList.remove('dark');
     };
   }, [theme]);
 
@@ -2367,14 +2367,15 @@ export default function DashboardApp({ onSignOut }) {
   // Command palette + G-key navigation
   useEffect(() => {
     let lastG = false;
+    let shortcutTimer;
     const onKey = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setCmdOpen(o => !o);
         return;
       }
-      if (e.key === 'Escape') { setCmdOpen(false); setShowAddTxn(false); setShowAddGoal(false); setShowAddBudget(false); setContributeGoal(null); return; }
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+      if (e.key === 'Escape') { setCmdOpen(false); setShowAddTxn(false); setShowAddGoal(false); setShowAddBudget(false); setContributeGoal(null); setSidebarOpen(false); return; }
+      if (e.target.isContentEditable || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
       if (lastG) {
         const map = { o: 'overview', t: 'transactions', b: 'budgets', g: 'goals', c: 'cashflow', i: 'insights', a: 'ai', s: 'settings' };
         if (map[e.key]) setScreen(map[e.key]);
@@ -2382,10 +2383,11 @@ export default function DashboardApp({ onSignOut }) {
         return;
       }
       if (e.key === 'g') lastG = true;
-      setTimeout(() => { lastG = false; }, 800);
+      clearTimeout(shortcutTimer);
+      shortcutTimer = setTimeout(() => { lastG = false; }, 800);
     };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    return () => { clearTimeout(shortcutTimer); window.removeEventListener('keydown', onKey); };
   }, []);
 
   const handleAddTxn = (t) => setTxns(prev => [t, ...prev]);
@@ -2394,26 +2396,27 @@ export default function DashboardApp({ onSignOut }) {
     <>
       <div className="pw-app">
         {sidebarOpen && <div className="pw-sidebar-overlay" onClick={() => setSidebarOpen(false)}/>}
-        <Sidebar screen={screen} setScreen={setScreen} theme={theme} onSignOut={onSignOut} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)}/>
+        <Sidebar budgets={liveBudgets} transactions={txns} screen={screen} setScreen={setScreen} theme={theme} onSignOut={onSignOut} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)}/>
         <div className="pw-main">
           <Topbar theme={theme} setTheme={setTheme} onCmd={() => setCmdOpen(true)} onAddTxn={() => setShowAddTxn(true)} onMenuToggle={() => setSidebarOpen(o => !o)}/>
           <div className="pw-workspace">
-            {screen === 'overview' && <Overview range={range} setRange={setRange} txns={txns} setScreen={setScreen} onAddTxn={() => setShowAddTxn(true)} onAddGoal={() => setShowAddGoal(true)} onExport={handleExportCSV}/>}
+            <p className="pw-demo-notice">Demo · Fictional data · Session changes reset on exit · No bank connections or money movement. Penny uses local response rules.</p>
+            {screen === 'overview' && <Overview goals={goals} budgets={liveBudgets} range={range} setRange={setRange} txns={txns} setScreen={setScreen} onAddTxn={() => setShowAddTxn(true)} onAddGoal={() => setShowAddGoal(true)} onExport={handleExportCSV}/>}
             {screen === 'transactions' && <Transactions txns={txns} onAddTxn={() => setShowAddTxn(true)} onExport={handleExportCSV}/>}
-            {screen === 'budgets' && <Budgets onAddBudget={() => setShowAddBudget(true)}/>}
-            {screen === 'goals' && <Goals onAddGoal={() => setShowAddGoal(true)} onContribute={setContributeGoal}/>}
+            {screen === 'budgets' && <Budgets budgets={liveBudgets} onApplySuggestion={() => setBudgets(prev => prev.map(b => b.cat === 'shopping' ? { ...b, budget: 300 } : b))} onAddBudget={() => setShowAddBudget(true)}/>}
+            {screen === 'goals' && <Goals goals={goals} onAddGoal={() => setShowAddGoal(true)} onContribute={setContributeGoal}/>}
             {screen === 'cashflow' && <Cashflow onExport={handleExportCSV} setScreen={setScreen}/>}
             {screen === 'insights' && <Insights setScreen={setScreen}/>}
-            {screen === 'ai' && <AIAssistant data={AI_DATA}/>}
-            {screen === 'settings' && <Settings theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}/>}
+            {screen === 'ai' && <AIAssistant data={aiData}/>}
+            {screen === 'settings' && <Settings onExport={handleExportCSV} theme={theme} setTheme={setTheme} accent={accent} setAccent={setAccent}/>}
           </div>
         </div>
       </div>
       {cmdOpen && <CommandPalette setScreen={setScreen} onClose={() => setCmdOpen(false)} onAddTxn={() => { setShowAddTxn(true); setCmdOpen(false); }} onAddGoal={() => { setShowAddGoal(true); setCmdOpen(false); }} onAddBudget={() => { setShowAddBudget(true); setCmdOpen(false); }}/>}
       {showAddTxn && <AddTxnModal onClose={() => setShowAddTxn(false)} onAdd={handleAddTxn}/>}
-      {showAddGoal && <AddGoalModal onClose={() => setShowAddGoal(false)}/>}
-      {showAddBudget && <AddBudgetModal onClose={() => setShowAddBudget(false)}/>}
-      {contributeGoal && <ContributeModal goal={GOALS.find(g => g.id === contributeGoal)} onClose={() => setContributeGoal(null)}/>}
+      {showAddGoal && <AddGoalModal onAdd={goal => setGoals(prev => [...prev, goal])} onClose={() => setShowAddGoal(false)}/>}
+      {showAddBudget && <AddBudgetModal budgets={budgets} onAdd={budget => setBudgets(prev => [...prev, budget])} onClose={() => setShowAddBudget(false)}/>}
+      {contributeGoal && <ContributeModal onContribute={(id, amount) => setGoals(prev => prev.map(g => g.id === id ? { ...g, current: Math.min(g.target, g.current + amount) } : g))} goal={goals.find(g => g.id === contributeGoal)} onClose={() => setContributeGoal(null)}/>}
     </>
   );
 }

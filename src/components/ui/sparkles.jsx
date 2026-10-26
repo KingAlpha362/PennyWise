@@ -1,3 +1,4 @@
+import { useReducedMotion } from 'framer-motion';
 "use client"
 
 import { useEffect, useId, useState } from "react"
@@ -18,15 +19,19 @@ export function Sparkles({
   background = "transparent",
   options = {},
 }) {
+  const reducedMotion = useReducedMotion();
   const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
+    if (reducedMotion) return;
+    let active = true;
     initParticlesEngine(async (engine) => {
       await loadSlim(engine)
     }).then(() => {
-      setIsReady(true)
+      if (active) setIsReady(true)
     })
-  }, [])
+    return () => { active = false; };
+  }, [reducedMotion])
 
   const id = useId()
 
@@ -78,5 +83,5 @@ export function Sparkles({
     detectRetina: true,
   }
 
-  return isReady && <Particles id={id} options={{ ...defaultOptions, ...options }} className={className} />
+  return isReady && !reducedMotion && <Particles id={id} options={{ ...defaultOptions, ...options }} className={className} />
 }

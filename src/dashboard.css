@@ -1738,3 +1738,9 @@ select.pw-field-input { cursor: pointer; }
   border-radius: 4px;
   transition: width 0.5s var(--ease-out);
 }
+
+.pw-demo-notice { font-size: 12px; line-height: 1.6; color: var(--text-muted); padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin: 0 0 16px; }
+button.pw-nav-item { width: 100%; background: transparent; border: 0; text-align: left; font: inherit; }
+@media (max-width: 767px) { .pw-screen-header { flex-wrap: wrap; gap: 12px; } .pw-goal-card-grid { grid-template-columns: 1fr !important; } }
+
+@media (max-width: 767px) { .pw-sidebar:not(.pw-sidebar--open) { visibility: hidden; } }

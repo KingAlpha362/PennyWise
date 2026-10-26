@@ -4,9 +4,19 @@ import { cn } from '@/lib/utils';
 import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 import { useScroll } from '@/components/ui/use-scroll';
 
-export function Header({ onSignIn }) {
+export function Header({ onSignIn, onGetStarted, theme, onToggleTheme }) {
   const [open, setOpen] = React.useState(false);
   const scrolled = useScroll(10);
+  const toggleRef = React.useRef(null);
+  React.useEffect(() => {
+    if (!open) return;
+    const escape = event => { if (event.key === 'Escape') { setOpen(false); toggleRef.current?.focus(); } };
+    const media = window.matchMedia('(min-width: 1280px)');
+    const resize = () => { if (media.matches) setOpen(false); };
+    window.addEventListener('keydown', escape);
+    media.addEventListener('change', resize);
+    return () => { window.removeEventListener('keydown', escape); media.removeEventListener('change', resize); };
+  }, [open]);
 
   const links = [
     { label: 'Features', href: '#features' },
@@ -37,7 +47,7 @@ export function Header({ onSignIn }) {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 w-full border-b border-black/10 transition-all ease-out duration-300',
         scrolled && !open &&
-        'bg-bg/90 supports-[backdrop-filter]:bg-bg/80 border-black/10 dark:border-white/10 backdrop-blur-xl md:top-4 md:mx-auto md:rounded-2xl md:border md:max-w-5xl md:shadow-[0_8px_32px_rgba(0,0,0,0.10),0_2px_8px_rgba(0,0,0,0.06)]',
+        'bg-bg/90 supports-[backdrop-filter]:bg-bg/80 border-black/10 dark:border-white/10 backdrop-blur-xl xl:top-4 xl:mx-auto xl:rounded-2xl xl:border xl:max-w-6xl xl:shadow-[0_8px_32px_rgba(0,0,0,0.10),0_2px_8px_rgba(0,0,0,0.06)]',
         open && 'bg-bg/95 backdrop-blur-xl',
         !scrolled && !open && 'bg-transparent',
       )}
@@ -45,9 +55,9 @@ export function Header({ onSignIn }) {
       {/* ── Top bar ── */}
       <nav
         className={cn(
-          'mx-auto flex w-full max-w-7xl items-center justify-between px-6 md:px-14',
-          'h-16 sm:h-20 md:h-24 transition-[height] ease-out duration-300',
-          scrolled && 'md:h-16',
+          'mx-auto flex w-full max-w-7xl items-center justify-between px-4 xl:px-6',
+          'h-16 sm:h-20 xl:h-24 transition-[height] ease-out duration-300',
+          scrolled && 'xl:h-16',
         )}
       >
         {/* Logo */}
@@ -58,29 +68,32 @@ export function Header({ onSignIn }) {
           aria-label="PennyWise home"
         >
           <img
-            src={`${import.meta.env.BASE_URL}PennyWhite.png`}
+            src={`${import.meta.env.BASE_URL}${theme === 'dark' ? 'PennyWhite.png' : 'PennyDark.png'}`}
             alt="PennyWise"
             className={cn(
               "w-auto object-contain transition-all duration-300",
-              scrolled ? "h-8 sm:h-9 md:h-11" : "h-10 sm:h-12 md:h-17"
+              scrolled ? "h-8 sm:h-9 xl:h-11" : "h-8 sm:h-9 xl:h-10"
             )}
           />
         </a>
 
         {/* Desktop links */}
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-1 xl:flex">
           {links.map((link, i) => (
             <a key={i} className={buttonVariants({ variant: 'ghost' })} href={link.href}>
               {link.label}
             </a>
           ))}
+          <button className="btn-secondary" onClick={onToggleTheme} aria-label="Toggle landing theme">{theme === 'dark' ? 'Light' : 'Dark'}</button>
           <button className="btn-secondary ml-2" onClick={onSignIn}>Sign In</button>
-          <button className="btn-primary" onClick={onSignIn}>Get Started</button>
+          <button className="btn-primary" onClick={onGetStarted}>Get Started</button>
         </div>
 
         {/* Mobile controls */}
-        <div className="flex items-center gap-1 md:hidden">
+        <div className="flex items-center gap-1 xl:hidden">
+          <button className="btn-secondary" onClick={onToggleTheme} aria-label="Toggle landing theme">{theme === 'dark' ? 'Light' : 'Dark'}</button>
           <Button
+            ref={toggleRef}
             size="icon"
             variant="ghost"
             onClick={() => setOpen(v => !v)}
@@ -99,8 +112,9 @@ export function Header({ onSignIn }) {
       <div
         id="mobile-menu"
         aria-hidden={!open}
+        inert={!open}
         className={cn(
-          'md:hidden overflow-hidden transition-[grid-template-rows,opacity] duration-300 ease-out',
+          'xl:hidden overflow-hidden transition-[grid-template-rows,opacity] duration-300 ease-out',
           'grid',
           open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
         )}
@@ -137,7 +151,7 @@ export function Header({ onSignIn }) {
               </button>
               <button
                 className="btn-primary w-full py-4 text-base rounded-xl"
-                onClick={() => { close(); onSignIn(); }}
+                onClick={() => { close(); onGetStarted(); }}
               >
                 Get Started
               </button>

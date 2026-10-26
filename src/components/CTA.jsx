@@ -32,16 +32,16 @@ export default function CTA({ onGetStarted }) {
           </svg>
 
           <div className="relative z-10 p-10 sm:p-16 text-center">
-            <div className="label mb-5">Join 14,000+ people who stopped guessing</div>
+            <div className="label mb-5">Explore the PennyWise demo</div>
             <h2 className="font-display text-5xl md:text-6xl font-extrabold tracking-[-0.03em] text-text mb-4 leading-[1.05]">
-              Your finances, finally<br/>on autopilot.
+              A clearer view of<br/>your money.
             </h2>
             <p className="text-text-muted text-base max-w-[420px] mx-auto mb-8 leading-relaxed">
-              Join 14,000+ users who found an average of <strong className="text-text">$156/month</strong> in hidden savings. 2 minutes to set up, no credit card required.
+              Explore budgets, transactions, and savings goals using fictional data. No bank connection or account is needed.
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <button onClick={onGetStarted} className="btn-primary inline-flex items-center gap-2 text-[0.9rem] py-3 px-7">
-                Get Started Free
+                Explore the demo
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 6.5h10M7.5 2.5l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </button>
               <a href="#pricing" className="btn-ghost inline-flex items-center gap-2 text-[0.9rem] py-3 px-7 no-underline">
@@ -50,8 +50,8 @@ export default function CTA({ onGetStarted }) {
             </div>
             <div className="flex items-center justify-center gap-6 mt-6 text-[0.73rem] text-text-muted flex-wrap">
               <span className="flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.5"><path d="m5 12 5 5L20 7"/></svg>No credit card</span>
-              <span className="flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.5"><path d="m5 12 5 5L20 7"/></svg>Cancel anytime</span>
-              <span className="flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.5"><path d="m5 12 5 5L20 7"/></svg>SOC 2 + GDPR</span>
+              <span className="flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.5"><path d="m5 12 5 5L20 7"/></svg>Sample data only</span>
+              <span className="flex items-center gap-1.5"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.5"><path d="m5 12 5 5L20 7"/></svg>No bank connection</span>
             </div>
           </div>
         </div>

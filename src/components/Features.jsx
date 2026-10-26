@@ -5,32 +5,32 @@ const featureCards = [
   {
     icon: Zap,
     title: 'Instant Categorization',
-    description: 'Zero sorting, ever. Every transaction is tagged, labeled, and filed the moment it hits your account.',
+    description: 'Browse categorized sample transactions and filter them by account or category.',
   },
   {
     icon: TrendingUp,
     title: '30-Day Cash Forecast',
-    description: 'Know your balance three weeks from now. Paydays, bills, and surprises — mapped before they happen.',
+    description: 'Explore illustrative cashflow charts using fictional income and expenses.',
   },
   {
     icon: ShieldAlert,
     title: 'Anomaly Detection',
-    description: "Spotted a charge you don't recognize? PennyWise flags it before your bank does.",
+    description: "Review sample insights showing how unusual spending could be highlighted.",
   },
   {
     icon: SlidersHorizontal,
     title: 'Living Budgets',
-    description: 'Not a spreadsheet. Budgets that update when your life does — raises, moves, new subscriptions.',
+    description: 'Create a sample budget and compare its limit with demo spending.',
   },
   {
     icon: Target,
     title: 'Goal Pathfinding',
-    description: 'Tell it what you want. It calculates exactly how fast you can get there and reroutes when plans shift.',
+    description: 'Create a savings goal and record fictional contributions to track progress.',
   },
   {
     icon: MessageSquare,
     title: 'Talk to Your Money',
-    description: "Ask anything. 'How much did I spend on food in March?' Get an answer instantly, no dashboards.",
+    description: "Try a local rule-based assistant with questions about the sample financial data.",
   },
 ];
 
@@ -41,12 +41,14 @@ const ScreenShot = ({ name, alt }) => (
       alt={alt}
       className="block w-full h-auto dark:hidden"
       draggable={false}
+      loading="lazy"
     />
     <img
       src={`${import.meta.env.BASE_URL}${name}-dark.png`}
       alt={alt}
       className="hidden dark:block w-full h-auto"
       draggable={false}
+      loading="lazy"
     />
   </>
 );
@@ -55,8 +57,8 @@ const bentoCards = [
   {
     id: 1,
     title: 'Expense Tracking',
-    subtitle: 'Every transaction categorized the moment it happens — nothing slips through.',
-    badge: 'Most used',
+    subtitle: 'Search and filter categorized sample transactions.',
+    badge: 'Sample data',
     icon: (
       <div className="w-8 h-8 rounded-full bg-[var(--bg-subtle)] flex items-center justify-center text-text shrink-0">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.4" /><path d="M10 6.5v3.5l2 2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>
@@ -68,7 +70,7 @@ const bentoCards = [
   {
     id: 2,
     title: 'Smart Budgeting',
-    subtitle: 'AI-powered budget recommendations that adapt to your lifestyle.',
+    subtitle: 'Explore sample budgets and a predefined adjustment suggestion.',
     icon: (
       <div className="w-8 h-8 rounded-full bg-[var(--bg-subtle)] flex items-center justify-center text-text shrink-0">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><rect x="2.5" y="4" width="15" height="13" rx="2" stroke="currentColor" strokeWidth="1.4" /><path d="M2.5 8h15" stroke="currentColor" strokeWidth="1.4" /><path d="M6 12h2M12 12h2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" /></svg>
@@ -112,10 +114,10 @@ export default function Features() {
         <AnimatedContainer className="mb-14 max-w-2xl">
           <p className="text-[var(--accent)] text-sm font-semibold tracking-widest uppercase mb-3">Capabilities</p>
           <h2 className="font-display font-black text-[clamp(2.2rem,5vw,3.8rem)] text-text leading-[1.05] tracking-[-0.03em] mb-4">
-            Six ways PennyWise<br/>thinks so you don&apos;t have to
+            Six ways to explore<br/>your financial picture
           </h2>
           <p className="text-text-muted text-[1.05rem] leading-[1.7]">
-            An AI engine running 24/7 on your finances. Categorizing, forecasting, protecting, optimizing.
+            Explore the product concept with sample data and local response rules.
           </p>
         </AnimatedContainer>
 
@@ -162,7 +164,7 @@ export default function Features() {
                   aria-hidden
                   className={`hidden sm:block absolute -inset-5 -z-10 rounded-[32px] blur-2xl opacity-70 ${
                     card.badge
-                      ? 'bg-[radial-gradient(closest-side,var(--accent-dim),transparent)]'
+                      ? 'bg-[radial-gradient(closest-side_at_center,var(--accent-dim),transparent)]'
                       : 'bg-[radial-gradient(closest-side,rgba(15,23,42,0.10),transparent)]'
                   }`}
                 />
