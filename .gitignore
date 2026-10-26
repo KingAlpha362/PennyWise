@@ -26,3 +26,6 @@ dist-ssr
 # Claude Code local config
 .claude/
 .agents/
+
+# Browser regression evidence
+test-results/
