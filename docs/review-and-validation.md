@@ -36,11 +36,11 @@ Reviewed against main commit 4f4cd3bca864dbcbbda013296c457ae24d421ca7. This is a
 
 Run npm test, npm run lint, and npm run build. Then start npm run preview -- --host 127.0.0.1 --port 4173 and run node tests/browser.mjs. The GitHub Actions workflow performs those checks with Chromium.
 
-The browser suite covers 360, 390, 768, 1024, and 1440 px, menu keyboard behavior, pricing actions, demo entry, sample transaction persistence, and exit. It could not launch locally because the environment rejects the Chromium child process with EPERM. These widths and reduced-motion emulation are not claimed as locally passed. CI results must be reviewed before merge.
+The browser suite covers 360, 390, 768, 1024, and 1440 px, menu keyboard behavior, pricing actions, demo entry, sample transaction persistence, and exit. It could not launch locally because the environment rejects the Chromium child process with EPERM. These widths and reduced-motion emulation were not run locally. GitHub Actions subsequently passed all five viewport cases, including reduced-motion emulation, on commit b0e884ee32816edf5c54020e7c42f7c3eacac67a (run 40339478673). Standard npm ci, lint, tests, and build also passed in that run.
 
 Build warnings remain for a large landing bundle, old Browserslist data, and gradient syntax emitted by existing utility styles. Dashboard code now loads separately; further animation-library consolidation is a performance follow-up.
 
-Vercel project penny-wise-website_1 was found, but the connection lacks authorization for its owning team. Check the PR's Vercel status for an automatically generated preview; no production deployment was requested.
+Vercel project penny-wise-website_1 was found, but the connection lacks authorization for its owning team. Vercel automatically built the PR preview successfully: https://penny-wise-websi-git-e43488-alphatapfuma362a-gmailcoms-projects.vercel.app . Browser access requires Vercel sign-in. No production deployment was requested.
 
 ## Deliberate demo boundaries
 
