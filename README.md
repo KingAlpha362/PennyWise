@@ -1,16 +1,48 @@
-# React + Vite
+![PennyWise · Finance Interface Prototype — project cover](https://raw.githubusercontent.com/KingAlpha362/KingAlpha362/main/assets/covers/web.png)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# PennyWise · Finance Interface Prototype
 
-Currently, two official plugins are available:
+A React personal-finance interface prototype with a marketing site and interactive mock dashboard.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ Highlights
 
-## React Compiler
+- Dashboard views for transactions, budgets, goals, cash flow, and insights.
+- Theme controls and reusable interface components.
+- A simulated assistant implemented in `src/components/dashboard/aiEngine.js`.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 Getting started
 
-## Expanding the ESLint configuration
+Install Node.js compatible with the checked-in dependencies and npm, then run:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```sh
+npm ci
+npm run dev
+```
+
+Open the local URL printed by the development server.
+
+```sh
+npm run build
+npm run preview
+```
+
+The build output is written to `dist/`. Run `npm run lint` for the configured lint check.
+
+## 🗂️ Repository guide
+
+- [CLAUDE.md](CLAUDE.md)
+- [capture-screens.cjs](capture-screens.cjs)
+- [check-img.cjs](check-img.cjs)
+- [eslint.config.js](eslint.config.js)
+- [index.html](index.html)
+- [package.json](package.json)
+- [pennywise.html](pennywise.html)
+- [postcss.config.js](postcss.config.js)
+
+## 📝 Project notes
+
+Authentication and financial data are mocked. The assistant uses local response logic, not a live language-model service. This is a UI prototype, not a banking integration.
+
+---
+
+[← Portfolio](https://github.com/KingAlpha362/KingAlpha362) · [Browse all projects](https://github.com/KingAlpha362/KingAlpha362/blob/main/PORTFOLIO.md)
